@@ -11,28 +11,31 @@ BOT_TOKEN = os.environ.get('BOT_TOKEN')
 CHAT_ID = "@V2rayashaq"
 ADMIN_USER = "@genie_2000"
 
-# المصادر العملاقة (أعماق الأرض)
 SEARCH_SOURCES = [
     "https://raw.githubusercontent.com/mahdibland/V2RayAggregator/master/sub/sub_merge.txt",
     "https://raw.githubusercontent.com/yebekhe/TelegramV2rayCollector/main/sub/base64/mix",
     "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/All_Configs_Sub.txt",
-    "https://raw.githubusercontent.com/Iranian_Cloud/Cloudfront_V2ray/main/configs.txt",
     "https://t.me/s/v2_team", "https://t.me/s/V2ray_Alpha", "https://t.me/s/V2Ray_VLESS_VMess"
 ]
 
-VPS_PROVIDERS = ['oracle', 'google', 'amazon', 'aws', 'digitalocean', 'hetzner', 'ovh', 'linode', 'vultr', 'azure', 'contabo']
+def get_location(ip):
+    try:
+        # طلب سريع جداً لجلب الدولة
+        res = requests.get(f"http://ip-api.com/json/{ip}?fields=status,country,countryCode", timeout=2).json()
+        if res.get('status') == 'success':
+            return f"({res.get('countryCode')}) {res.get('country')}"
+    except: pass
+    return "🌍 Global Node"
 
-def check_server(host, port, config):
+def check_server_status(host, port):
     try:
         start = time.time()
-        with socket.create_connection((host, int(port)), timeout=1.2):
-            ping = int((time.time() - start) * 1000)
-            is_ssl = "tls" in config.lower() or port == "443"
-            is_cf = "cloudfront" in config.lower() or "104." in host or "172." in host
-            return ping, is_ssl, is_cf
-    except: return None, False, False
+        with socket.create_connection((host, int(port)), timeout=1.5):
+            return int((time.time() - start) * 1000)
+    except: return None
 
 def post_process():
+    print("⛏️ Starting Deep Search for 3 Elite Servers with Location...")
     all_found = []
     for url in SEARCH_SOURCES:
         try:
@@ -46,46 +49,63 @@ def post_process():
     unique_configs = list(set(all_found))
     random.shuffle(unique_configs)
     
-    posted = 0
-    for config in unique_configs[:300]:
-        if posted >= 3: break # ينشر 3 سيرفرات فقط كل دورة
-        
+    posted_count = 0
+    # فحص العينة لضمان استخراج 3 سيرفرات كاملة البيانات
+    for config in unique_configs:
+        if posted_count >= 3:
+            break 
+            
         match = re.search(r'@([^:/]+):(\d+)', config)
         if not match: continue
         
         host, port = match.group(1), match.group(2)
-        ping, has_ssl, has_cf = check_server(host, port, config)
+        ping = check_server_status(host, port)
         
-        if ping and ping < 250:
+        if ping and ping < 350:
+            # جلب الموقع الحقيقي بدلاً من Checking
             try:
-                # وسم النار للسيرفرات الخارقة
-                header = "🔥 <b>ULTRA FAST SERVER</b> 🔥" if ping < 80 else "✨ <b>Welcome to Ashaq Team</b> ✨"
-                
-                msg = f"{header}\n"
-                msg += f"━━━━━━━━━━━━━━━\n"
-                msg += f"🌍 <b>Country:</b> Checking...\n" # لتسريع الكود حذفنا طلب الـ IP التفصيلي
-                msg += f"🔹 <b>Type:</b> Vless/Vmess\n"
-                msg += f"⚡ <b>Ping:</b> {ping}ms | 🟢 Ultra Stable\n"
-                msg += f"🛡️ <b>SSL:</b> {'Verified ✅' if has_ssl else 'Standard'}\n"
-                msg += f"☁️ <b>CF:</b> {'Active ⚡' if has_cf else 'Direct'}\n"
-                msg += f"🕒 <b>Checked:</b> Just Now\n"
-                msg += f"🏷️ <b>Tags:</b> #Ashaq_Team #Free_VPN\n"
-                msg += f"🔹 <b>Port:</b> {port}\n"
-                msg += f"━━━━━━━━━━━━━━━\n"
-                msg += f"<code>{config}</code>\n"
-                msg += f"━━━━━━━━━━━━━━━\n"
-                msg += f"👥 @V2rayashaq"
+                ip_addr = socket.gethostbyname(host)
+                location = get_location(ip_addr)
+            except:
+                location = "🌍 International"
 
-                requests.post(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage", json={
-                    "chat_id": CHAT_ID, "text": msg, "parse_mode": "HTML",
+            is_ssl = "tls" in config.lower() or port == "443"
+            is_cf = "cloudfront" in config.lower() or "104." in host
+            
+            # واجهة فريق عشق (النسخة النارية)
+            header = "🔥 <b>ULTRA FAST SERVER</b> 🔥" if ping < 90 else "✨ <b>Welcome to Ashaq Team</b> ✨"
+            
+            msg = f"{header}\n"
+            msg += f"━━━━━━━━━━━━━━━\n"
+            msg += f"🌍 <b>Country:</b> {location}\n"
+            msg += f"🔹 <b>Type:</b> Vless/Vmess\n"
+            msg += f"⚡ <b>Ping:</b> {ping}ms | 🟢 Ultra Stable\n"
+            msg += f"🛡️ <b>SSL:</b> {'Verified ✅' if is_ssl else 'Standard'}\n"
+            msg += f"☁️ <b>CF:</b> {'Active ⚡' if is_cf else 'Direct'}\n"
+            msg += f"🕒 <b>Checked:</b> Just Now\n"
+            msg += f"🏷️ <b>Tags:</b> #Ashaq_Team #Free_VPN\n"
+            msg += f"🔹 <b>Port:</b> {port}\n"
+            msg += f"━━━━━━━━━━━━━━━\n"
+            msg += f"<code>{config}</code>\n"
+            msg += f"━━━━━━━━━━━━━━━\n"
+            msg += f"👥 @V2rayashaq"
+
+            try:
+                payload = {
+                    "chat_id": CHAT_ID,
+                    "text": msg,
+                    "parse_mode": "HTML",
                     "reply_markup": {"inline_keyboard": [[
                         {"text": "📢 Join Channel", "url": "https://t.me/V2rayashaq"},
                         {"text": "👤 Admin", "url": f"https://t.me/{ADMIN_USER.replace('@','')}"}
                     ]]}
-                })
-                posted += 1
-                time.sleep(5) # فاصل أمان بين المنشورات
-            except: continue
+                }
+                res = requests.post(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage", json=payload)
+                if res.status_code == 200:
+                    posted_count += 1
+                    print(f"🚀 Posted #{posted_count} from {location}")
+                    time.sleep(6) # فاصل أمان
+            except: pass
 
 if __name__ == "__main__":
     post_process()
