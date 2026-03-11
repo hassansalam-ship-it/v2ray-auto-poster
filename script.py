@@ -4,85 +4,100 @@ import re
 import base64
 import random
 import socket
-from datetime import datetime
 
-# الإعدادات الأساسية
+# الإعدادات
 BOT_TOKEN = os.environ.get('BOT_TOKEN')
 CHAT_ID = "@V2rayashaq"
+BLOCKED_COUNTRIES = ['IR', 'CN', 'RU'] # الدول المحظورة
 
-# القنوات والمصادر التي طلبتها (بصيغة ويب ليسحب منها الكود)
+# الكلمات الدلالية لسيرفرات الـ VPS القوية
+VPS_KEYWORDS = ['oracle', 'digitalocean', 'hetzner', 'ovh', 'linode', 'vultr', 'aws', 'amazon', 'google', 'azure', 'vps']
+
 TG_CHANNELS = [
     "oneclickvpnkeys", "ConfigsHUB", "Outline_ir", 
     "vpnfail_v2ray", "vpnfail_vless", "v2rayngte", "Outline_Vpn"
 ]
 
-SOURCES = [
-    "https://raw.githubusercontent.com/yebekhe/TelegramV2rayCollector/main/sub/base64/mix",
-    "https://raw.githubusercontent.com/LonUp/V2Ray-Config/main/Helper/All_Configs_Sub.txt",
-    "https://raw.githubusercontent.com/mahdibland/V2RayAggregator/master/sub/sub_merge.txt"
-]
-
-def is_alive(config):
-    """فحص الاتصال الحقيقي بالسيرفر"""
+def get_ip_info(ip):
     try:
-        host_port = re.search(r'@([^:/]+):(\d+)', config)
-        if host_port:
-            host, port = host_port.group(1), int(host_port.group(2))
-            with socket.create_connection((host, port), timeout=3):
-                return True
-    except: return False
-    return False
+        res = requests.get(f"http://ip-api.com/json/{ip}?fields=status,countryCode,isp", timeout=5).json()
+        if res.get('status') == 'success':
+            return res.get('countryCode'), res.get('isp', '').lower()
+    except: pass
+    return 'Unknown', ''
 
-def fetch_from_telegram():
-    """صيد السيرفرات من قنوات التليجرام المحددة"""
-    found_configs = []
-    for channel in TG_CHANNELS:
+def is_vps(isp_name, config_name):
+    """التحقق إذا كان السيرفر VPS بناءً على اسم الشركة أو اسم السيرفر"""
+    full_text = f"{isp_name} {config_name}".lower()
+    return any(key in full_text for key in VPS_KEYWORDS)
+
+def is_alive_and_safe(config):
+    try:
+        match = re.search(r'@([^:/]+):(\d+)', config)
+        if match:
+            host, port = match.group(1), int(match.group(2))
+            ip = socket.gethostbyname(host)
+            country, isp = get_ip_info(ip)
+            
+            if country in BLOCKED_COUNTRIES: return False, False
+            
+            with socket.create_connection((host, port), timeout=3):
+                # نتحقق إذا كان VPS لتمييزه في المنشور
+                vps_status = is_vps(isp, config)
+                return True, vps_status
+    except: pass
+    return False, False
+
+def fetch_all():
+    found = []
+    # سحب من التليجرام
+    for ch in TG_CHANNELS:
         try:
-            url = f"https://t.me/s/{channel}" # واجهة الويب للقناة
-            res = requests.get(url, timeout=15)
-            configs = re.findall(r'(?:vless|vmess|trojan)://[^\s#"\'<>]+', res.text)
-            found_configs.extend(configs)
+            res = requests.get(f"https://t.me/s/{ch}", timeout=10)
+            found.extend(re.findall(r'(?:vless|vmess|trojan)://[^\s#"\'<>]+', res.text))
         except: continue
-    return found_configs
+    # سحب من GitHub
+    sources = [
+        "https://raw.githubusercontent.com/yebekhe/TelegramV2rayCollector/main/sub/base64/mix",
+        "https://raw.githubusercontent.com/LonUp/V2Ray-Config/main/Helper/All_Configs_Sub.txt",
+        "https://raw.githubusercontent.com/mahdibland/V2RayAggregator/master/sub/sub_merge.txt"
+    ]
+    for src in sources:
+        try:
+            r = requests.get(src, timeout=10).text
+            found.extend(re.findall(r'(?:vless|vmess|trojan)://[^\s]+', r))
+        except: continue
+    return list(set(found))
 
 def post_process():
-    print(f"--- Ashaq Pro System Started: {datetime.now()} ---")
-    
-    # جمع السيرفرات من كل مكان
-    all_configs = fetch_from_telegram()
-    for src in SOURCES:
-        try:
-            r = requests.get(src, timeout=10)
-            all_configs.extend(re.findall(r'(?:vless|vmess|trojan)://[^\s]+', r.text))
-        except: continue
+    all_configs = fetch_all()
+    if not all_configs: return
 
-    unique_configs = list(set(all_configs))
+    # ترتيب الأولويات (Vmess/Vless أولاً، ثم Trojan)
+    v_configs = [c for c in all_configs if c.startswith(('vmess', 'vless'))]
+    t_configs = [c for c in all_found if c.startswith('trojan')]
     
-    # الأولوية لبورت 443
-    priority_443 = [c for c in unique_configs if ":443" in c]
-    others = [c for c in unique_configs if ":443" not in c]
-    random.shuffle(priority_443)
-    random.shuffle(others)
+    random.shuffle(v_configs)
+    random.shuffle(t_configs)
     
-    final_list = priority_443 + others
+    final_search_list = v_configs + t_configs
     posted = 0
     
-    for config in final_list:
-        if posted >= 2: break # نشر سيرفرين فقط كل نصف ساعة كما طلبت
+    for config in final_search_list:
+        if posted >= 2: break # سيرفرين كل نصف ساعة
         
-        if is_alive(config):
-            ctype = "Trojan" if "trojan" in config else "Vless" if "vless" in config else "Vmess"
-            port = "443" if ":443" in config else "Dynamic"
+        alive, vps_flag = is_alive_and_safe(config)
+        if alive:
+            ctype = "Vmess" if "vmess" in config else "Vless" if "vless" in config else "Trojan"
+            vps_tag = "🚀 (High Speed VPS)" if vps_flag else "✅ (Premium)"
             
             msg = f"✨ <b>Welcome to Ashaq Team</b> ✨\n"
             msg += f"━━━━━━━━━━━━━━━\n"
-            msg += f"<b>🔹 Type:</b> {ctype}\n"
-            msg += f"<b>🔹 Port:</b> {port}\n"
-            msg += f"<b>🔹 Online Status:</b> Tested 🟢\n\n" # الحالة خضراء عند النشر
+            msg += f"<b>🔹 Type:</b> {ctype} {vps_tag}\n"
+            msg += f"<b>🔹 Online Status:</b> Online Tested 🟢\n\n"
             msg += f"<code>{config}</code>\n\n"
             msg += f"👥 @V2rayashaq"
             
-            # إرسال الرسالة وحفظ الـ ID إذا أردت التعديل لاحقاً (تحتاج قاعدة بيانات للتعديل التلقائي)
             requests.post(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage", 
                           data={"chat_id": CHAT_ID, "text": msg, "parse_mode": "HTML"})
             posted += 1
