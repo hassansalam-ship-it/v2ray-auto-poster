@@ -1,19 +1,31 @@
-name: V2Ray Auto Post
+name: Ashaq Pro Auto Post
+
 on:
   schedule:
-    - cron: '*/50 * * * *'
-  workflow_dispatch:
+    # تشغيل تلقائي كل 30 دقيقة (نشر سيرفرين في كل دورة)
+    - cron: '*/30 * * * *'
+  workflow_dispatch: # يسمح لك بتشغيل البوت يدوياً في أي وقت للتجربة
 
 jobs:
-  run:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-      - name: Setup Python
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
-      - run: pip install requests
-      - env:
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Run Ashaq Script
+        env:
+          # تأكد أن اسم السر في الإعدادات هو BOT_TOKEN بالضبط
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         run: python script.py
