@@ -4,35 +4,54 @@ import re
 import base64
 import random
 import socket
+import time
+import json
+from datetime import datetime
 
 # الإعدادات
 BOT_TOKEN = os.environ.get('BOT_TOKEN')
 CHAT_ID = "@V2rayashaq"
-BLOCKED_COUNTRIES = ['IR', 'CN', 'RU'] # الدول المحظورة
-# شركات الـ VPS المعروفة
+BLOCKED_COUNTRIES = ['IR', 'CN', 'RU']
 VPS_PROVIDERS = ['oracle', 'digitalocean', 'hetzner', 'ovh', 'linode', 'vultr', 'aws', 'amazon', 'google', 'azure', 'vps', 'contabo', 'alibaba']
 
 SEARCH_SOURCES = [
     "https://raw.githubusercontent.com/yebekhe/TelegramV2rayCollector/main/sub/base64/mix",
     "https://raw.githubusercontent.com/LonUp/V2Ray-Config/main/Helper/All_Configs_Sub.txt",
     "https://raw.githubusercontent.com/mahdibland/V2RayAggregator/master/sub/sub_merge.txt",
-    "https://t.me/s/oneclickvpnkeys", "https://t.me/s/ConfigsHUB", 
-    "https://t.me/s/Outline_ir", "https://t.me/s/vpnfail_v2ray",
-    "https://t.me/s/v2rayngte", "https://t.me/s/Outline_Vpn"
+    "https://raw.githubusercontent.com/SreSami/Free-V2ray-Config/main/Splitted-Configs/vmess.txt",
+    "https://raw.githubusercontent.com/SreSami/Free-V2ray-Config/main/Splitted-Configs/vless.txt",
+    "https://raw.githubusercontent.com/SreSami/Free-V2ray-Config/main/Splitted-Configs/trojan.txt",
+    "https://t.me/s/v2rayngte", "https://t.me/s/Outline_Vpn", "https://t.me/s/ConfigsHUB",
+    "https://t.me/s/oneclickvpnkeys", "https://t.me/s/v2ray_outline_config", "https://t.me/s/v2_team"
 ]
 
-def get_ip_info(ip):
+def get_detailed_info(ip):
     try:
-        res = requests.get(f"http://ip-api.com/json/{ip}?fields=status,countryCode,isp", timeout=5).json()
+        res = requests.get(f"http://ip-api.com/json/{ip}?fields=status,country,countryCode,isp", timeout=2).json()
         if res.get('status') == 'success':
-            return res.get('countryCode'), res.get('isp', '').lower()
+            return res.get('countryCode'), res.get('country'), res.get('isp', '').lower()
     except: pass
-    return 'Unknown', ''
+    return 'Unknown', 'Unknown', ''
 
-def check_vps(isp, config_name):
-    """التحقق إذا كان السيرفر VPS بناءً على اسم الشركة"""
-    text = f"{isp} {config_name}".lower()
-    return any(provider in text for provider in VPS_PROVIDERS)
+def measure_ping(host, port):
+    start = time.time()
+    try:
+        with socket.create_connection((host, port), timeout=2):
+            return int((time.time() - start) * 1000)
+    except: return None
+
+def get_tags(ms, is_vps):
+    tags = []
+    if ms < 120: tags.append("#Gaming")
+    if is_vps: tags.append("#Streaming")
+    if ms < 200: tags.append("#Fast")
+    tags.append("#Free_VPN")
+    return " ".join(tags)
+
+def get_rating(ms, is_vps):
+    if ms < 100 and is_vps: return "⭐⭐⭐⭐⭐ (Gaming Pro)"
+    if ms < 150: return "⭐⭐⭐⭐ (High Speed)"
+    return "⭐⭐⭐ (Stable)"
 
 def is_alive_and_safe(config):
     try:
@@ -40,18 +59,20 @@ def is_alive_and_safe(config):
         if match:
             host, port = match.group(1), int(match.group(2))
             ip = socket.gethostbyname(host)
-            country, isp = get_ip_info(ip)
-            if country in BLOCKED_COUNTRIES: return False, False
-            with socket.create_connection((host, port), timeout=3):
-                return True, check_vps(isp, config)
+            cc, country, isp = get_detailed_info(ip)
+            if cc in BLOCKED_COUNTRIES: return None
+            ms = measure_ping(host, port)
+            if ms:
+                vps = any(p in f"{isp} {config}".lower() for p in VPS_PROVIDERS)
+                return {"cc": cc, "country": country, "ms": ms, "vps": vps}
     except: pass
-    return False, False
+    return None
 
 def fetch_mega():
     found = []
     for url in SEARCH_SOURCES:
         try:
-            r = requests.get(url, timeout=15).text
+            r = requests.get(url, timeout=10).text
             if "vmess://" not in r and "vless://" not in r:
                 try: r = base64.b64decode(r).decode('utf-8')
                 except: pass
@@ -59,42 +80,62 @@ def fetch_mega():
         except: continue
     return list(set(found))
 
+def send_with_buttons(text):
+    url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
+    payload = {
+        "chat_id": CHAT_ID,
+        "text": text,
+        "parse_mode": "HTML",
+        "reply_markup": json.dumps({
+            "inline_keyboard": [
+                [
+                    {"text": "📢 Join Channel", "url": "https://t.me/V2rayashaq"},
+                    {"text": "🛠 Help", "url": "https://t.me/V2rayashaq/1"}
+                ],
+                [{"text": "👤 Support", "url": "https://t.me/YourUsername"}]
+            ]
+        })
+    }
+    requests.post(url, json=payload)
+
 def post_process():
     try:
         all_found = fetch_mega()
         if not all_found: return
-
-        # فرز: أولوية بورت 443 ثم البروتوكولات
-        p443 = [c for c in all_found if ":443" in c]
-        others = [c for c in all_found if ":443" not in c]
+        v_list = [c for c in all_found if c.startswith(('vmess', 'vless'))]
+        t_list = [c for c in all_found if c.startswith('trojan')]
         
         def sort_logic(lst):
-            v = [c for c in lst if c.startswith(('vmess', 'vless'))]
-            t = [c for c in lst if c.startswith('trojan')]
-            random.shuffle(v); random.shuffle(t)
-            return v + t
+            p443 = [c for c in lst if ":443" in c]; others = [c for c in lst if ":443" not in c]
+            random.shuffle(p443); random.shuffle(others)
+            return p443 + others
 
-        final_list = sort_logic(p443) + sort_logic(others)
+        final_list = sort_logic(v_list) + sort_logic(t_list)
         posted = 0
-        
         for config in final_list:
-            if posted >= 2: break
-            alive, vps_status = is_alive_and_safe(config)
-            if alive:
+            if posted >= 4: break
+            data = is_alive_and_safe(config)
+            if data:
                 proto = "Trojan" if "trojan" in config else "Vless" if "vless" in config else "Vmess"
-                # التعديل المطلوب: يكتب VPS فقط إذا كان فعلاً VPS
-                type_label = f"{proto} VPS 🚀" if vps_status else proto
-                port_label = "443 (Ultra Fast)" if ":443" in config else "Stable"
+                type_label = f"{proto} VPS 🚀" if data['vps'] else proto
+                rating = get_rating(data['ms'], data['vps'])
+                tags = get_tags(data['ms'], data['vps'])
                 
-                msg = f"✨ <b>Welcome to Ashaq Team</b> ✨\n━━━━━━━━━━━━━━━\n"
+                msg = f"✨ <b>Welcome to Ashaq Team</b> ✨\n"
+                msg += f"━━━━━━━━━━━━━━━\n"
+                msg += f"<b>🌍 Country:</b> ({data['cc']}) {data['country']}\n"
                 msg += f"<b>🔹 Type:</b> {type_label}\n"
-                msg += f"<b>🔹 Port:</b> {port_label}\n"
-                msg += f"<b>🔹 Online Status:</b> Online Tested 🟢\n\n"
-                msg += f"<code>{config}</code>\n\n"
+                msg += f"<b>⚡ Ping:</b> {data['ms']}ms\n"
+                msg += f"<b>⭐ Rating:</b> {rating}\n"
+                msg += f"<b>🕒 Checked:</b> Just Now\n"
+                msg += f"<b>🏷 Tags:</b> {tags}\n"
+                msg += f"<b>🔹 Port:</b> {'443 (Ultra Fast)' if ':443' in config else 'Stable'}\n"
+                msg += f"━━━━━━━━━━━━━━━\n"
+                msg += f"<code>{config}</code>\n"
+                msg += f"━━━━━━━━━━━━━━━\n"
                 msg += f"👥 @V2rayashaq"
                 
-                requests.post(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage", 
-                              data={"chat_id": CHAT_ID, "text": msg, "parse_mode": "HTML"})
+                send_with_buttons(msg)
                 posted += 1
     except: pass
 
