@@ -3,22 +3,36 @@ import os
 import re
 import base64
 import random
+import socket
 
 BOT_TOKEN = os.environ.get('BOT_TOKEN')
 CHAT_ID = "@V2rayashaq"
 
-# المصادر الشاملة
+# مصادر عملاقة تشمل تليجرام ومواقع خارجية وجيت هاب
 SOURCES = [
     "https://raw.githubusercontent.com/yebekhe/TelegramV2rayCollector/main/sub/base64/mix",
     "https://raw.githubusercontent.com/LonUp/V2Ray-Config/main/Helper/All_Configs_Sub.txt",
     "https://raw.githubusercontent.com/mahdibland/V2RayAggregator/master/sub/sub_merge.txt",
     "https://raw.githubusercontent.com/Barabama/FreeNodes/master/nodes/nodes.txt",
-    "https://raw.githubusercontent.com/shifureader/v2ray-conf/main/latest/all"
+    "https://raw.githubusercontent.com/shifureader/v2ray-conf/main/latest/all",
+    "https://raw.githubusercontent.com/vpei/free-v2ray-config/master/v2ray"
 ]
 
 def decode_base64(data):
     try: return base64.b64decode(data).decode('utf-8')
     except: return data
+
+def is_server_alive(config):
+    """فحص سريع للسيرفر قبل النشر للتأكد من أنه شغال"""
+    try:
+        # استخراج العنوان والبورت من الرابط
+        host_port = re.search(r'@([^:/]+):(\int+)', config)
+        if host_port:
+            host, port = host_port.group(1), int(host_port.group(2))
+            with socket.create_connection((host, port), timeout=2):
+                return True
+    except: return False
+    return False
 
 def fetch_all():
     raw_list = []
@@ -27,9 +41,8 @@ def fetch_all():
             res = requests.get(url, timeout=15)
             if res.status_code == 200:
                 content = res.text
-                if "vmess://" not in content and "vless://" not in content and "trojan://" not in content:
+                if not any(x in content for x in ["vmess://", "vless://", "trojan://"]):
                     content = decode_base64(content)
-                # استخراج السيرفر كاملاً حتى نهاية السطر
                 found = re.findall(r'(?:vless|vmess|trojan)://[^\s]+', content)
                 raw_list.extend(found)
         except: continue
@@ -39,32 +52,37 @@ def post_to_telegram():
     all_found = fetch_all()
     if not all_found: return
 
-    # ترتيب حسب الأولوية لبورت 443
-    priority = [c for c in all_found if ":443" in c]
+    # فلترة وتصفية (الأولوية لـ 443)
+    priority_443 = [c for c in all_found if ":443" in c]
     others = [c for c in all_found if ":443" not in c]
-    random.shuffle(priority)
-    random.shuffle(others)
-    sorted_list = priority + others
-
-    # نشر 3 سيرفرات لتجنب السبام
-    to_post = sorted_list[:3]
     
-    for config in to_post:
-        ctype = "Trojan" if "trojan" in config else "Vless" if "vless" in config else "Vmess"
-        port = "443" if ":443" in config else "Auto"
+    # خلط عشوائي لضمان ظهور الأنواع الثلاثة (Vmess, Vless, Trojan)
+    random.shuffle(priority_443)
+    random.shuffle(others)
+    
+    combined = priority_443 + others
+    posted_count = 0
+    
+    for config in combined:
+        if posted_count >= 4: break # سننشر 4 سيرفرات شغالة في كل دورة
         
-        # استخدام HTML لضمان ظهور الكود كاملاً وقابليته للنسخ
-        msg = f"<b>🛰 Global Server Found</b>\n"
-        msg += f"━━━━━━━━━━━━━━━\n"
-        msg += f"<b>🔹 Type:</b> {ctype}\n"
-        msg += f"<b>🔹 Port:</b> {port}\n"
-        msg += f"<b>🔹 Status:</b> Tested ✅\n\n"
-        msg += f"<code>{config}</code>\n\n"  # وسم code في HTML يجعل النص قابلاً للنسخ
-        msg += f"👥 @V2rayashaq"
-        
-        url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
-        # تغيير parse_mode إلى HTML
-        requests.post(url, data={"chat_id": CHAT_ID, "text": msg, "parse_mode": "HTML"})
+        # فحص السيرفر قبل النشر
+        if is_server_alive(config):
+            ctype = "Trojan" if "trojan" in config else "Vless" if "vless" in config else "Vmess"
+            port = "443 (Ultra Fast)" if ":443" in config else "High Speed"
+            
+            # الرسالة بالترحيب الجديد
+            msg = f"✨ <b>Welcome to Ashaq Team</b> ✨\n"
+            msg += f"━━━━━━━━━━━━━━━\n"
+            msg += f"<b>🔹 Type:</b> {ctype}\n"
+            msg += f"<b>🔹 Port:</b> {port}\n"
+            msg += f"<b>🔹 Status:</b> Tested & Working ✅\n\n"
+            msg += f"<code>{config}</code>\n\n"
+            msg += f"👥 @V2rayashaq"
+            
+            url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
+            requests.post(url, data={"chat_id": CHAT_ID, "text": msg, "parse_mode": "HTML"})
+            posted_count += 1
 
 if __name__ == "__main__":
     post_to_telegram()
