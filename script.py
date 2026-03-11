@@ -37,25 +37,26 @@ def get_geo(ip):
 
 def check_ping(host, port):
     try:
+        if str(port) != "443": return None # تجاهل أي بورت غير 443
         start = time.time()
-        with socket.create_connection((host, int(port)), timeout=1.2):
+        with socket.create_connection((host, 443), timeout=1.2):
             return int((time.time() - start) * 1000)
     except: return None
 
 def fix_vmess(link, sni):
     try:
-        # فك تشفير Vmess وتعديل الـ SNI داخله
         data_b64 = link.split("://")[1]
         decoded = json.loads(base64.b64decode(data_b64).decode('utf-8'))
+        decoded['port'] = 443 # إجبار البورت 443
         decoded['sni'] = sni
         decoded['host'] = sni
-        # إرجاع الرابط مشفراً وجاهزاً للتطبيق
         new_b64 = base64.b64encode(json.dumps(decoded).encode('utf-8')).decode('utf-8')
         return f"vmess://{new_b64}"
-    except: return link
+    except: return None
 
 def clean_vless(link, sni, use_ssl):
-    # مسح أي SNI أو host أو security قديم
+    # إجبار البورت 443 في رابط Vless
+    link = re.sub(r':\d+@', ':443@', link)
     link = re.sub(r'[?&](sni|host|security)=[^&]*', '', link)
     connector = "&" if "?" in link else "?"
     if use_ssl:
@@ -65,7 +66,7 @@ def clean_vless(link, sni, use_ssl):
     return link.replace('&amp;', '&')
 
 def post_process():
-    print("🚀 Starting The Empire Scraper...")
+    print("⛏️ Searching for Port 443 Elite Servers Only...")
     all_links = []
     for url in SOURCES:
         try:
@@ -90,52 +91,57 @@ def post_process():
     for link in unique_links:
         if posted >= 3: break
         
-        # استخراج الهوست والبورت للفحص
+        # استخراج الهوست والبورت
         if "vmess://" in link:
             try:
                 data = json.loads(base64.b64decode(link.split("://")[1]).decode('utf-8'))
-                host, port = data['add'], data['port']
+                host, port = data['add'], data.get('port', 443)
             except: continue
         else:
             match = re.search(r'@([^:/]+):(\d+)', link)
             if not match: continue
             host, port = match.group(1), match.group(2)
 
-        ping = check_ping(host, port)
-        if ping:
-            geo = get_geo(socket.gethostbyname(host)) if ping < 200 else "🌍 Global"
-            pkg = packages[posted]
-            
-            # حقن الهوست حسب النوع
-            if "vmess://" in link:
-                final_link = fix_vmess(link, pkg['host'])
-            else:
-                final_link = clean_vless(link, pkg['host'], pkg['ssl'])
-            
-            header = "🔥 <b>ULTRA FAST SERVER</b> 🔥" if ping < 90 else "✨ <b>Welcome to Ashaq Team</b> ✨"
-            
-            msg = f"{header}\n"
-            msg += f"━━━━━━━━━━━━━━━\n"
-            msg += f"🌍 <b>Country:</b> {geo}\n"
-            msg += f"📦 <b>Package:</b> {pkg['name']}\n"
-            msg += f"⚡ <b>Ping:</b> {ping}ms | 🟢 Ultra Stable\n"
-            msg += f"🛡️ <b>SSL:</b> {'Enabled ✅' if pkg['ssl'] else 'Disabled 🔓'}\n"
-            msg += f"🕒 <b>Checked:</b> Just Now\n"
-            msg += f"🏷️ <b>Tags:</b> #Ashaq_Team #Alpha\n"
-            msg += f"━━━━━━━━━━━━━━━\n"
-            msg += f"<code>{final_link}</code>\n"
-            msg += f"━━━━━━━━━━━━━━━\n"
-            msg += f"👥 @V2rayashaq"
+        # الشرط الصارم: بورت 443 فقط
+        if str(port) == "443":
+            ping = check_ping(host, 443)
+            if ping:
+                try:
+                    ip = socket.gethostbyname(host)
+                    geo = get_geo(ip)
+                except: geo = "🌍 Global"
+                
+                pkg = packages[posted]
+                if "vmess://" in link:
+                    final_link = fix_vmess(link, pkg['host'])
+                else:
+                    final_link = clean_vless(link, pkg['host'], pkg['ssl'])
+                
+                if not final_link: continue
 
-            requests.post(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage", json={
-                "chat_id": CHAT_ID, "text": msg, "parse_mode": "HTML",
-                "reply_markup": {"inline_keyboard": [
-                    [{"text": "📢 Join Channel", "url": "https://t.me/V2rayashaq"}],
-                    [{"text": "👤 Admin", "url": f"https://t.me/{ADMIN_USER}"}]
-                ]}
-            })
-            posted += 1
-            time.sleep(7)
+                header = "🔥 <b>ULTRA FAST SERVER</b> 🔥" if ping < 90 else "✨ <b>Welcome to Ashaq Team</b> ✨"
+                msg = f"{header}\n"
+                msg += f"━━━━━━━━━━━━━━━\n"
+                msg += f"🌍 <b>Country:</b> {geo}\n"
+                msg += f"📦 <b>Package:</b> {pkg['name']}\n"
+                msg += f"⚡ <b>Ping:</b> {ping}ms | 🟢 443 Only\n"
+                msg += f"🛡️ <b>SSL:</b> {'Enabled ✅' if pkg['ssl'] else 'Disabled 🔓'}\n"
+                msg += f"🕒 <b>Checked:</b> Just Now\n"
+                msg += f"🏷️ <b>Tags:</b> #Ashaq_Team #Port443\n"
+                msg += f"━━━━━━━━━━━━━━━\n"
+                msg += f"<code>{final_link}</code>\n"
+                msg += f"━━━━━━━━━━━━━━━\n"
+                msg += f"👥 @V2rayashaq"
+
+                requests.post(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage", json={
+                    "chat_id": CHAT_ID, "text": msg, "parse_mode": "HTML",
+                    "reply_markup": {"inline_keyboard": [
+                        [{"text": "📢 Join Channel", "url": "https://t.me/V2rayashaq"}],
+                        [{"text": "👤 Admin", "url": f"https://t.me/{ADMIN_USER}"}]
+                    ]}
+                })
+                posted += 1
+                time.sleep(7)
 
 if __name__ == "__main__":
     post_process()
