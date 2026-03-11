@@ -11,12 +11,14 @@ import json
 BOT_TOKEN = os.environ.get('BOT_TOKEN')
 CHAT_ID = "@V2rayashaq"
 ADMIN_USER = "genie_2000"
+# --- إعدادات الدومين ---
+MY_DOMAIN = "predator666h.duckdns.org"
+DUCK_TOKEN = "e6e3c545-6677-4b7b-83c3-37651c6c518b" # توكن DuckDNS الخاص بك
 
-# --- باقات الهوستات ---
+# --- الباقات ---
 OODI_HOSTS = [
     ("m.tiktok.com", "Oodi | TikTok 🎵"), ("m.youtube.com", "Oodi | YouTube 🎥"),
-    ("m.instagram.com", "Oodi | Instagram 📸"), ("m.facebook.com", "Oodi | Facebook 👥"),
-    ("web.whatsapp.com", "Oodi | WhatsApp 🟢")
+    ("m.instagram.com", "Oodi | Instagram 📸"), ("web.whatsapp.com", "Oodi | WhatsApp 🟢")
 ]
 VOXI_HOST = ("downloads.vodafone.co.uk", "Voxi UK 🇬🇧")
 ZAIN_KAFO_HOST = ("m.tiktok.com", "Zain كفو 💎")
@@ -27,121 +29,112 @@ SOURCES = [
     "https://t.me/s/v2_team", "https://t.me/s/V2ray_Alpha"
 ]
 
-def get_geo(ip):
+def update_dns(ip):
     try:
-        res = requests.get(f"http://ip-api.com/json/{ip}?fields=status,country,countryCode", timeout=2).json()
-        if res.get('status') == 'success':
-            return f"({res.get('countryCode')}) {res.get('country')}"
+        requests.get(f"https://www.duckdns.org/update?domains=predator666h&token={DUCK_TOKEN}&ip={ip}", timeout=5)
     except: pass
-    return "🌍 Global Node"
 
-def check_ping(host, port):
+def check_443(host):
     try:
-        if str(port) != "443": return None # تجاهل أي بورت غير 443
         start = time.time()
         with socket.create_connection((host, 443), timeout=1.2):
             return int((time.time() - start) * 1000)
     except: return None
 
-def fix_vmess(link, sni):
+def get_geo(ip):
     try:
-        data_b64 = link.split("://")[1]
-        decoded = json.loads(base64.b64decode(data_b64).decode('utf-8'))
-        decoded['port'] = 443 # إجبار البورت 443
-        decoded['sni'] = sni
-        decoded['host'] = sni
-        new_b64 = base64.b64encode(json.dumps(decoded).encode('utf-8')).decode('utf-8')
-        return f"vmess://{new_b64}"
-    except: return None
+        r = requests.get(f"http://ip-api.com/json/{ip}?fields=country,countryCode", timeout=2).json()
+        return f"({r['countryCode']}) {r['country']}"
+    except: return "🌍 Global"
 
-def clean_vless(link, sni, use_ssl):
-    # إجبار البورت 443 في رابط Vless
+def inject_config(link, sni, address, use_ssl):
+    # معالجة Vmess
+    if "vmess://" in link:
+        try:
+            data = json.loads(base64.b64decode(link.split("://")[1]).decode('utf-8'))
+            data['add'], data['port'], data['sni'], data['host'] = address, 443, sni, sni
+            return f"vmess://{base64.b64encode(json.dumps(data).encode('utf-8')).decode('utf-8')}"
+        except: return None
+    # معالجة Vless
+    link = re.sub(r'@([^:/]+):', f'@{address}:', link)
     link = re.sub(r':\d+@', ':443@', link)
     link = re.sub(r'[?&](sni|host|security)=[^&]*', '', link)
-    connector = "&" if "?" in link else "?"
-    if use_ssl:
-        link += f"{connector}sni={sni}&host={sni}&security=tls"
-    else:
-        link += f"{connector}host={sni}"
+    sep = "&" if "?" in link else "?"
+    link += f"{sep}sni={sni}&host={sni}"
+    if use_ssl: link += "&security=tls"
     return link.replace('&amp;', '&')
 
 def post_process():
-    print("⛏️ Searching for Port 443 Elite Servers Only...")
-    all_links = []
+    all_raw = []
     for url in SOURCES:
         try:
             r = requests.get(url, timeout=10).text
             if "vless://" not in r and "vmess://" not in r:
                 try: r = base64.b64decode(r).decode('utf-8')
                 except: pass
-            all_links.extend(re.findall(r'(?:vless|vmess)://[^\s#"\'<>]+', r))
+            all_raw.extend(re.findall(r'(?:vless|vmess)://[^\s#"\'<>]+', r))
         except: continue
     
-    unique_links = list(set(all_links))
-    random.shuffle(unique_links)
+    unique = list(set(all_raw))
+    random.shuffle(unique)
     
     chosen_oodi = random.choice(OODI_HOSTS)
     packages = [
-        {"host": VOXI_HOST[0], "name": VOXI_HOST[1], "ssl": True},
-        {"host": chosen_oodi[0], "name": chosen_oodi[1], "ssl": False},
-        {"host": ZAIN_KAFO_HOST[0], "name": ZAIN_KAFO_HOST[1], "ssl": False}
+        {"host": VOXI_HOST[0], "name": VOXI_HOST[1], "ssl": True, "use_domain": True},
+        {"host": chosen_oodi[0], "name": chosen_oodi[1], "ssl": False, "use_domain": False},
+        {"host": ZAIN_KAFO_HOST[0], "name": ZAIN_KAFO_HOST[1], "ssl": False, "use_domain": False}
     ]
 
     posted = 0
-    for link in unique_links:
+    for link in unique:
         if posted >= 3: break
         
-        # استخراج الهوست والبورت
+        # استخراج الهوست الأصلي
         if "vmess://" in link:
-            try:
-                data = json.loads(base64.b64decode(link.split("://")[1]).decode('utf-8'))
-                host, port = data['add'], data.get('port', 443)
+            try: host = json.loads(base64.b64decode(link.split("://")[1]).decode('utf-8'))['add']
             except: continue
         else:
-            match = re.search(r'@([^:/]+):(\d+)', link)
+            match = re.search(r'@([^:/]+):', link)
             if not match: continue
-            host, port = match.group(1), match.group(2)
+            host = match.group(1)
 
-        # الشرط الصارم: بورت 443 فقط
-        if str(port) == "443":
-            ping = check_ping(host, 443)
-            if ping:
-                try:
-                    ip = socket.gethostbyname(host)
-                    geo = get_geo(ip)
-                except: geo = "🌍 Global"
-                
-                pkg = packages[posted]
-                if "vmess://" in link:
-                    final_link = fix_vmess(link, pkg['host'])
-                else:
-                    final_link = clean_vless(link, pkg['host'], pkg['ssl'])
-                
-                if not final_link: continue
+        ping = check_443(host)
+        if ping:
+            pkg = packages[posted]
+            ip = socket.gethostbyname(host)
+            
+            # إذا كان فوكسي، نحدث الدومين ونستخدمه
+            if pkg['use_domain']:
+                update_dns(ip)
+                target_address = MY_DOMAIN
+                time.sleep(1)
+            else:
+                target_address = ip # البقية IP مباشر
+            
+            final_link = inject_config(link, pkg['host'], target_address, pkg['ssl'])
+            if not final_link: continue
 
-                header = "🔥 <b>ULTRA FAST SERVER</b> 🔥" if ping < 90 else "✨ <b>Welcome to Ashaq Team</b> ✨"
-                msg = f"{header}\n"
-                msg += f"━━━━━━━━━━━━━━━\n"
-                msg += f"🌍 <b>Country:</b> {geo}\n"
-                msg += f"📦 <b>Package:</b> {pkg['name']}\n"
-                msg += f"⚡ <b>Ping:</b> {ping}ms | 🟢 443 Only\n"
-                msg += f"🛡️ <b>SSL:</b> {'Enabled ✅' if pkg['ssl'] else 'Disabled 🔓'}\n"
-                msg += f"🕒 <b>Checked:</b> Just Now\n"
-                msg += f"🏷️ <b>Tags:</b> #Ashaq_Team #Port443\n"
-                msg += f"━━━━━━━━━━━━━━━\n"
-                msg += f"<code>{final_link}</code>\n"
-                msg += f"━━━━━━━━━━━━━━━\n"
-                msg += f"👥 @V2rayashaq"
+            geo = get_geo(ip)
+            header = "👑 <b>DOMAIN EDITION</b> 👑" if pkg['use_domain'] else "🔥 <b>ULTRA FAST SERVER</b> 🔥"
+            
+            msg = f"{header}\n"
+            msg += f"━━━━━━━━━━━━━━━\n"
+            msg += f"🌍 <b>Country:</b> {geo}\n"
+            msg += f"📦 <b>Package:</b> {pkg['name']}\n"
+            msg += f"⚡ <b>Ping:</b> {ping}ms | 🟢 443 Only\n"
+            msg += f"🛡️ <b>SSL:</b> {'Enabled ✅' if pkg['ssl'] else 'Disabled 🔓'}\n"
+            msg += f"🕒 <b>Checked:</b> Just Now\n"
+            msg += f"━━━━━━━━━━━━━━━\n"
+            msg += f"<code>{final_link}</code>\n"
+            msg += f"━━━━━━━━━━━━━━━\n"
+            msg += f"👥 @V2rayashaq"
 
-                requests.post(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage", json={
-                    "chat_id": CHAT_ID, "text": msg, "parse_mode": "HTML",
-                    "reply_markup": {"inline_keyboard": [
-                        [{"text": "📢 Join Channel", "url": "https://t.me/V2rayashaq"}],
-                        [{"text": "👤 Admin", "url": f"https://t.me/{ADMIN_USER}"}]
-                    ]}
-                })
-                posted += 1
-                time.sleep(7)
+            requests.post(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage", json={
+                "chat_id": CHAT_ID, "text": msg, "parse_mode": "HTML",
+                "reply_markup": {"inline_keyboard": [[{"text": "📢 Join", "url": "https://t.me/V2rayashaq"}],[{"text": "👤 Admin", "url": f"https://t.me/{ADMIN_USER}"}]]}
+            })
+            posted += 1
+            time.sleep(7)
 
 if __name__ == "__main__":
     post_process()
