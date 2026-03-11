@@ -1,11 +1,49 @@
+name: V2Ray Hunter v4 - 45min Cycle
+
+on:
+  schedule:
+    - cron: '*/45 * * * *'
+  workflow_dispatch: # يسمح لك بتشغيل السكربت يدوياً للتجربة
+
+jobs:
+  hunt_and_post:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # ضروري للسماح للأكشن برفع الملفات بعد التعديل
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # لجلب كامل تاريخ الملفات وتجنب أخطاء الدمج
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install Dependencies
+        run: pip install requests
+
+      - name: Run Hunter Script
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          ADMIN_TG: "@genie_2000"
+        run: python v2ray_hunter.py
+
       - name: Commit & Push Changes
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action Bot"
-          git add . || true
+          
+          # إضافة جميع الملفات المعدلة (السجل، المصادر، والاشتراك)
+          git add sub_link.txt v2ray_hunt.log learned_sources.json source_stats.json || true
+          
+          # التحقق إذا كانت هناك تغييرات حقيقية لتجنب الخطأ
           if git diff --cached --quiet; then
-            echo "No changes found"
+            echo "No changes to commit"
           else
+            # حل مشكلة التعارض بسحب التحديثات مع تفضيل نسخة السكربت
             git pull --rebase -X ours origin main
             git commit -m "Update links: $(date +'%Y-%m-%d %H:%M:%S')"
             git push origin main
