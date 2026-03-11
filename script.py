@@ -20,7 +20,6 @@ SEARCH_SOURCES = [
 
 def get_location(ip):
     try:
-        # طلب سريع جداً لجلب الدولة
         res = requests.get(f"http://ip-api.com/json/{ip}?fields=status,country,countryCode", timeout=2).json()
         if res.get('status') == 'success':
             return f"({res.get('countryCode')}) {res.get('country')}"
@@ -35,7 +34,7 @@ def check_server_status(host, port):
     except: return None
 
 def post_process():
-    print("⛏️ Starting Deep Search for 3 Elite Servers with Location...")
+    print("⛏️ Searching for 3 Elite Servers on Port 443 ONLY...")
     all_found = []
     for url in SEARCH_SOURCES:
         try:
@@ -50,7 +49,7 @@ def post_process():
     random.shuffle(unique_configs)
     
     posted_count = 0
-    # فحص العينة لضمان استخراج 3 سيرفرات كاملة البيانات
+    # فحص العينة لضمان استخراج بورت 443 فقط
     for config in unique_configs:
         if posted_count >= 3:
             break 
@@ -59,20 +58,23 @@ def post_process():
         if not match: continue
         
         host, port = match.group(1), match.group(2)
+        
+        # الشرط الذهبي: بورت 443 فقط
+        if port != "443":
+            continue
+
         ping = check_server_status(host, port)
         
         if ping and ping < 350:
-            # جلب الموقع الحقيقي بدلاً من Checking
             try:
                 ip_addr = socket.gethostbyname(host)
                 location = get_location(ip_addr)
             except:
                 location = "🌍 International"
 
-            is_ssl = "tls" in config.lower() or port == "443"
+            is_ssl = "tls" in config.lower() or "security=tls" in config
             is_cf = "cloudfront" in config.lower() or "104." in host
             
-            # واجهة فريق عشق (النسخة النارية)
             header = "🔥 <b>ULTRA FAST SERVER</b> 🔥" if ping < 90 else "✨ <b>Welcome to Ashaq Team</b> ✨"
             
             msg = f"{header}\n"
@@ -84,7 +86,7 @@ def post_process():
             msg += f"☁️ <b>CF:</b> {'Active ⚡' if is_cf else 'Direct'}\n"
             msg += f"🕒 <b>Checked:</b> Just Now\n"
             msg += f"🏷️ <b>Tags:</b> #Ashaq_Team #Free_VPN\n"
-            msg += f"🔹 <b>Port:</b> {port}\n"
+            msg += f"🔹 <b>Port:</b> 443 (High Priority)\n"
             msg += f"━━━━━━━━━━━━━━━\n"
             msg += f"<code>{config}</code>\n"
             msg += f"━━━━━━━━━━━━━━━\n"
@@ -103,8 +105,7 @@ def post_process():
                 res = requests.post(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage", json=payload)
                 if res.status_code == 200:
                     posted_count += 1
-                    print(f"🚀 Posted #{posted_count} from {location}")
-                    time.sleep(6) # فاصل أمان
+                    time.sleep(6)
             except: pass
 
 if __name__ == "__main__":
