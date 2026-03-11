@@ -11,7 +11,7 @@ BOT_TOKEN = os.environ.get('BOT_TOKEN')
 CHAT_ID = "@V2rayashaq"
 ADMIN_USER = "@genie_2000"
 
-# قائمة المصادر العملاقة (باطن الأرض + السطح)
+# المصادر العملاقة (أعماق الأرض)
 SEARCH_SOURCES = [
     "https://raw.githubusercontent.com/mahdibland/V2RayAggregator/master/sub/sub_merge.txt",
     "https://raw.githubusercontent.com/yebekhe/TelegramV2rayCollector/main/sub/base64/mix",
@@ -21,14 +21,6 @@ SEARCH_SOURCES = [
 ]
 
 VPS_PROVIDERS = ['oracle', 'google', 'amazon', 'aws', 'digitalocean', 'hetzner', 'ovh', 'linode', 'vultr', 'azure', 'contabo']
-
-def get_detailed_info(ip):
-    try:
-        res = requests.get(f"http://ip-api.com/json/{ip}?fields=status,country,countryCode,isp", timeout=2).json()
-        if res.get('status') == 'success':
-            return res.get('countryCode'), res.get('country'), res.get('isp', '').lower()
-    except: pass
-    return 'Unknown', 'Unknown', ''
 
 def check_server(host, port, config):
     try:
@@ -41,7 +33,6 @@ def check_server(host, port, config):
     except: return None, False, False
 
 def post_process():
-    print("🚀 جاري بدء التنقيب عن السيرفرات الخارقة...")
     all_found = []
     for url in SEARCH_SOURCES:
         try:
@@ -56,51 +47,45 @@ def post_process():
     random.shuffle(unique_configs)
     
     posted = 0
-    # فحص أفضل 250 سيرفر لضمان الجودة
-    for config in unique_configs[:250]:
-        if posted >= 5: break 
+    for config in unique_configs[:300]:
+        if posted >= 3: break # ينشر 3 سيرفرات فقط كل دورة
+        
         match = re.search(r'@([^:/]+):(\d+)', config)
         if not match: continue
         
         host, port = match.group(1), match.group(2)
         ping, has_ssl, has_cf = check_server(host, port, config)
         
-        if ping:
-            ip = socket.gethostbyname(host)
-            cc, country, isp = get_detailed_info(ip)
-            is_vps = any(v in isp for v in VPS_PROVIDERS)
-            
-            # نظام النار للسيرفرات القوية جداً
-            is_fire = ping < 80
-            header = "🔥 <b>ULTRA FAST SERVER</b> 🔥" if is_fire else "✨ <b>Welcome to Ashaq Team</b> ✨"
-            
-            # تنسيق الواجهة الملكية القديمة مع الإضافات الجديدة
-            msg = f"{header}\n"
-            msg += f"━━━━━━━━━━━━━━━\n"
-            msg += f"🌍 <b>Country:</b> ({cc}) {country}\n"
-            msg += f"🔹 <b>Type:</b> {'💎 VPS ELITE' if is_vps else '⚡ CloudFront'}\n"
-            msg += f"⚡ <b>Ping:</b> {ping}ms | 🟢 Ultra Stable\n"
-            msg += f"🛡️ <b>SSL:</b> {'Verified ✅' if has_ssl else 'Standard'}\n"
-            msg += f"☁️ <b>CF:</b> {'Active ⚡' if has_cf else 'Direct'}\n"
-            msg += f"🕒 <b>Checked:</b> Just Now\n"
-            msg += f"🏷️ <b>Tags:</b> #Ashaq_Team #Free_VPN\n"
-            msg += f"🔹 <b>Port:</b> {port} (Priority)\n"
-            msg += f"━━━━━━━━━━━━━━━\n"
-            msg += f"<code>{config}</code>\n"
-            msg += f"━━━━━━━━━━━━━━━\n"
-            msg += f"👥 @V2rayashaq"
+        if ping and ping < 250:
+            try:
+                # وسم النار للسيرفرات الخارقة
+                header = "🔥 <b>ULTRA FAST SERVER</b> 🔥" if ping < 80 else "✨ <b>Welcome to Ashaq Team</b> ✨"
+                
+                msg = f"{header}\n"
+                msg += f"━━━━━━━━━━━━━━━\n"
+                msg += f"🌍 <b>Country:</b> Checking...\n" # لتسريع الكود حذفنا طلب الـ IP التفصيلي
+                msg += f"🔹 <b>Type:</b> Vless/Vmess\n"
+                msg += f"⚡ <b>Ping:</b> {ping}ms | 🟢 Ultra Stable\n"
+                msg += f"🛡️ <b>SSL:</b> {'Verified ✅' if has_ssl else 'Standard'}\n"
+                msg += f"☁️ <b>CF:</b> {'Active ⚡' if has_cf else 'Direct'}\n"
+                msg += f"🕒 <b>Checked:</b> Just Now\n"
+                msg += f"🏷️ <b>Tags:</b> #Ashaq_Team #Free_VPN\n"
+                msg += f"🔹 <b>Port:</b> {port}\n"
+                msg += f"━━━━━━━━━━━━━━━\n"
+                msg += f"<code>{config}</code>\n"
+                msg += f"━━━━━━━━━━━━━━━\n"
+                msg += f"👥 @V2rayashaq"
 
-            res = requests.post(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage", json={
-                "chat_id": CHAT_ID, "text": msg, "parse_mode": "HTML",
-                "reply_markup": {"inline_keyboard": [[
-                    {"text": "📢 Join Channel", "url": "https://t.me/V2rayashaq"},
-                    {"text": "👤 Admin", "url": f"https://t.me/{ADMIN_USER.replace('@','')}"}
-                ]]}
-            })
-            
-            if res.status_code == 200:
+                requests.post(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage", json={
+                    "chat_id": CHAT_ID, "text": msg, "parse_mode": "HTML",
+                    "reply_markup": {"inline_keyboard": [[
+                        {"text": "📢 Join Channel", "url": "https://t.me/V2rayashaq"},
+                        {"text": "👤 Admin", "url": f"https://t.me/{ADMIN_USER.replace('@','')}"}
+                    ]]}
+                })
                 posted += 1
-                time.sleep(2)
+                time.sleep(5) # فاصل أمان بين المنشورات
+            except: continue
 
 if __name__ == "__main__":
     post_process()
