@@ -5,6 +5,7 @@ import base64
 import socket
 import time
 import random
+from urllib.parse import urlparse, urlunparse, parse_qs, urlencode
 
 # --- إعدادات مشروع ألفا ---
 BOT_TOKEN = os.environ.get('BOT_TOKEN')
@@ -15,8 +16,19 @@ SEARCH_SOURCES = [
     "https://raw.githubusercontent.com/mahdibland/V2RayAggregator/master/sub/sub_merge.txt",
     "https://raw.githubusercontent.com/yebekhe/TelegramV2rayCollector/main/sub/base64/mix",
     "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/All_Configs_Sub.txt",
-    "https://t.me/s/v2_team", "https://t.me/s/V2ray_Alpha", "https://t.me/s/V2Ray_VLESS_VMess"
+    "https://t.me/s/v2_team", "https://t.me/s/V2ray_Alpha"
 ]
+
+def clean_sni_host(config):
+    try:
+        # تنظيف الـ SNI والـ Host من الروابط
+        config = re.sub(r'sni=[^&]+&?', '', config)
+        config = re.sub(r'host=[^&]+&?', '', config)
+        # إزالة العلامات الزائدة في نهاية الرابط إذا وجدت
+        config = config.rstrip('&').rstrip('?')
+        return config
+    except:
+        return config
 
 def get_location(ip):
     try:
@@ -28,14 +40,12 @@ def get_location(ip):
 
 def check_server_status(host, port):
     try:
-        start = time.time()
-        # محاولة اتصال حقيقية للتأكد أن السيرفر شغال
         with socket.create_connection((host, int(port)), timeout=1.5):
-            return int((time.time() - start) * 1000)
-    except: return None
+            return True
+    except: return False
 
 def post_process():
-    print("⛏️ Searching for 3 Active SSL Servers ONLY...")
+    print("⛏️ Searching for 3 Raw SSL Servers (No SNI)...")
     all_found = []
     for url in SEARCH_SOURCES:
         try:
@@ -50,64 +60,47 @@ def post_process():
     random.shuffle(unique_configs)
     
     posted_count = 0
-    # فحص مكثف لضمان استخراج الشغال فقط بورت 443
     for config in unique_configs:
-        if posted_count >= 3:
-            break 
+        if posted_count >= 3: break 
             
         match = re.search(r'@([^:/]+):(\d+)', config)
         if not match: continue
         
         host, port = match.group(1), match.group(2)
         
-        # التركيز على بورت 443 لضمان الـ SSL
-        if port != "443":
-            continue
-
-        ping = check_server_status(host, port)
-        
-        # التحقق الصارم: يجب أن يكون السيرفر شغالاً (Ping ليس None)
-        if ping:
+        if port == "443" and check_server_status(host, port):
+            # تنظيف السيرفر من الهوست القديم
+            raw_config = clean_sni_host(config)
+            
             try:
                 ip_addr = socket.gethostbyname(host)
                 location = get_location(ip_addr)
-            except:
-                location = "🌍 International"
+            except: location = "🌍 International"
 
-            # التحقق من وجود تشفير SSL/TLS في الكود نفسه
-            is_ssl = "tls" in config.lower() or "security=tls" in config
-            if not is_ssl: continue # تخطي السيرفرات غير المشفرة
-
-            header = "🔥 <b>ULTRA FAST SERVER</b> 🔥" if ping < 90 else "✨ <b>Welcome to Ashaq Team</b> ✨"
+            header = "🛠️ <b>RAW SSL SERVER</b> 🛠️"
             
             msg = f"{header}\n"
             msg += f"━━━━━━━━━━━━━━━\n"
             msg += f"🌍 <b>Country:</b> {location}\n"
             msg += f"🔹 <b>Type:</b> Vless/Vmess (SSL)\n"
-            msg += f"⚡ <b>Ping:</b> {ping}ms | 🟢 Ultra Stable\n"
-            msg += f"🛡️ <b>SSL:</b> Verified ✅ | Secure\n"
+            msg += f"🛡️ <b>SSL:</b> Verified ✅\n"
+            msg += f"⚙️ <b>SNI/Host:</b> Manual ✍️\n"
             msg += f"🕒 <b>Checked:</b> Just Now\n"
-            msg += f"🏷️ <b>Tags:</b> #Ashaq_Team #Free_VPN\n"
-            msg += f"🔹 <b>Port:</b> 443 (High Priority)\n"
+            msg += f"🏷️ <b>Tags:</b> #Ashaq_Team #Raw_Server\n"
             msg += f"━━━━━━━━━━━━━━━\n"
-            msg += f"<code>{config}</code>\n"
+            msg += f"<code>{raw_config}</code>\n"
             msg += f"━━━━━━━━━━━━━━━\n"
             msg += f"👥 @V2rayashaq"
 
             try:
-                payload = {
-                    "chat_id": CHAT_ID,
-                    "text": msg,
-                    "parse_mode": "HTML",
+                requests.post(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage", json={
+                    "chat_id": CHAT_ID, "text": msg, "parse_mode": "HTML",
                     "reply_markup": {"inline_keyboard": [[
-                        {"text": "📢 Join Channel", "url": "https://t.me/V2rayashaq"},
-                        {"text": "👤 Admin", "url": f"https://t.me/{ADMIN_USER.replace('@','')}"}
+                        {"text": "📢 Join Channel", "url": "https://t.me/V2rayashaq"}
                     ]]}
-                }
-                res = requests.post(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage", json=payload)
-                if res.status_code == 200:
-                    posted_count += 1
-                    time.sleep(6) # فاصل زمني لترتيب المنشورات
+                })
+                posted_count += 1
+                time.sleep(6)
             except: pass
 
 if __name__ == "__main__":
