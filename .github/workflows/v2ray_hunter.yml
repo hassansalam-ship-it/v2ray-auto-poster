@@ -26,13 +26,18 @@ jobs:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           CUSTOM_SNI: "www.speedtest.net"
           ADMIN_TG: "@genie_2000"
-        run: python v2ray_hunter.py
+        run: |
+          # هذا السطر يضمن نشر 4 سيرفرات فقط كما طلبت
+          sed -i "s/MAX_POSTS        = 5/MAX_POSTS        = 4/g" v2ray_hunter.py
+          python v2ray_hunter.py
 
       - name: Commit & Push Changes
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action Bot"
+          # سحب التحديثات لتجنب التعارض (Conflict)
           git pull --rebase origin main
+          # تحديث ملف الاشتراك والسجل في المستودع
           git add sub_link.txt v2ray_hunt.log
           git commit -m "Update links: $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes"
           git push
