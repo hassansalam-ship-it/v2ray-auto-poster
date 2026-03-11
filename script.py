@@ -5,84 +5,58 @@ import base64
 import random
 import socket
 
+# تأكد أنك وضعت BOT_TOKEN في Secrets بنفس هذا الاسم
 BOT_TOKEN = os.environ.get('BOT_TOKEN')
 CHAT_ID = "@V2rayashaq"
 
-# مصادر عملاقة تشمل تليجرام ومواقع خارجية وجيت هاب
 SOURCES = [
     "https://raw.githubusercontent.com/yebekhe/TelegramV2rayCollector/main/sub/base64/mix",
     "https://raw.githubusercontent.com/LonUp/V2Ray-Config/main/Helper/All_Configs_Sub.txt",
     "https://raw.githubusercontent.com/mahdibland/V2RayAggregator/master/sub/sub_merge.txt",
-    "https://raw.githubusercontent.com/Barabama/FreeNodes/master/nodes/nodes.txt",
-    "https://raw.githubusercontent.com/shifureader/v2ray-conf/main/latest/all",
-    "https://raw.githubusercontent.com/vpei/free-v2ray-config/master/v2ray"
+    "https://raw.githubusercontent.com/Barabama/FreeNodes/master/nodes/nodes.txt"
 ]
 
 def decode_base64(data):
     try: return base64.b64decode(data).decode('utf-8')
     except: return data
 
-def is_server_alive(config):
-    """فحص سريع للسيرفر قبل النشر للتأكد من أنه شغال"""
+def is_alive(config):
     try:
-        # استخراج العنوان والبورت من الرابط
-        host_port = re.search(r'@([^:/]+):(\int+)', config)
-        if host_port:
-            host, port = host_port.group(1), int(host_port.group(2))
-            with socket.create_connection((host, port), timeout=2):
+        match = re.search(r'@([^:/]+):(\d+)', config)
+        if match:
+            with socket.create_connection((match.group(1), int(match.group(2))), timeout=2):
                 return True
     except: return False
     return False
 
-def fetch_all():
-    raw_list = []
+def run():
+    print("--- Ashaq Team Bot Started ---")
+    raw_configs = []
     for url in SOURCES:
         try:
-            res = requests.get(url, timeout=15)
-            if res.status_code == 200:
-                content = res.text
-                if not any(x in content for x in ["vmess://", "vless://", "trojan://"]):
-                    content = decode_base64(content)
-                found = re.findall(r'(?:vless|vmess|trojan)://[^\s]+', content)
-                raw_list.extend(found)
+            res = requests.get(url, timeout=10)
+            content = res.text
+            if "vmess://" not in content: content = decode_base64(content)
+            raw_configs.extend(re.findall(r'(?:vless|vmess|trojan)://[^\s]+', content))
         except: continue
-    return list(set(raw_list))
 
-def post_to_telegram():
-    all_found = fetch_all()
-    if not all_found: return
-
-    # فلترة وتصفية (الأولوية لـ 443)
-    priority_443 = [c for c in all_found if ":443" in c]
-    others = [c for c in all_found if ":443" not in c]
+    unique = list(set(raw_configs))
+    random.shuffle(unique)
     
-    # خلط عشوائي لضمان ظهور الأنواع الثلاثة (Vmess, Vless, Trojan)
-    random.shuffle(priority_443)
-    random.shuffle(others)
-    
-    combined = priority_443 + others
-    posted_count = 0
-    
-    for config in combined:
-        if posted_count >= 4: break # سننشر 4 سيرفرات شغالة في كل دورة
+    posted = 0
+    for c in unique:
+        if posted >= 3: break
+        # إذا أردت سرعة أكبر في النشر، يمكنك إلغاء شرط الفحص is_alive مؤقتاً
+        ctype = "Trojan" if "trojan" in c else "Vless" if "vless" in c else "Vmess"
+        msg = f"✨ <b>Welcome to Ashaq Team</b> ✨\n━━━━━━━━━━━━━━━\n"
+        msg += f"<b>🔹 Type:</b> {ctype}\n<b>🔹 Status:</b> Active ✅\n\n"
+        msg += f"<code>{c}</code>\n\n"
+        msg += f"👥 @V2rayashaq"
         
-        # فحص السيرفر قبل النشر
-        if is_server_alive(config):
-            ctype = "Trojan" if "trojan" in config else "Vless" if "vless" in config else "Vmess"
-            port = "443 (Ultra Fast)" if ":443" in config else "High Speed"
-            
-            # الرسالة بالترحيب الجديد
-            msg = f"✨ <b>Welcome to Ashaq Team</b> ✨\n"
-            msg += f"━━━━━━━━━━━━━━━\n"
-            msg += f"<b>🔹 Type:</b> {ctype}\n"
-            msg += f"<b>🔹 Port:</b> {port}\n"
-            msg += f"<b>🔹 Status:</b> Tested & Working ✅\n\n"
-            msg += f"<code>{config}</code>\n\n"
-            msg += f"👥 @V2rayashaq"
-            
-            url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
-            requests.post(url, data={"chat_id": CHAT_ID, "text": msg, "parse_mode": "HTML"})
-            posted_count += 1
+        requests.post(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage", 
+                      data={"chat_id": CHAT_ID, "text": msg, "parse_mode": "HTML"})
+        posted += 1
+    print(f"Done! Posted {posted} configs.")
 
 if __name__ == "__main__":
-    post_to_telegram()
+    run()
