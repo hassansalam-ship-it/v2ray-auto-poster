@@ -29,12 +29,13 @@ def get_location(ip):
 def check_server_status(host, port):
     try:
         start = time.time()
+        # محاولة اتصال حقيقية للتأكد أن السيرفر شغال
         with socket.create_connection((host, int(port)), timeout=1.5):
             return int((time.time() - start) * 1000)
     except: return None
 
 def post_process():
-    print("⛏️ Searching for 3 Elite Servers on Port 443 ONLY...")
+    print("⛏️ Searching for 3 Active SSL Servers ONLY...")
     all_found = []
     for url in SEARCH_SOURCES:
         try:
@@ -49,7 +50,7 @@ def post_process():
     random.shuffle(unique_configs)
     
     posted_count = 0
-    # فحص العينة لضمان استخراج بورت 443 فقط
+    # فحص مكثف لضمان استخراج الشغال فقط بورت 443
     for config in unique_configs:
         if posted_count >= 3:
             break 
@@ -59,31 +60,32 @@ def post_process():
         
         host, port = match.group(1), match.group(2)
         
-        # الشرط الذهبي: بورت 443 فقط
+        # التركيز على بورت 443 لضمان الـ SSL
         if port != "443":
             continue
 
         ping = check_server_status(host, port)
         
-        if ping and ping < 350:
+        # التحقق الصارم: يجب أن يكون السيرفر شغالاً (Ping ليس None)
+        if ping:
             try:
                 ip_addr = socket.gethostbyname(host)
                 location = get_location(ip_addr)
             except:
                 location = "🌍 International"
 
+            # التحقق من وجود تشفير SSL/TLS في الكود نفسه
             is_ssl = "tls" in config.lower() or "security=tls" in config
-            is_cf = "cloudfront" in config.lower() or "104." in host
-            
+            if not is_ssl: continue # تخطي السيرفرات غير المشفرة
+
             header = "🔥 <b>ULTRA FAST SERVER</b> 🔥" if ping < 90 else "✨ <b>Welcome to Ashaq Team</b> ✨"
             
             msg = f"{header}\n"
             msg += f"━━━━━━━━━━━━━━━\n"
             msg += f"🌍 <b>Country:</b> {location}\n"
-            msg += f"🔹 <b>Type:</b> Vless/Vmess\n"
+            msg += f"🔹 <b>Type:</b> Vless/Vmess (SSL)\n"
             msg += f"⚡ <b>Ping:</b> {ping}ms | 🟢 Ultra Stable\n"
-            msg += f"🛡️ <b>SSL:</b> {'Verified ✅' if is_ssl else 'Standard'}\n"
-            msg += f"☁️ <b>CF:</b> {'Active ⚡' if is_cf else 'Direct'}\n"
+            msg += f"🛡️ <b>SSL:</b> Verified ✅ | Secure\n"
             msg += f"🕒 <b>Checked:</b> Just Now\n"
             msg += f"🏷️ <b>Tags:</b> #Ashaq_Team #Free_VPN\n"
             msg += f"🔹 <b>Port:</b> 443 (High Priority)\n"
@@ -105,7 +107,7 @@ def post_process():
                 res = requests.post(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage", json=payload)
                 if res.status_code == 200:
                     posted_count += 1
-                    time.sleep(6)
+                    time.sleep(6) # فاصل زمني لترتيب المنشورات
             except: pass
 
 if __name__ == "__main__":
