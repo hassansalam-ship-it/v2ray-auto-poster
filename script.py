@@ -15,7 +15,7 @@ ADMIN_USER = "@genie_2000"
 BLOCKED_COUNTRIES = ['IR', 'CN', 'RU'] # الدول المحظورة
 VPS_PROVIDERS = ['oracle', 'digitalocean', 'hetzner', 'ovh', 'linode', 'vultr', 'aws', 'amazon', 'google', 'azure', 'vps', 'contabo', 'alibaba', 'hostinger', 'cloudflare']
 
-# 100+ مصدر عالمي متجدد (VPS ومصادر خاصة)
+# المصادر العالمية المتجددة
 SEARCH_SOURCES = [
     "https://raw.githubusercontent.com/yebekhe/TelegramV2rayCollector/main/sub/base64/mix",
     "https://raw.githubusercontent.com/LonUp/V2Ray-Config/main/Helper/All_Configs_Sub.txt",
@@ -91,7 +91,6 @@ def post_process():
         all_found = fetch_mega()
         if not all_found: return
         
-        # تقسيم السيرفرات حسب النوع لضمان الأولوية
         v_list = [c for c in all_found if c.startswith(('vmess', 'vless'))]
         t_list = [c for c in all_found if c.startswith('trojan')]
         
@@ -100,12 +99,11 @@ def post_process():
             random.shuffle(p443); random.shuffle(others)
             return p443 + others
 
-        # الترتيب: Vless/Vmess (بورت 443 ثم البقية) ثم Trojan (بورت 443 ثم البقية)
         final_list = sort_logic(v_list) + sort_logic(t_list)
         
         posted = 0
         for config in final_list:
-            if posted >= 4: break # نشر 4 سيرفرات في كل دورة
+            if posted >= 4: break
             data = is_alive_and_safe(config)
             if data:
                 proto = "Trojan" if "trojan" in config else "Vless" if "vless" in config else "Vmess"
@@ -127,27 +125,24 @@ def post_process():
                 msg += f"━━━━━━━━━━━━━━━\n"
                 msg += f"👥 @V2rayashaq"
                 
-                # رابط النسخ السريع الذكي
-                copy_url = f"https://t.me/share/url?url={config}"
-                
                 payload = {
                     "chat_id": CHAT_ID,
                     "text": msg,
                     "parse_mode": "HTML",
+                    "disable_web_page_preview": True,
                     "reply_markup": json.dumps({
                         "inline_keyboard": [
                             [
                                 {"text": "📢 Join Channel", "url": "https://t.me/V2rayashaq"},
                                 {"text": "👤 Admin", "url": f"https://t.me/{ADMIN_USER.replace('@','')}"}
-                            ],
-                            [{"text": "📋 Click here to Copy", "url": copy_url}]
+                            ]
                         ]
                     })
                 }
                 requests.post(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage", json=payload)
                 posted += 1
     except Exception as e:
-        print(f"Error occurred: {e}")
+        print(f"Error: {e}")
 
 if __name__ == "__main__":
     post_process()
