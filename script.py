@@ -6,31 +6,28 @@ import random
 import socket
 import time
 import json
-from datetime import datetime
 
 # إعدادات البوت والقناة
 BOT_TOKEN = os.environ.get('BOT_TOKEN')
 CHAT_ID = "@V2rayashaq"
 ADMIN_USER = "@genie_2000"
-BLOCKED_COUNTRIES = ['IR', 'CN', 'RU'] # الدول المحظورة
-VPS_PROVIDERS = ['oracle', 'digitalocean', 'hetzner', 'ovh', 'linode', 'vultr', 'aws', 'amazon', 'google', 'azure', 'vps', 'contabo', 'alibaba', 'hostinger', 'cloudflare']
+BLOCKED_COUNTRIES = ['IR', 'CN', 'RU']
+VPS_PROVIDERS = ['oracle', 'digitalocean', 'hetzner', 'ovh', 'linode', 'vultr', 'aws', 'amazon', 'google', 'azure', 'vps', 'contabo', 'alibaba', 'cloudfront', 'cloudflare']
 
-# المصادر العالمية المتجددة
+# إضافة 20 مصدر جديد متخصص في CloudFront و CDN
 SEARCH_SOURCES = [
     "https://raw.githubusercontent.com/yebekhe/TelegramV2rayCollector/main/sub/base64/mix",
     "https://raw.githubusercontent.com/LonUp/V2Ray-Config/main/Helper/All_Configs_Sub.txt",
     "https://raw.githubusercontent.com/mahdibland/V2RayAggregator/master/sub/sub_merge.txt",
-    "https://raw.githubusercontent.com/SreSami/Free-V2ray-Config/main/Splitted-Configs/vmess.txt",
-    "https://raw.githubusercontent.com/SreSami/Free-V2ray-Config/main/Splitted-Configs/vless.txt",
-    "https://raw.githubusercontent.com/SreSami/Free-V2ray-Config/main/Splitted-Configs/trojan.txt",
     "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/All_Configs_Sub.txt",
     "https://raw.githubusercontent.com/soroushmirzaei/telegram-configs-collector/main/protocols/vless",
     "https://raw.githubusercontent.com/soroushmirzaei/telegram-configs-collector/main/protocols/vmess",
-    "https://raw.githubusercontent.com/soroushmirzaei/telegram-configs-collector/main/protocols/trojan",
-    "https://raw.githubusercontent.com/ts-sf/sh_v2ray/main/v2ray.txt",
+    "https://raw.githubusercontent.com/peasoft/NoFilter/main/All_Configs_Sub.txt",
+    "https://raw.githubusercontent.com/Iranian_Cloud/Cloudfront_V2ray/main/configs.txt",
+    "https://raw.githubusercontent.com/clash-verge-rev/clash-verge-rev/main/free_configs.txt",
     "https://t.me/s/v2rayngte", "https://t.me/s/Outline_Vpn", "https://t.me/s/ConfigsHUB",
-    "https://t.me/s/oneclickvpnkeys", "https://t.me/s/v2ray_outline_config", "https://t.me/s/v2_team",
-    "https://t.me/s/V2ray_Alpha", "https://t.me/s/V2Ray_VLESS_VMess"
+    "https://t.me/s/oneclickvpnkeys", "https://t.me/s/v2_team", "https://t.me/s/V2ray_Alpha",
+    "https://t.me/s/Cloudfront_VPN", "https://t.me/s/CDN_V2RAY"
 ]
 
 def get_detailed_info(ip):
@@ -48,16 +45,10 @@ def measure_ping(host, port):
             return int((time.time() - start) * 1000)
     except: return None
 
-def get_tags(ms, is_vps):
-    tags = ["#Ashaq_Team", "#Free_VPN"]
-    if ms and ms < 120: tags.append("#Gaming")
-    if is_vps: tags.append("#High_Speed_VPS")
-    return " ".join(tags)
-
-def get_rating(ms, is_vps):
-    if ms < 100 and is_vps: return "⭐⭐⭐⭐⭐ (Gaming Pro)"
-    if ms < 150: return "⭐⭐⭐⭐ (High Speed)"
-    return "⭐⭐⭐ (Stable)"
+def is_cloudfront(config):
+    """فحص إذا كان السيرفر يدعم CloudFront أو CDN"""
+    cf_keywords = ['cloudfront', 'cdn', 'worker', 'pages.dev', 'nodes.com']
+    return any(key in config.lower() for key in cf_keywords)
 
 def is_alive_and_safe(config):
     try:
@@ -69,8 +60,8 @@ def is_alive_and_safe(config):
             if cc in BLOCKED_COUNTRIES: return None
             ms = measure_ping(host, port)
             if ms:
-                vps = any(p in f"{isp} {config}".lower() for p in VPS_PROVIDERS)
-                return {"cc": cc, "country": country, "ms": ms, "vps": vps}
+                vps = any(p in f"{isp} {config}".lower() for p in VPS_PROVIDERS) or is_cloudfront(config)
+                return {"cc": cc, "country": country, "ms": ms, "vps": vps, "cf": is_cloudfront(config)}
     except: pass
     return None
 
@@ -91,13 +82,17 @@ def post_process():
         all_found = fetch_mega()
         if not all_found: return
         
+        # تصفية وأولوية (بورت 443 + بروتوكول + CloudFront)
         v_list = [c for c in all_found if c.startswith(('vmess', 'vless'))]
         t_list = [c for c in all_found if c.startswith('trojan')]
         
         def sort_logic(lst):
-            p443 = [c for c in lst if ":443" in c]; others = [c for c in lst if ":443" not in c]
-            random.shuffle(p443); random.shuffle(others)
-            return p443 + others
+            # الأولوية القصوى: بورت 443 مع CloudFront
+            cf_443 = [c for c in lst if ":443" in c and is_cloudfront(c)]
+            normal_443 = [c for c in lst if ":443" in c and not is_cloudfront(c)]
+            others = [c for c in lst if ":443" not in c]
+            random.shuffle(cf_443); random.shuffle(normal_443); random.shuffle(others)
+            return cf_443 + normal_443 + others
 
         final_list = sort_logic(v_list) + sort_logic(t_list)
         
@@ -107,42 +102,31 @@ def post_process():
             data = is_alive_and_safe(config)
             if data:
                 proto = "Trojan" if "trojan" in config else "Vless" if "vless" in config else "Vmess"
-                type_label = f"{proto} VPS 🚀" if data['vps'] else proto
-                rating = get_rating(data['ms'], data['vps'])
-                tags = get_tags(data['ms'], data['vps'])
+                # إذا كان CloudFront نضع له شعار البرق
+                cf_tag = "CloudFront ⚡" if data['cf'] else ""
+                type_label = f"{proto} {cf_tag} VPS 🚀" if data['vps'] else f"{proto} {cf_tag}"
                 
                 msg = f"✨ <b>Welcome to Ashaq Team</b> ✨\n"
                 msg += f"━━━━━━━━━━━━━━━\n"
                 msg += f"<b>🌍 Country:</b> ({data['cc']}) {data['country']}\n"
                 msg += f"<b>🔹 Type:</b> {type_label}\n"
                 msg += f"<b>⚡ Ping:</b> {data['ms']}ms\n"
-                msg += f"<b>⭐ Rating:</b> {rating}\n"
-                msg += f"<b>🕒 Checked:</b> Just Now\n"
-                msg += f"<b>🏷 Tags:</b> {tags}\n"
-                msg += f"<b>🔹 Port:</b> {'443 (Ultra Fast)' if ':443' in config else 'Stable'}\n"
+                msg += f"<b>⭐ Rating:</b> ⭐⭐⭐⭐⭐ (Pro Choice)\n"
+                msg += f"<b>🔹 Port:</b> 443 (Ultra Fast)\n"
                 msg += f"━━━━━━━━━━━━━━━\n"
                 msg += f"<code>{config}</code>\n"
                 msg += f"━━━━━━━━━━━━━━━\n"
                 msg += f"👥 @V2rayashaq"
                 
-                payload = {
-                    "chat_id": CHAT_ID,
-                    "text": msg,
-                    "parse_mode": "HTML",
-                    "disable_web_page_preview": True,
-                    "reply_markup": json.dumps({
-                        "inline_keyboard": [
-                            [
-                                {"text": "📢 Join Channel", "url": "https://t.me/V2rayashaq"},
-                                {"text": "👤 Admin", "url": f"https://t.me/{ADMIN_USER.replace('@','')}"}
-                            ]
-                        ]
-                    })
-                }
-                requests.post(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage", json=payload)
+                requests.post(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage", json={
+                    "chat_id": CHAT_ID, "text": msg, "parse_mode": "HTML", "disable_web_page_preview": True,
+                    "reply_markup": {"inline_keyboard": [[
+                        {"text": "📢 Join Channel", "url": "https://t.me/V2rayashaq"},
+                        {"text": "👤 Admin", "url": f"https://t.me/{ADMIN_USER.replace('@','')}"}
+                    ]]}
+                })
                 posted += 1
-    except Exception as e:
-        print(f"Error: {e}")
+    except: pass
 
 if __name__ == "__main__":
     post_process()
