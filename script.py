@@ -7,7 +7,7 @@ import random
 BOT_TOKEN = os.environ.get('BOT_TOKEN')
 CHAT_ID = "@V2rayashaq"
 
-# المصادر
+# المصادر الشاملة
 SOURCES = [
     "https://raw.githubusercontent.com/yebekhe/TelegramV2rayCollector/main/sub/base64/mix",
     "https://raw.githubusercontent.com/LonUp/V2Ray-Config/main/Helper/All_Configs_Sub.txt",
@@ -29,7 +29,8 @@ def fetch_all():
                 content = res.text
                 if "vmess://" not in content and "vless://" not in content and "trojan://" not in content:
                     content = decode_base64(content)
-                found = re.findall(r'(vless://|vmess://|trojan://)[^\s#"\'<>]+', content)
+                # استخراج السيرفر كاملاً حتى نهاية السطر
+                found = re.findall(r'(?:vless|vmess|trojan)://[^\s]+', content)
                 raw_list.extend(found)
         except: continue
     return list(set(raw_list))
@@ -45,24 +46,25 @@ def post_to_telegram():
     random.shuffle(others)
     sorted_list = priority + others
 
-    to_post = sorted_list[:5]
+    # نشر 3 سيرفرات لتجنب السبام
+    to_post = sorted_list[:3]
     
     for config in to_post:
         ctype = "Trojan" if "trojan" in config else "Vless" if "vless" in config else "Vmess"
-        port = "443" if ":443" in config else "High Speed"
+        port = "443" if ":443" in config else "Auto"
         
-        # التعديل هنا: استخدام الرموز الخلفية (Backticks) لجعل النص قابل للنسخ
-        msg = f"🛰 *Global Server Found*\n"
+        # استخدام HTML لضمان ظهور الكود كاملاً وقابليته للنسخ
+        msg = f"<b>🛰 Global Server Found</b>\n"
         msg += f"━━━━━━━━━━━━━━━\n"
-        msg += f"🔹 *Type:* {ctype}\n"
-        msg += f"🔹 *Port:* {port}\n"
-        msg += f"🔹 *Status:* Tested ✅\n\n"
-        msg += f"```{config}```\n\n"  # الثلاث نقاط هذه تجعل النص "كتلة برمجية" قابلة للنسخ
+        msg += f"<b>🔹 Type:</b> {ctype}\n"
+        msg += f"<b>🔹 Port:</b> {port}\n"
+        msg += f"<b>🔹 Status:</b> Tested ✅\n\n"
+        msg += f"<code>{config}</code>\n\n"  # وسم code في HTML يجعل النص قابلاً للنسخ
         msg += f"👥 @V2rayashaq"
         
         url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
-        # تأكد من استخدام MarkdownV2 أو HTML؛ هنا سنستخدم Markdown العادي مع تعديل بسيط
-        requests.post(url, data={"chat_id": CHAT_ID, "text": msg, "parse_mode": "Markdown"})
+        # تغيير parse_mode إلى HTML
+        requests.post(url, data={"chat_id": CHAT_ID, "text": msg, "parse_mode": "HTML"})
 
 if __name__ == "__main__":
     post_to_telegram()
