@@ -1,4 +1,4 @@
-name: V2Ray Hunter v4 - 45min Cycle
+name: V2Ray Hunter v4
 
 on:
   schedule:
@@ -8,13 +8,12 @@ on:
 jobs:
   hunt_and_post:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4 # تحديث لـ v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5 # تحديث لـ v5
         with:
           python-version: '3.10'
 
@@ -24,20 +23,4 @@ jobs:
       - name: Run Hunter Script
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-          CUSTOM_SNI: "www.speedtest.net"
-          ADMIN_TG: "@genie_2000"
-        run: |
-          # هذا السطر يضمن نشر 4 سيرفرات فقط كما طلبت
-          sed -i "s/MAX_POSTS        = 5/MAX_POSTS        = 4/g" v2ray_hunter.py
-          python v2ray_hunter.py
-
-      - name: Commit & Push Changes
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action Bot"
-          # سحب التحديثات لتجنب التعارض (Conflict)
-          git pull --rebase origin main
-          # تحديث ملف الاشتراك والسجل في المستودع
-          git add sub_link.txt v2ray_hunt.log
-          git commit -m "Update links: $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes"
-          git push
+        run: python v2ray_hunter.py
