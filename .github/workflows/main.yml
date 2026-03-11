@@ -14,7 +14,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v4        # ✅ Fixed: was actions/core/setup-python@v4
+        uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
@@ -26,16 +26,13 @@ jobs:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           CUSTOM_SNI: "www.speedtest.net"
           ADMIN_TG: "@genie_2000"
-        run: |
-          # ✅ Fixed: use double quotes to avoid YAML/shell escaping issues
-          sed -i "s/MAX_POSTS        = 5/MAX_POSTS        = 4/g" v2ray_hunter.py
-          python v2ray_hunter.py
+        run: python v2ray_hunter.py
 
       - name: Commit & Push Changes
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action Bot"
-          git pull --rebase origin main        # ✅ Added: prevents push conflicts
+          git pull --rebase origin main
           git add sub_link.txt v2ray_hunt.log
-          git commit -m "Update links: $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
+          git commit -m "Update links: $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes"
           git push
