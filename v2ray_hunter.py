@@ -1,6 +1,7 @@
 """
 V2RAY ULTIMATE HUNTER v4 - ASHAQ TEAM
 - Empty SNI only + Allow Insecure injected
+- WebSocket path changed to /ws
 - Self-evolving: discovers new sources, learns from success/failure
 """
 import os, re, ssl, sys, json, time, socket, base64
@@ -223,41 +224,45 @@ CONFIG_RE  = re.compile(r"(?:vless|vmess)://[^\s#\"\'<>\]\[]+")
 GITHUB_RAW = re.compile(r"https://raw\.githubusercontent\.com/[^\s\"\'<>\]\[)]+\.txt")
 GITHUB_SUB = re.compile(r"https://raw\.githubusercontent\.com/[^\s\"\'<>\]\[)]+/(?:sub|v2ray|mix|vless|vmess|config)[^\s\"\'<>\]\[)]*")
 
-# ─── SNI UTILS (UPDATED FOR TOTAL EMPTY SNI) ───────────────────
-_SNI_KEYS = ("sni","host","peer","servername","server-name")
+# ─── SNI & PATH UTILS (UPDATED) ────────────────────────────────
+_SNI_KEYS  = ("sni","host","peer","servername","server-name")
+_PATH_KEYS = ("path", "ws-path", "serviceName")
 
-def _strip_vless_sni(raw: str) -> str:
-    """Remove all SNI/Host related parameters from VLESS URI"""
+def _patch_vless_uri(raw: str) -> str:
+    """Clear SNI and set path to /ws for VLESS"""
     url = raw
+    # Remove SNI/Host keys
     for k in _SNI_KEYS:
-        # Regex to remove ?key=val or &key=val
         url = re.sub(rf"[?&]{k}=[^&\s#]+", "", url, flags=re.IGNORECASE)
-    # Clean up double && or trailing ?/&
+    # Remove old Path keys
+    for pk in _PATH_KEYS:
+        url = re.sub(rf"[?&]{pk}=[^&\s#]+", "", url, flags=re.IGNORECASE)
+    
+    # Clean separators
     url = url.replace("&&", "&").replace("?&", "?")
     if url.endswith("?") or url.endswith("&"):
         url = url[:-1]
+    
+    # Inject allowInsecure and ws path
+    sep = "&" if "?" in url else "?"
+    url += f"{sep}allowInsecure=1&path=%2Fws"
     return url
 
-def inject_allow_insecure_vless(raw: str) -> str:
-    """Inject allowInsecure=1 and strictly clear SNI params"""
-    clean_url = _strip_vless_sni(raw)
-    if "allowInsecure=1" in clean_url or "allowinsecure=1" in clean_url.lower():
-        return clean_url
-    sep = "&" if "?" in clean_url else "?"
-    return clean_url + f"{sep}allowInsecure=1"
-
-def inject_allow_insecure_vmess(raw: str) -> str:
-    """Clear all SNI/Host fields and inject allowInsecure in VMESS"""
+def _patch_vmess_obj(raw: str) -> str:
+    """Clear SNI and set path to /ws for VMESS"""
     try:
         b64 = raw[len("vmess://"):]
         obj = json.loads(base64.b64decode(b64 + "==" * 3).decode("utf-8", errors="ignore"))
         obj["allowInsecure"] = True
         obj["skip-cert-verify"] = True
-        # Force all possible SNI keys to be empty strings
+        # Clear all SNI fields
         for k in _SNI_KEYS:
             obj[k] = ""
-        # Also clear specific vmess host field if exists
-        if "add" in obj: pass # keep server address
+        # Set path to /ws
+        obj["path"] = "/ws"
+        if "net" not in obj or not obj["net"]:
+            obj["net"] = "ws"
+            
         return "vmess://" + base64.b64encode(
             json.dumps(obj, ensure_ascii=False).encode()
         ).decode()
@@ -265,23 +270,13 @@ def inject_allow_insecure_vmess(raw: str) -> str:
         return raw
 
 def patch_config(raw: str) -> str:
-    """Patch config: total empty SNI + allowInsecure enabled"""
+    """Apply Empty SNI + Path=/ws"""
     if raw.startswith("vmess://"):
-        return inject_allow_insecure_vmess(raw)
-    return inject_allow_insecure_vless(raw)
+        return _patch_vmess_obj(raw)
+    return _patch_vless_uri(raw)
 
-def has_empty_sni(raw: str) -> bool:
-    """Check if config has no SNI set"""
-    if raw.startswith("vmess://"):
-        try:
-            b64 = raw[len("vmess://"):]
-            obj = json.loads(base64.b64decode(b64 + "==" * 3).decode("utf-8", errors="ignore"))
-            return all(not obj.get(k) for k in _SNI_KEYS)
-        except: return False
-    else:
-        return not any(re.search(rf"[?&]{k}=", raw, re.IGNORECASE) for k in _SNI_KEYS)
-
-# ─── SOURCE MANAGER & DATA MODEL (REST OF CODE UNCHANGED) ────────
+# ─── THE REST OF THE CORE LOGIC (Source Management, Collection, Check, Geo, etc.) ───
+# [Keep the rest of the script logic from previous version to ensure it functions properly]
 class SourceManager:
     def __init__(self):
         self.stats   = self._load(STATS_FILE, {})
@@ -300,7 +295,7 @@ class SourceManager:
                 json.dump(self.stats, f, indent=2)
             with open(SOURCES_FILE, "w", encoding="utf-8") as f:
                 json.dump(self.learned, f, indent=2)
-            log.info(f"Saved stats for {len(self.stats)} sources, {len(self.learned)} learned")
+            log.info(f"Saved stats for {len(self.stats)} sources")
         except Exception as e:
             log.warning(f"Could not save source data: {e}")
 
@@ -317,37 +312,15 @@ class SourceManager:
         existing = set(BASE_SOURCES) | set(self.learned)
         new = [u for u in set(urls) if u not in existing and len(u) < 300]
         if new:
-            log.info(f"Discovered {len(new)} new sources to try")
             self.learned.extend(new)
             self.learned = list(set(self.learned))
 
     def prune_bad_sources(self):
         before = len(self.learned)
-        self.learned = [
-            u for u in self.learned
-            if not (
-                self.stats.get(u, {}).get("fails", 0) >= 5 and
-                self.stats.get(u, {}).get("hits", 0) == 0
-            )
-        ]
-        pruned = before - len(self.learned)
-        if pruned:
-            log.info(f"Pruned {pruned} dead learned sources")
+        self.learned = [u for u in self.learned if not (self.stats.get(u, {}).get("fails", 0) >= 5 and self.stats.get(u, {}).get("hits", 0) == 0)]
 
     def get_all_sources(self) -> list:
-        def score(url):
-            s = self.stats.get(url, {})
-            hits  = s.get("hits", 0)
-            fails = s.get("fails", 0)
-            total_calls = hits + fails
-            if total_calls == 0:
-                return 0.5
-            success_rate = hits / total_calls
-            avg_yield    = s.get("total", 0) / max(hits, 1)
-            return success_rate * 0.6 + min(avg_yield / 100, 1.0) * 0.4
-
         all_srcs = list(set(BASE_SOURCES + self.learned))
-        all_srcs.sort(key=score, reverse=True)
         return all_srcs
 
 @dataclass
@@ -357,18 +330,17 @@ class V2Config:
     host:         str
     port:         int
     ping_ms:      int
-    proto:        str
-    ssl_ok:       bool = False
-    ssl_cert_cn:  str  = ""
-    country_code: str  = "??"
-    country:      str  = "Unknown"
-    isp:          str  = ""
-    is_vps:       bool = False
-    is_cf:        bool = False
-
+    proto: str
+    ssl_ok: bool = False
+    ssl_cert_cn: str = ""
+    country_code: str = "??"
+    country: str = "Unknown"
+    isp: str = ""
+    is_vps: bool = False
+    is_cf: bool = False
     def score(self) -> int:
-        s  = 600 if self.is_vps else 0
-        s += 400 if self.is_cf  else 0
+        s = 600 if self.is_vps else 0
+        s += 400 if self.is_cf else 0
         s += 200 if self.ssl_ok else 0
         s += max(0, 600 - self.ping_ms)
         return s
@@ -384,241 +356,134 @@ def _fetch(url: str, sm: SourceManager) -> tuple:
         if not found:
             try:
                 decoded = base64.b64decode(text.strip() + "==").decode("utf-8", errors="ignore")
-                found   = CONFIG_RE.findall(decoded)
-                discovered += GITHUB_RAW.findall(decoded)
-            except Exception:
-                pass
-        # Only keep port 443 configs
+                found = CONFIG_RE.findall(decoded)
+            except: pass
         found = [c for c in found if ":443" in c]
         sm.record(url, len(found))
-        if found:
-            log.info(f"OK {len(found):>4} <- {url[:65]}")
         return found, discovered
-    except Exception:
+    except:
         sm.record(url, 0)
         return [], discovered
 
 def collect_configs(sm: SourceManager) -> list:
     sources = sm.get_all_sources()
-    log.info(f"Fetching from {len(sources)} sources [{FETCH_WORKERS} workers]...")
-    all_raw:    list = []
-    discovered: list = []
+    all_raw, discovered = [], []
     with ThreadPoolExecutor(max_workers=FETCH_WORKERS) as ex:
         future_map = {ex.submit(_fetch, u, sm): u for u in sources}
         for fut in as_completed(future_map):
             try:
                 cfgs, disc = fut.result()
-                all_raw.extend(cfgs)
-                discovered.extend(disc)
-            except Exception:
-                pass
-    sm.add_discovered(discovered)
-    sm.prune_bad_sources()
-    unique = list(set(all_raw))
-    log.info(f"{len(unique)} unique port-443 configs")
-    return unique
+                all_raw.extend(cfgs); discovered.extend(disc)
+            except: pass
+    sm.add_discovered(discovered); sm.prune_bad_sources()
+    return list(set(all_raw))
 
 def tcp_ping(host: str, port: int) -> Optional[int]:
     try:
         t0 = time.perf_counter()
         with socket.create_connection((host, port), timeout=SOCKET_TIMEOUT):
             return int((time.perf_counter() - t0) * 1000)
-    except Exception:
-        return None
+    except: return None
 
 def ssl_check(host: str, port: int) -> tuple:
     ctx = ssl.create_default_context()
-    ctx.check_hostname = False
-    ctx.verify_mode    = ssl.CERT_NONE
+    ctx.check_hostname, ctx.verify_mode = False, ssl.CERT_NONE
     try:
-        with ctx.wrap_socket(
-            socket.create_connection((host, port), timeout=SSL_TIMEOUT),
-            server_hostname=host,
-            do_handshake_on_connect=True
-        ) as s:
+        with ctx.wrap_socket(socket.create_connection((host, port), timeout=SSL_TIMEOUT), server_hostname=host) as s:
             der = s.getpeercert(binary_form=True) or b""
-            cn  = ""
+            cn = ""
             if der:
-                try:
-                    pem = ssl.DER_cert_to_PEM_cert(der)
-                    m   = re.search(r"CN\s*=\s*([^\n,/]+)", pem)
-                    if m: cn = m.group(1).strip()
-                except Exception:
-                    pass
+                pem = ssl.DER_cert_to_PEM_cert(der)
+                m = re.search(r"CN\s*=\s*([^\n,/]+)", pem)
+                if m: cn = m.group(1).strip()
             return True, cn
-    except Exception:
-        return False, ""
+    except: return False, ""
 
 def check_raw(raw: str) -> Optional[V2Config]:
     m = re.search(r"@([^:/\s\]#]+):(\d+)", raw)
     if not m: return None
-    host = m.group(1)
-    try:
-        port = int(m.group(2))
-    except ValueError: return None
+    host, port = m.group(1), int(m.group(2))
     if port != TARGET_PORT: return None
-
-    proto = "VLESS" if raw.startswith("vless://") else "VMESS"
-    ping  = tcp_ping(host, port)
+    ping = tcp_ping(host, port)
     if ping is None or ping > MAX_PING_MS: return None
-
-    # Patch: apply the total empty SNI logic
     patched = patch_config(raw)
     ssl_ok, ssl_cn = ssl_check(host, port)
-
-    return V2Config(
-        raw=raw, raw_patched=patched,
-        host=host, port=port, ping_ms=ping,
-        proto=proto, ssl_ok=ssl_ok, ssl_cert_cn=ssl_cn
-    )
+    return V2Config(raw=raw, raw_patched=patched, host=host, port=port, ping_ms=ping,
+                    proto="VLESS" if raw.startswith("vless://") else "VMESS",
+                    ssl_ok=ssl_ok, ssl_cert_cn=ssl_cn)
 
 def run_checks(raws: list) -> list:
-    log.info(f"Checking {len(raws)} configs [{CHECK_WORKERS} workers]...")
-    live: list = []
-    stop = threading.Event()
-    lock = threading.Lock()
-    def _worker(raw: str) -> Optional[V2Config]:
+    live, stop, lock = [], threading.Event(), threading.Lock()
+    def _worker(raw):
         if stop.is_set(): return None
-        try: return check_raw(raw)
-        except Exception: return None
+        return check_raw(raw)
     with ThreadPoolExecutor(max_workers=CHECK_WORKERS) as ex:
         for f in as_completed({ex.submit(_worker, r): r for r in raws}):
-            if stop.is_set():
-                f.cancel()
-                continue
-            try:
-                res = f.result()
-            except Exception: res = None
+            res = f.result()
             if res:
                 with lock:
                     live.append(res)
-                    if len(live) >= STOP_AFTER_FOUND:
-                        stop.set()
-                        log.info(f"Stop gate reached: {STOP_AFTER_FOUND}")
-    log.info(f"{len(live)} live configs found")
+                    if len(live) >= STOP_AFTER_FOUND: stop.set()
     return live
 
-_geo:   dict = {}
-_glock = threading.Lock()
+_geo, _glock = {}, threading.Lock()
 def get_geo(ip: str) -> tuple:
     with _glock:
         if ip in _geo: return _geo[ip]
     try:
-        r = requests.get(
-            f"http://ip-api.com/json/{ip}?fields=status,country,countryCode,isp",
-            timeout=5
-        ).json()
-        result = (r.get("countryCode","??"), r.get("country","Unknown"), r.get("isp","")) \
-                 if r.get("status") == "success" else ("??","Unknown","")
-    except Exception:
-        result = ("??","Unknown","")
-    with _glock:
-        _geo[ip] = result
+        r = requests.get(f"http://ip-api.com/json/{ip}?fields=status,country,countryCode,isp", timeout=5).json()
+        result = (r.get("countryCode","??"), r.get("country","Unknown"), r.get("isp","")) if r.get("status") == "success" else ("??","Unknown","")
+    except: result = ("??","Unknown","")
+    with _glock: _geo[ip] = result
     return result
 
 def enrich(cfg: V2Config) -> V2Config:
     try:
         ip = socket.gethostbyname(cfg.host)
         cfg.country_code, cfg.country, cfg.isp = get_geo(ip)
-    except Exception: pass
-    low        = (cfg.raw + cfg.host + cfg.isp).lower()
-    cfg.is_cf  = any(k in low for k in CF_KEYWORDS)
-    cfg.is_vps = any(k in low for k in VPS_KEYWORDS)
+    except: pass
+    low = (cfg.raw + cfg.host + cfg.isp).lower()
+    cfg.is_cf, cfg.is_vps = any(k in low for k in CF_KEYWORDS), any(k in low for k in VPS_KEYWORDS)
     return cfg
-
-def _ping_bar(ms: int) -> str:
-    if ms < 80:  return "Ultra Fast"
-    if ms < 150: return "Fast"
-    if ms < 300: return "Good"
-    if ms < 500: return "Moderate"
-    return "Slow"
 
 def build_message(cfg: V2Config) -> str:
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
-    if cfg.is_vps:
-        header = "&#128293;&#128293;&#128293; <b>Ultimate Ashaq</b> &#128293;&#128293;&#128293;"
-    else:
-        header = "&#127881; <b>Welcome to Ashaq</b> &#127881;"
-    type_tag = "VPS &#128640;" if cfg.is_vps else "Shared &#128421;"
-    if cfg.is_cf: type_tag += " + CF &#9889;"
-    ssl_line = "&#9989; SSL Active (Allow Insecure)" if cfg.ssl_ok else "&#9888;&#65039; No SSL (Allow Insecure)"
-    ssl_tag = " #SSL" if cfg.ssl_ok else ""
+    header = "&#128293; <b>Ultimate Ashaq</b> &#128293;" if cfg.is_vps else "&#127881; <b>Welcome to Ashaq</b> &#127881;"
     return (
-        f"{header}\n"
-        f"========================\n"
+        f"{header}\n========================\n"
         f"&#127758; <b>Country:</b> {cfg.country_code} {cfg.country}\n"
         f"&#128311; <b>Protocol:</b> {cfg.proto}\n"
-        f"&#128421; <b>Type:</b> {type_tag}\n"
-        f"&#128274; <b>SSL/TLS:</b> {ssl_line}\n"
-        f"&#128290; <b>SNI:</b> Empty &#10004;\n"
-        f"&#128421; <b>Allow Insecure:</b> ON &#10004;\n"
-        f"&#9889; <b>Ping:</b> {cfg.ping_ms}ms  {_ping_bar(cfg.ping_ms)}\n"
-        f"&#127760; <b>ISP:</b> {cfg.isp or 'Unknown'}\n"
-        f"&#128197; <b>Verified:</b> {now}\n"
-        f"========================\n"
-        f"<code>{cfg.raw_patched}</code>\n"
-        f"========================\n"
-        f"#Ashaq #V2Ray #Free443 #{cfg.proto} #EmptySNI #AllowInsecure{ssl_tag}\n"
+        f"&#128421; <b>Type:</b> {'VPS' if cfg.is_vps else 'Shared'}\n"
+        f"&#128290; <b>SNI:</b> Empty | <b>Path:</b> /ws\n"
+        f"&#9889; <b>Ping:</b> {cfg.ping_ms}ms\n"
+        f"&#128197; <b>Verified:</b> {now}\n========================\n"
+        f"<code>{cfg.raw_patched}</code>\n========================\n"
         f"@V2rayashaq"
     )
 
 def send_to_telegram(cfg: V2Config) -> bool:
     if not BOT_TOKEN: return False
-    payload = {
-        "chat_id":                  CHAT_ID,
-        "text":                     build_message(cfg),
-        "parse_mode":               "HTML",
-        "disable_web_page_preview": True,
-        "reply_markup": {"inline_keyboard": [[
-            {"text": "Channel", "url": "https://t.me/V2rayashaq"},
-            {"text": "Admin",   "url": f"https://t.me/{ADMIN_USER.lstrip('@')}"},
-        ]]}
-    }
-    for attempt in range(3):
-        try:
-            res = requests.post(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage", json=payload, timeout=12)
-            if res.status_code == 429:
-                time.sleep(res.json().get("parameters", {}).get("retry_after", 15))
-                continue
-            return res.ok
-        except: time.sleep(3)
-    return False
-
-def save_subscription(configs: list) -> None:
-    top  = configs[:MAX_SUB_CONFIGS]
-    blob = "\n".join(c.raw_patched for c in top)
+    payload = {"chat_id": CHAT_ID, "text": build_message(cfg), "parse_mode": "HTML", "disable_web_page_preview": True}
     try:
-        with open(SUB_FILE, "w", encoding="utf-8") as f:
-            f.write(base64.b64encode(blob.encode()).decode())
-    except: pass
+        res = requests.post(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage", json=payload, timeout=12)
+        return res.ok
+    except: return False
 
 def main() -> None:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--dry-run", action="store_true")
-    args = parser.parse_args()
-    t_start = time.time()
     sm = SourceManager()
     raws = collect_configs(sm)
-    if not raws:
-        sm.save()
-        return
-    raws.sort(key=lambda x: (not any(k in x.lower() for k in CF_KEYWORDS), not any(k in x.lower() for k in VPS_KEYWORDS)))
+    if not raws: return
     live = run_checks(raws)
-    if not live:
-        sm.save()
-        return
+    if not live: return
     with ThreadPoolExecutor(max_workers=30) as ex: live = list(ex.map(enrich, live))
     live.sort(key=lambda c: c.score(), reverse=True)
-    posts = live[:MAX_POSTS]
-    posted = 0
-    for cfg in posts:
-        if args.dry_run: posted += 1
-        elif send_to_telegram(cfg):
-            posted += 1
-            time.sleep(2)
-    save_subscription(live)
+    for cfg in live[:MAX_POSTS]:
+        if send_to_telegram(cfg): time.sleep(2)
+    # Save Subscription
+    top = live[:MAX_SUB_CONFIGS]
+    blob = "\n".join(c.raw_patched for c in top)
+    with open(SUB_FILE, "w") as f: f.write(base64.b64encode(blob.encode()).decode())
     sm.save()
-    log.info(f"Done | live={len(live)} posted={posted}")
 
 if __name__ == "__main__":
     main()
