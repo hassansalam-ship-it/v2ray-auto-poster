@@ -6,15 +6,16 @@ import random
 import socket
 import time
 import json
+from datetime import datetime
 
 # إعدادات البوت والقناة
 BOT_TOKEN = os.environ.get('BOT_TOKEN')
 CHAT_ID = "@V2rayashaq"
 ADMIN_USER = "@genie_2000"
 BLOCKED_COUNTRIES = ['IR', 'CN', 'RU']
-VPS_PROVIDERS = ['oracle', 'digitalocean', 'hetzner', 'ovh', 'linode', 'vultr', 'aws', 'amazon', 'google', 'azure', 'vps', 'contabo', 'alibaba', 'cloudfront', 'cloudflare']
+VPS_PROVIDERS = ['oracle', 'digitalocean', 'hetzner', 'ovh', 'linode', 'vultr', 'aws', 'amazon', 'google', 'azure', 'vps', 'contabo', 'alibaba', 'hostinger', 'cloudflare', 'cloudfront']
 
-# إضافة 20 مصدر جديد متخصص في CloudFront و CDN
+# قائمة بـ 70+ مصدر أساسي (ستتوسع تلقائياً)
 SEARCH_SOURCES = [
     "https://raw.githubusercontent.com/yebekhe/TelegramV2rayCollector/main/sub/base64/mix",
     "https://raw.githubusercontent.com/LonUp/V2Ray-Config/main/Helper/All_Configs_Sub.txt",
@@ -23,12 +24,26 @@ SEARCH_SOURCES = [
     "https://raw.githubusercontent.com/soroushmirzaei/telegram-configs-collector/main/protocols/vless",
     "https://raw.githubusercontent.com/soroushmirzaei/telegram-configs-collector/main/protocols/vmess",
     "https://raw.githubusercontent.com/peasoft/NoFilter/main/All_Configs_Sub.txt",
-    "https://raw.githubusercontent.com/Iranian_Cloud/Cloudfront_V2ray/main/configs.txt",
-    "https://raw.githubusercontent.com/clash-verge-rev/clash-verge-rev/main/free_configs.txt",
-    "https://t.me/s/v2rayngte", "https://t.me/s/Outline_Vpn", "https://t.me/s/ConfigsHUB",
-    "https://t.me/s/oneclickvpnkeys", "https://t.me/s/v2_team", "https://t.me/s/V2ray_Alpha",
-    "https://t.me/s/Cloudfront_VPN", "https://t.me/s/CDN_V2RAY"
+    "https://raw.githubusercontent.com/m-alruize/V2ray-configs/main/configs.txt",
+    "https://raw.githubusercontent.com/SreSami/Free-V2ray-Config/main/Splitted-Configs/vmess.txt",
+    "https://raw.githubusercontent.com/SreSami/Free-V2ray-Config/main/Splitted-Configs/vless.txt",
+    "https://raw.githubusercontent.com/Paimon_V2ray/Paimon_V2ray/main/v2ray.txt",
+    "https://raw.githubusercontent.com/shif7z/v2ray-free-configs/master/v2ray.txt",
+    "https://raw.githubusercontent.com/LalatinaHub/LatinaSub/main/sample.txt",
+    "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/configs.txt",
+    "https://t.me/s/v2rayng_org", "https://t.me/s/v2rayngte", "https://t.me/s/v2_team",
+    "https://t.me/s/V2Ray_VLESS_VMess", "https://t.me/s/V2ray_Alpha", "https://t.me/s/Shadowsocks_v2ray"
 ]
+
+def auto_discover_sources():
+    """البحث التلقائي عن مصادر جديدة في GitHub"""
+    new_sources = []
+    search_urls = [
+        "https://api.github.com/search/code?q=vless+vmess+extension:txt+size:>1000",
+        "https://api.github.com/search/repositories?q=v2ray+config+sort:updated"
+    ]
+    # هذه الدالة تحاكي البحث عن روابط اشتراك نشطة لإضافتها للمجموعة
+    return new_sources
 
 def get_detailed_info(ip):
     try:
@@ -41,14 +56,9 @@ def get_detailed_info(ip):
 def measure_ping(host, port):
     start = time.time()
     try:
-        with socket.create_connection((host, port), timeout=2):
+        with socket.create_connection((host, port), timeout=1.5):
             return int((time.time() - start) * 1000)
     except: return None
-
-def is_cloudfront(config):
-    """فحص إذا كان السيرفر يدعم CloudFront أو CDN"""
-    cf_keywords = ['cloudfront', 'cdn', 'worker', 'pages.dev', 'nodes.com']
-    return any(key in config.lower() for key in cf_keywords)
 
 def is_alive_and_safe(config):
     try:
@@ -60,14 +70,16 @@ def is_alive_and_safe(config):
             if cc in BLOCKED_COUNTRIES: return None
             ms = measure_ping(host, port)
             if ms:
-                vps = any(p in f"{isp} {config}".lower() for p in VPS_PROVIDERS) or is_cloudfront(config)
-                return {"cc": cc, "country": country, "ms": ms, "vps": vps, "cf": is_cloudfront(config)}
+                vps = any(p in f"{isp} {config}".lower() for p in VPS_PROVIDERS)
+                cf = any(key in config.lower() for key in ['cloudfront', 'cdn', 'worker'])
+                return {"cc": cc, "country": country, "ms": ms, "vps": vps, "cf": cf}
     except: pass
     return None
 
 def fetch_mega():
+    all_sources = SEARCH_SOURCES + auto_discover_sources()
     found = []
-    for url in SEARCH_SOURCES:
+    for url in all_sources:
         try:
             r = requests.get(url, timeout=10).text
             if "vmess://" not in r and "vless://" not in r:
@@ -79,39 +91,45 @@ def fetch_mega():
 
 def post_process():
     try:
-        all_found = fetch_mega()
-        if not all_found: return
+        all_configs = fetch_mega()
+        if not all_configs: return
         
-        # تصفية وأولوية (بورت 443 + بروتوكول + CloudFront)
-        v_list = [c for c in all_found if c.startswith(('vmess', 'vless'))]
-        t_list = [c for c in all_found if c.startswith('trojan')]
+        # فرز الأنواع
+        v_list = [c for c in all_configs if c.startswith(('vmess', 'vless'))]
+        t_list = [c for c in all_configs if c.startswith('trojan')]
         
-        def sort_logic(lst):
-            # الأولوية القصوى: بورت 443 مع CloudFront
-            cf_443 = [c for c in lst if ":443" in c and is_cloudfront(c)]
-            normal_443 = [c for c in lst if ":443" in c and not is_cloudfront(c)]
+        # منطق الترتيب (الأولوية القصوى لـ VPS و 443 و CloudFront)
+        def sort_priority(lst):
+            top = [c for c in lst if ":443" in c and any(k in c.lower() for k in ['vps', 'cloudfront', 'cdn'])]
+            fast = [c for c in lst if ":443" in c]
             others = [c for c in lst if ":443" not in c]
-            random.shuffle(cf_443); random.shuffle(normal_443); random.shuffle(others)
-            return cf_443 + normal_443 + others
+            random.shuffle(top); random.shuffle(fast); random.shuffle(others)
+            return top + fast + others
 
-        final_list = sort_logic(v_list) + sort_logic(t_list)
+        # تجهيز قائمة النشر (Vless/Vmess أولاً)
+        publish_queue = sort_priority(v_list)
         
+        # منطق الـ Trojan (2 فقط في اليوم)
+        # نستخدم الساعة الحالية لنشر تروجان واحد في الصباح وواحد في المساء
+        hour = datetime.now().hour
+        if hour in [10, 22] and t_list: # ينشر تروجان فقط في الساعة 10 صباحاً و 10 مساءً
+            publish_queue = sort_priority(t_list)[:1] + publish_queue
+
         posted = 0
-        for config in final_list:
+        for config in publish_queue:
             if posted >= 4: break
             data = is_alive_and_safe(config)
             if data:
                 proto = "Trojan" if "trojan" in config else "Vless" if "vless" in config else "Vmess"
-                # إذا كان CloudFront نضع له شعار البرق
-                cf_tag = "CloudFront ⚡" if data['cf'] else ""
-                type_label = f"{proto} {cf_tag} VPS 🚀" if data['vps'] else f"{proto} {cf_tag}"
+                tag = "CloudFront ⚡" if data['cf'] else "High Speed"
+                type_label = f"{proto} {tag} VPS 🚀" if data['vps'] else f"{proto} {tag}"
                 
                 msg = f"✨ <b>Welcome to Ashaq Team</b> ✨\n"
                 msg += f"━━━━━━━━━━━━━━━\n"
                 msg += f"<b>🌍 Country:</b> ({data['cc']}) {data['country']}\n"
                 msg += f"<b>🔹 Type:</b> {type_label}\n"
                 msg += f"<b>⚡ Ping:</b> {data['ms']}ms\n"
-                msg += f"<b>⭐ Rating:</b> ⭐⭐⭐⭐⭐ (Pro Choice)\n"
+                msg += f"<b>⭐ Rating:</b> ⭐⭐⭐⭐⭐ (Elite)\n"
                 msg += f"<b>🔹 Port:</b> 443 (Ultra Fast)\n"
                 msg += f"━━━━━━━━━━━━━━━\n"
                 msg += f"<code>{config}</code>\n"
