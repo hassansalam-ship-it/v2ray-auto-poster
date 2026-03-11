@@ -1,0 +1,36 @@
+22:53:54 | INFO    | =======================================================
+22:53:54 | INFO    |   V2Ray Ultimate Hunter v4 - Ashaq Team
+22:53:54 | INFO    |   Mode: Empty SNI + Allow Insecure | Self-Evolving
+22:53:54 | INFO    | =======================================================
+22:53:54 | INFO    | Sources: 160 total (base=160 learned=0)
+22:53:54 | INFO    | Fetching from 160 sources [60 workers]...
+22:53:55 | INFO    | OK    5 empty-SNI <- https://t.me/s/v2ray_configs_pool
+22:53:55 | INFO    | OK    5 empty-SNI <- https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/main/s
+22:53:56 | INFO    | OK    8 empty-SNI <- https://t.me/s/v2ray_collector
+22:53:56 | INFO    | OK    8 empty-SNI <- https://raw.githubusercontent.com/youfoundamin/V2rayCollector/mai
+22:53:56 | INFO    | OK    1 empty-SNI <- https://raw.githubusercontent.com/Everyday-VPN/Everyday-VPN/main/
+22:53:56 | INFO    | OK  322 empty-SNI <- https://raw.githubusercontent.com/SoliSpirit/v2ray-configs/main/a
+22:53:56 | INFO    | OK    4 empty-SNI <- https://raw.githubusercontent.com/roosterkid/openproxylist/main/V
+22:53:56 | INFO    | OK    2 empty-SNI <- https://raw.githubusercontent.com/Surfboardv2ray/TGParse/main/spl
+22:53:56 | INFO    | OK   58 empty-SNI <- https://raw.githubusercontent.com/ndsphonemy/proxy-sub/main/defau
+22:53:56 | INFO    | OK    5 empty-SNI <- https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/main/s
+22:53:56 | INFO    | OK  361 empty-SNI <- https://raw.githubusercontent.com/shabane/kamaji/master/hub/merge
+22:53:56 | INFO    | OK  120 empty-SNI <- https://raw.githubusercontent.com/Surfboardv2ray/TGParse/main/spl
+22:53:57 | INFO    | OK   24 empty-SNI <- https://raw.githubusercontent.com/MhdiTaheri/V2rayCollector_Py/ma
+22:53:57 | INFO    | OK    7 empty-SNI <- https://t.me/s/V2ray_Alpha
+22:53:57 | INFO    | OK  224 empty-SNI <- https://raw.githubusercontent.com/mheidari98/.proxy/main/all
+22:53:58 | INFO    | OK 1036 empty-SNI <- https://raw.githubusercontent.com/Leon406/SubCrawler/master/sub/s
+22:53:58 | INFO    | 1670 unique empty-SNI port-443 configs
+22:53:58 | INFO    | Checking 1670 configs [100 workers]...
+22:54:14 | INFO    | Stop gate reached: 1000
+22:54:19 | INFO    | 1000 live empty-SNI configs found
+22:54:19 | INFO    | Enriching geo data...
+22:54:25 | INFO    | Posting 4 configs | SSL=1 VPS=2
+22:54:26 | WARNING | Telegram 400: {"ok":false,"error_code":400,"description":"Bad Request: message is too long"}
+22:54:26 | INFO    | Posted 1/4: 172.66.40.99 ping=5ms ssl=False vps=True
+22:54:28 | INFO    | Posted 2/4: 162.159.36.20 ping=5ms ssl=False vps=False
+22:54:31 | INFO    | Posted 3/4: 104.16.79.188 ping=5ms ssl=False vps=False
+22:54:33 | INFO    | Saved 200 configs to sub_link.txt
+22:54:33 | INFO    | Saved stats for 160 sources, 0 learned
+22:54:33 | INFO    | Done in 38s | live=1000 scanned=1670 posted=3
+22:54:33 | INFO    | Learned sources total: 0
