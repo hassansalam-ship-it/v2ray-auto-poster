@@ -14,6 +14,8 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # لضمان جلب التاريخ الكامل وتجنب مشاكل الـ Rebase
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -34,7 +36,16 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action Bot"
-          git pull --rebase origin main
+          
+          # إضافة جميع الملفات الناتجة عن السكربت
           git add sub_link.txt v2ray_hunt.log learned_sources.json source_stats.json || true
-          git commit -m "Update links: $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes"
-          git push
+          
+          # تحقق إذا كان هناك تغييرات حقيقية قبل المتابعة
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            # سحب التغييرات مع استخدام Rebase لتفادي تعارض النسخ
+            git pull --rebase origin main
+            git commit -m "Update links: $(date +'%Y-%m-%d %H:%M:%S')"
+            git push origin main
+          fi
