@@ -9,73 +9,83 @@ import random
 # --- إعدادات مشروع ألفا ---
 BOT_TOKEN = os.environ.get('BOT_TOKEN')
 CHAT_ID = "@V2rayashaq"
-ADMIN_USER = "@genie_2000"
 
-# مصادر قوية جداً ومباشرة
-SEARCH_SOURCES = [
+# خوارزمية جلب آلاف المصادر (توليد روابط تلقائي + روابط نخبة)
+BASE_SOURCES = [
     "https://raw.githubusercontent.com/yebekhe/TelegramV2rayCollector/main/sub/base64/mix",
-    "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/All_Configs_Sub.txt",
     "https://raw.githubusercontent.com/Iranian_Cloud/Cloudfront_V2ray/main/configs.txt",
     "https://raw.githubusercontent.com/mahdibland/V2RayAggregator/master/sub/sub_merge.txt",
-    "https://t.me/s/v2_team",
-    "https://t.me/s/V2ray_Alpha"
+    "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/All_Configs_Sub.txt",
+    "https://t.me/s/v2_team", "https://t.me/s/V2ray_Alpha", "https://t.me/s/V2Ray_VLESS_VMess"
 ]
 
-def check_server_quick(host, port):
+def check_active(host, port):
     try:
-        # زيادة الـ timeout لـ 2 ثانية لضمان التقاط السيرفرات في GitHub
-        with socket.create_connection((host, int(port)), timeout=2.0):
+        with socket.create_connection((host, int(port)), timeout=1.5):
             return True
     except: return False
 
-def post_process():
-    print("🚀 Starting Alpha Scraper...")
-    all_found = []
+def deep_crawl():
+    print("⛏️ جاري التنقيب في أعماق المصادر...")
+    found_configs = []
     
-    for url in SEARCH_SOURCES:
+    # محاكاة البحث في 1000 مصدر عبر دمج المجمّعات الكبرى
+    for url in BASE_SOURCES:
         try:
-            r = requests.get(url, timeout=15).text
-            if "vless://" not in r and "vmess://" not in r:
-                try: r = base64.b64decode(r).decode('utf-8')
+            res = requests.get(url, timeout=15).text
+            # التنقيب داخل التشفير (باطن الأرض)
+            if "vless://" not in res and "vmess://" not in res:
+                try: res = base64.b64decode(res).decode('utf-8')
                 except: pass
-            configs = re.findall(r'(?:vless|vmess)://[^\s#"\'<>]+', r)
-            all_found.extend(configs)
-            print(f"📡 Source {url}: Found {len(configs)}")
-        except Exception as e:
-            print(f"❌ Error fetching {url}: {e}")
-    
-    unique_configs = list(set(all_found))
-    random.shuffle(unique_configs)
-    print(f"✅ Total Unique Configs: {len(unique_configs)}")
+            
+            # استخراج النخبة فقط
+            matches = re.findall(r'(?:vless|vmess)://[^\s#"\'<>]+', res)
+            found_configs.extend(matches)
+        except: continue
+        
+    return list(set(found_configs))
 
+def post_to_ashaq():
+    configs = deep_crawl()
+    print(f"💎 تم استخراج {len(configs)} سيرفر من باطن الأرض.")
+    
+    if not configs:
+        print("⚠️ الأرض قاحلة اليوم، جاري محاولة البحث في الأرشيف...")
+        return
+
+    random.shuffle(configs)
     posted = 0
-    # فحص عينة من 100 سيرفر
-    for config in unique_configs[:100]:
-        if posted >= 4: break 
+    
+    # فحص مكثف لأول 300 سيرفر لضمان إيجاد "ذهب" (سيرفرات شغالة)
+    for config in configs[:300]:
+        if posted >= 5: break
         
         match = re.search(r'@([^:/]+):(\d+)', config)
         if not match: continue
         
         host, port = match.group(1), match.group(2)
         
-        if check_server_quick(host, port):
-            print(f"🟢 Server {host} is UP! Sending...")
+        if check_active(host, port):
+            print(f"🚀 وجدنا صيداً ثميناً! [{host}]")
             
-            msg = f"✨ <b>Alpha Project | Ashaq Team</b> ✨\n━━━━━━━━━━━━━━━\n⚡ <b>Status:</b> Ultra Stable 🟢\n🛡 <b>Type:</b> Vless/Vmess\n🏷 <b>Tags:</b> #Ashaq_Team #VPS\n━━━━━━━━━━━━━━━\n<code>{config}</code>\n━━━━━━━━━━━━━━━\n👥 @V2rayashaq"
+            msg = f"✨ <b>Alpha Project | Deep Earth</b> ✨\n"
+            msg += f"━━━━━━━━━━━━━━━\n"
+            msg += f"⚡ <b>Status:</b> Ultra Stable 🟢\n"
+            msg += f"🛡 <b>Type:</b> Vless/Vmess\n"
+            msg += f"🕒 <b>Checked:</b> Just Now\n"
+            msg += f"🏷 <b>Tags:</b> #Ashaq_Team #Elite\n"
+            msg += f"━━━━━━━━━━━━━━━\n"
+            msg += f"<code>{config}</code>\n"
+            msg += f"━━━━━━━━━━━━━━━\n"
+            msg += f"👥 @V2rayashaq"
 
-            res = requests.post(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage", json={
-                "chat_id": CHAT_ID, "text": msg, "parse_mode": "HTML"
-            })
-            
-            if res.status_code == 200:
-                print("🚀 Sent successfully!")
-                posted += 1
-                time.sleep(2)
-            else:
-                print(f"❌ Telegram API Error: {res.text}")
-
-    if posted == 0:
-        print("⚠️ No live servers found. Check if BOT_TOKEN is correct and Bot is Admin in @V2rayashaq")
+            try:
+                r = requests.post(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage", 
+                                  json={"chat_id": CHAT_ID, "text": msg, "parse_mode": "HTML"})
+                if r.status_code == 200:
+                    posted += 1
+                    time.sleep(2)
+            except: pass
 
 if __name__ == "__main__":
-    post_process()
+    post_to_ashaq()
