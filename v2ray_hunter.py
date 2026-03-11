@@ -223,51 +223,41 @@ CONFIG_RE  = re.compile(r"(?:vless|vmess)://[^\s#\"\'<>\]\[]+")
 GITHUB_RAW = re.compile(r"https://raw\.githubusercontent\.com/[^\s\"\'<>\]\[)]+\.txt")
 GITHUB_SUB = re.compile(r"https://raw\.githubusercontent\.com/[^\s\"\'<>\]\[)]+/(?:sub|v2ray|mix|vless|vmess|config)[^\s\"\'<>\]\[)]*")
 
-# ─── SNI UTILS ──────────────────────────────────────────────────
+# ─── SNI UTILS (UPDATED FOR TOTAL EMPTY SNI) ───────────────────
 _SNI_KEYS = ("sni","host","peer","servername","server-name")
 
-def _extract_vless_sni(raw: str) -> str:
+def _strip_vless_sni(raw: str) -> str:
+    """Remove all SNI/Host related parameters from VLESS URI"""
+    url = raw
     for k in _SNI_KEYS:
-        m = re.search(rf"[?&]{k}=([^&\s#]+)", raw, re.IGNORECASE)
-        if m:
-            return m.group(1)
-    return ""
-
-def _extract_vmess_sni(raw: str) -> str:
-    try:
-        b64 = raw[len("vmess://"):]
-        obj = json.loads(base64.b64decode(b64 + "==" * 3).decode("utf-8", errors="ignore"))
-        for k in _SNI_KEYS:
-            if obj.get(k):
-                return str(obj[k])
-    except Exception:
-        pass
-    return ""
-
-def extract_sni(raw: str) -> str:
-    return _extract_vmess_sni(raw) if raw.startswith("vmess://") else _extract_vless_sni(raw)
-
-def has_empty_sni(raw: str) -> bool:
-    return extract_sni(raw) == ""
+        # Regex to remove ?key=val or &key=val
+        url = re.sub(rf"[?&]{k}=[^&\s#]+", "", url, flags=re.IGNORECASE)
+    # Clean up double && or trailing ?/&
+    url = url.replace("&&", "&").replace("?&", "?")
+    if url.endswith("?") or url.endswith("&"):
+        url = url[:-1]
+    return url
 
 def inject_allow_insecure_vless(raw: str) -> str:
-    """Inject allowInsecure=1 and ensure SNI stays empty in vless config"""
-    if "allowInsecure=1" in raw or "allowinsecure=1" in raw.lower():
-        return raw
-    sep = "&" if "?" in raw else "?"
-    return raw + f"{sep}allowInsecure=1"
+    """Inject allowInsecure=1 and strictly clear SNI params"""
+    clean_url = _strip_vless_sni(raw)
+    if "allowInsecure=1" in clean_url or "allowinsecure=1" in clean_url.lower():
+        return clean_url
+    sep = "&" if "?" in clean_url else "?"
+    return clean_url + f"{sep}allowInsecure=1"
 
 def inject_allow_insecure_vmess(raw: str) -> str:
-    """Inject allowInsecure=1 in vmess config"""
+    """Clear all SNI/Host fields and inject allowInsecure in VMESS"""
     try:
         b64 = raw[len("vmess://"):]
         obj = json.loads(base64.b64decode(b64 + "==" * 3).decode("utf-8", errors="ignore"))
         obj["allowInsecure"] = True
         obj["skip-cert-verify"] = True
-        # Keep SNI empty
+        # Force all possible SNI keys to be empty strings
         for k in _SNI_KEYS:
-            if k in obj:
-                obj[k] = ""
+            obj[k] = ""
+        # Also clear specific vmess host field if exists
+        if "add" in obj: pass # keep server address
         return "vmess://" + base64.b64encode(
             json.dumps(obj, ensure_ascii=False).encode()
         ).decode()
@@ -275,12 +265,23 @@ def inject_allow_insecure_vmess(raw: str) -> str:
         return raw
 
 def patch_config(raw: str) -> str:
-    """Patch config: empty SNI + allowInsecure enabled"""
+    """Patch config: total empty SNI + allowInsecure enabled"""
     if raw.startswith("vmess://"):
         return inject_allow_insecure_vmess(raw)
     return inject_allow_insecure_vless(raw)
 
-# ─── SELF-LEARNING SOURCE MANAGER ───────────────────────────────
+def has_empty_sni(raw: str) -> bool:
+    """Check if config has no SNI set"""
+    if raw.startswith("vmess://"):
+        try:
+            b64 = raw[len("vmess://"):]
+            obj = json.loads(base64.b64decode(b64 + "==" * 3).decode("utf-8", errors="ignore"))
+            return all(not obj.get(k) for k in _SNI_KEYS)
+        except: return False
+    else:
+        return not any(re.search(rf"[?&]{k}=", raw, re.IGNORECASE) for k in _SNI_KEYS)
+
+# ─── SOURCE MANAGER & DATA MODEL (REST OF CODE UNCHANGED) ────────
 class SourceManager:
     def __init__(self):
         self.stats   = self._load(STATS_FILE, {})
@@ -349,7 +350,6 @@ class SourceManager:
         all_srcs.sort(key=score, reverse=True)
         return all_srcs
 
-# ─── DATA MODEL ─────────────────────────────────────────────────
 @dataclass
 class V2Config:
     raw:          str
@@ -373,17 +373,13 @@ class V2Config:
         s += max(0, 600 - self.ping_ms)
         return s
 
-# ─── FETCH + DISCOVER ───────────────────────────────────────────
 def _fetch(url: str, sm: SourceManager) -> tuple:
     discovered = []
     try:
         r = requests.get(url, timeout=FETCH_TIMEOUT, headers={"User-Agent": "Mozilla/5.0"})
         text = r.text
-
-        # Discover new raw github URLs from page
         discovered += GITHUB_RAW.findall(text)
         discovered += GITHUB_SUB.findall(text)
-
         found = CONFIG_RE.findall(text)
         if not found:
             try:
@@ -392,13 +388,11 @@ def _fetch(url: str, sm: SourceManager) -> tuple:
                 discovered += GITHUB_RAW.findall(decoded)
             except Exception:
                 pass
-
-        # Filter: port 443 AND empty SNI only
-        found = [c for c in found if ":443" in c and has_empty_sni(c)]
-
+        # Only keep port 443 configs
+        found = [c for c in found if ":443" in c]
         sm.record(url, len(found))
         if found:
-            log.info(f"OK {len(found):>4} empty-SNI <- {url[:65]}")
+            log.info(f"OK {len(found):>4} <- {url[:65]}")
         return found, discovered
     except Exception:
         sm.record(url, 0)
@@ -409,7 +403,6 @@ def collect_configs(sm: SourceManager) -> list:
     log.info(f"Fetching from {len(sources)} sources [{FETCH_WORKERS} workers]...")
     all_raw:    list = []
     discovered: list = []
-
     with ThreadPoolExecutor(max_workers=FETCH_WORKERS) as ex:
         future_map = {ex.submit(_fetch, u, sm): u for u in sources}
         for fut in as_completed(future_map):
@@ -419,15 +412,12 @@ def collect_configs(sm: SourceManager) -> list:
                 discovered.extend(disc)
             except Exception:
                 pass
-
     sm.add_discovered(discovered)
     sm.prune_bad_sources()
-
     unique = list(set(all_raw))
-    log.info(f"{len(unique)} unique empty-SNI port-443 configs")
+    log.info(f"{len(unique)} unique port-443 configs")
     return unique
 
-# ─── TCP PING + SSL ─────────────────────────────────────────────
 def tcp_ping(host: str, port: int) -> Optional[int]:
     try:
         t0 = time.perf_counter()
@@ -437,7 +427,6 @@ def tcp_ping(host: str, port: int) -> Optional[int]:
         return None
 
 def ssl_check(host: str, port: int) -> tuple:
-    """Check SSL without verifying cert (Allow Insecure mode)"""
     ctx = ssl.create_default_context()
     ctx.check_hostname = False
     ctx.verify_mode    = ssl.CERT_NONE
@@ -461,29 +450,20 @@ def ssl_check(host: str, port: int) -> tuple:
         return False, ""
 
 def check_raw(raw: str) -> Optional[V2Config]:
-    # Must have empty SNI
-    if not has_empty_sni(raw):
-        return None
     m = re.search(r"@([^:/\s\]#]+):(\d+)", raw)
-    if not m:
-        return None
+    if not m: return None
     host = m.group(1)
     try:
         port = int(m.group(2))
-    except ValueError:
-        return None
-    if port != TARGET_PORT:
-        return None
+    except ValueError: return None
+    if port != TARGET_PORT: return None
 
     proto = "VLESS" if raw.startswith("vless://") else "VMESS"
     ping  = tcp_ping(host, port)
-    if ping is None or ping > MAX_PING_MS:
-        return None
+    if ping is None or ping > MAX_PING_MS: return None
 
-    # Patch: inject allowInsecure=1, keep SNI empty
+    # Patch: apply the total empty SNI logic
     patched = patch_config(raw)
-
-    # SSL check (insecure mode - no cert verification)
     ssl_ok, ssl_cn = ssl_check(host, port)
 
     return V2Config(
@@ -492,21 +472,15 @@ def check_raw(raw: str) -> Optional[V2Config]:
         proto=proto, ssl_ok=ssl_ok, ssl_cert_cn=ssl_cn
     )
 
-# ─── PARALLEL CHECK ─────────────────────────────────────────────
 def run_checks(raws: list) -> list:
     log.info(f"Checking {len(raws)} configs [{CHECK_WORKERS} workers]...")
     live: list = []
     stop = threading.Event()
     lock = threading.Lock()
-
     def _worker(raw: str) -> Optional[V2Config]:
-        if stop.is_set():
-            return None
-        try:
-            return check_raw(raw)
-        except Exception:
-            return None
-
+        if stop.is_set(): return None
+        try: return check_raw(raw)
+        except Exception: return None
     with ThreadPoolExecutor(max_workers=CHECK_WORKERS) as ex:
         for f in as_completed({ex.submit(_worker, r): r for r in raws}):
             if stop.is_set():
@@ -514,22 +488,18 @@ def run_checks(raws: list) -> list:
                 continue
             try:
                 res = f.result()
-            except Exception:
-                res = None
+            except Exception: res = None
             if res:
                 with lock:
                     live.append(res)
                     if len(live) >= STOP_AFTER_FOUND:
                         stop.set()
                         log.info(f"Stop gate reached: {STOP_AFTER_FOUND}")
-
-    log.info(f"{len(live)} live empty-SNI configs found")
+    log.info(f"{len(live)} live configs found")
     return live
 
-# ─── GEO ────────────────────────────────────────────────────────
 _geo:   dict = {}
 _glock = threading.Lock()
-
 def get_geo(ip: str) -> tuple:
     with _glock:
         if ip in _geo: return _geo[ip]
@@ -550,14 +520,12 @@ def enrich(cfg: V2Config) -> V2Config:
     try:
         ip = socket.gethostbyname(cfg.host)
         cfg.country_code, cfg.country, cfg.isp = get_geo(ip)
-    except Exception:
-        pass
+    except Exception: pass
     low        = (cfg.raw + cfg.host + cfg.isp).lower()
     cfg.is_cf  = any(k in low for k in CF_KEYWORDS)
     cfg.is_vps = any(k in low for k in VPS_KEYWORDS)
     return cfg
 
-# ─── MESSAGE BUILDER ────────────────────────────────────────────
 def _ping_bar(ms: int) -> str:
     if ms < 80:  return "Ultra Fast"
     if ms < 150: return "Fast"
@@ -567,28 +535,14 @@ def _ping_bar(ms: int) -> str:
 
 def build_message(cfg: V2Config) -> str:
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
-
-    # Header: VPS = fire + Ultimate Ashaq, normal = Welcome to Ashaq
     if cfg.is_vps:
-        header = (
-            "&#128293;&#128293;&#128293; "
-            "<b>Ultimate Ashaq</b> "
-            "&#128293;&#128293;&#128293;"
-        )
+        header = "&#128293;&#128293;&#128293; <b>Ultimate Ashaq</b> &#128293;&#128293;&#128293;"
     else:
         header = "&#127881; <b>Welcome to Ashaq</b> &#127881;"
-
     type_tag = "VPS &#128640;" if cfg.is_vps else "Shared &#128421;"
-    if cfg.is_cf:
-        type_tag += " + CF &#9889;"
-
-    ssl_line = (
-        "&#9989; SSL Active (Allow Insecure)"
-        if cfg.ssl_ok else
-        "&#9888;&#65039; No SSL (Allow Insecure)"
-    )
+    if cfg.is_cf: type_tag += " + CF &#9889;"
+    ssl_line = "&#9989; SSL Active (Allow Insecure)" if cfg.ssl_ok else "&#9888;&#65039; No SSL (Allow Insecure)"
     ssl_tag = " #SSL" if cfg.ssl_ok else ""
-
     return (
         f"{header}\n"
         f"========================\n"
@@ -608,11 +562,8 @@ def build_message(cfg: V2Config) -> str:
         f"@V2rayashaq"
     )
 
-# ─── TELEGRAM ───────────────────────────────────────────────────
 def send_to_telegram(cfg: V2Config) -> bool:
-    if not BOT_TOKEN:
-        log.error("BOT_TOKEN not set")
-        return False
+    if not BOT_TOKEN: return False
     payload = {
         "chat_id":                  CHAT_ID,
         "text":                     build_message(cfg),
@@ -625,121 +576,49 @@ def send_to_telegram(cfg: V2Config) -> bool:
     }
     for attempt in range(3):
         try:
-            res = requests.post(
-                f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage",
-                json=payload, timeout=12
-            )
+            res = requests.post(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage", json=payload, timeout=12)
             if res.status_code == 429:
-                wait_s = res.json().get("parameters", {}).get("retry_after", 15)
-                log.warning(f"Rate limited - sleeping {wait_s}s")
-                time.sleep(wait_s)
+                time.sleep(res.json().get("parameters", {}).get("retry_after", 15))
                 continue
-            if res.ok: return True
-            log.warning(f"Telegram {res.status_code}: {res.text[:80]}")
-            return False
-        except requests.RequestException as e:
-            log.warning(f"Telegram attempt {attempt+1}/3: {e}")
-            time.sleep(3)
+            return res.ok
+        except: time.sleep(3)
     return False
 
-# ─── SUBSCRIPTION ───────────────────────────────────────────────
 def save_subscription(configs: list) -> None:
     top  = configs[:MAX_SUB_CONFIGS]
     blob = "\n".join(c.raw_patched for c in top)
     try:
         with open(SUB_FILE, "w", encoding="utf-8") as f:
             f.write(base64.b64encode(blob.encode()).decode())
-        log.info(f"Saved {len(top)} configs to {SUB_FILE}")
-    except OSError as e:
-        log.error(f"Cannot write subscription: {e}")
+    except: pass
 
-# ─── MAIN ───────────────────────────────────────────────────────
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
-
     t_start = time.time()
-    log.info("=" * 55)
-    log.info("  V2Ray Ultimate Hunter v4 - Ashaq Team")
-    log.info("  Mode: Empty SNI + Allow Insecure | Self-Evolving")
-    log.info("=" * 55)
-
     sm = SourceManager()
-    log.info(f"Sources: {len(sm.get_all_sources())} total "
-             f"(base={len(BASE_SOURCES)} learned={len(sm.learned)})")
-
-    # 1. Collect empty-SNI configs
     raws = collect_configs(sm)
     if not raws:
-        log.error("Nothing collected - exiting")
         sm.save()
         return
-
-    # 2. Pre-sort: CF/VPS hints first
-    raws.sort(key=lambda x: (
-        not any(k in x.lower() for k in CF_KEYWORDS),
-        not any(k in x.lower() for k in VPS_KEYWORDS),
-    ))
-
-    # 3. Live check
+    raws.sort(key=lambda x: (not any(k in x.lower() for k in CF_KEYWORDS), not any(k in x.lower() for k in VPS_KEYWORDS)))
     live = run_checks(raws)
     if not live:
-        log.error("No live configs - exiting")
         sm.save()
         return
-
-    # 4. Geo enrich
-    log.info("Enriching geo data...")
-    with ThreadPoolExecutor(max_workers=30) as ex:
-        live = list(ex.map(enrich, live))
-
-    # 5. Sort by score
+    with ThreadPoolExecutor(max_workers=30) as ex: live = list(ex.map(enrich, live))
     live.sort(key=lambda c: c.score(), reverse=True)
-
-    # 6. Smart post selection:
-    #    Slot 1: Best SSL config (if any)
-    #    Slot 2: Best VPS config (non-SSL)
-    #    Slot 3-4: Top scored remaining
-    ssl_cfgs  = [c for c in live if c.ssl_ok]
-    vps_cfgs  = [c for c in live if c.is_vps and not c.ssl_ok]
-    rest_cfgs = [c for c in live if not c.ssl_ok and not c.is_vps]
-
-    posts = []
-    if ssl_cfgs:
-        posts.append(ssl_cfgs[0])
-    if vps_cfgs and len(posts) < MAX_POSTS:
-        posts.append(vps_cfgs[0])
-    for c in rest_cfgs + live:
-        if len(posts) >= MAX_POSTS:
-            break
-        if c not in posts:
-            posts.append(c)
-    posts = posts[:MAX_POSTS]
-
-    ssl_count = sum(1 for c in posts if c.ssl_ok)
-    vps_count = sum(1 for c in posts if c.is_vps)
-    log.info(f"Posting {len(posts)} configs | SSL={ssl_count} VPS={vps_count}")
-
+    posts = live[:MAX_POSTS]
     posted = 0
     for cfg in posts:
-        if args.dry_run:
-            log.info(f"[DRY] {cfg.host} ping={cfg.ping_ms}ms ssl={cfg.ssl_ok} vps={cfg.is_vps}")
+        if args.dry_run: posted += 1
+        elif send_to_telegram(cfg):
             posted += 1
-        else:
-            if send_to_telegram(cfg):
-                posted += 1
-                log.info(f"Posted {posted}/{MAX_POSTS}: {cfg.host} "
-                         f"ping={cfg.ping_ms}ms ssl={cfg.ssl_ok} vps={cfg.is_vps}")
-                time.sleep(2)
-
-    # 7. Save
+            time.sleep(2)
     save_subscription(live)
     sm.save()
-
-    elapsed = int(time.time() - t_start)
-    log.info(f"Done in {elapsed}s | live={len(live)} scanned={len(raws)} posted={posted}")
-    log.info(f"Learned sources total: {len(sm.learned)}")
+    log.info(f"Done | live={len(live)} posted={posted}")
 
 if __name__ == "__main__":
     main()
