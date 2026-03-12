@@ -3,19 +3,19 @@ name: V2Ray Hunter v4 - 45min Cycle
 on:
   schedule:
     - cron: '*/45 * * * *'
-  workflow_dispatch: # يسمح لك بتشغيل السكربت يدوياً للتجربة
+  workflow_dispatch:
 
 jobs:
   hunt_and_post:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # ضروري للسماح للأكشن برفع الملفات بعد التعديل
+      contents: write
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0 # لجلب كامل تاريخ الملفات وتجنب أخطاء الدمج
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -36,15 +36,19 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action Bot"
           
-          # إضافة جميع الملفات المعدلة (السجل، المصادر، والاشتراك)
+          # 1. إضافة كافة الملفات الناتجة عن السكربت لتهيئة الـ Index
           git add sub_link.txt v2ray_hunt.log learned_sources.json source_stats.json || true
           
-          # التحقق إذا كانت هناك تغييرات حقيقية لتجنب الخطأ
+          # 2. التحقق من وجود تغييرات حقيقية قبل البدء
           if git diff --cached --quiet; then
-            echo "No changes to commit"
+            echo "لا توجد تغييرات جديدة لرفعها"
           else
-            # حل مشكلة التعارض بسحب التحديثات مع تفضيل نسخة السكربت
-            git pull --rebase -X ours origin main
-            git commit -m "Update links: $(date +'%Y-%m-%d %H:%M:%S')"
+            # 3. حفظ التغييرات محلياً أولاً لتفريغ الـ Index
+            git commit -m "Update configs: $(date +'%Y-%m-%d %H:%M:%S')"
+            
+            # 4. جلب التحديثات من السيرفر ودمجها (حل مشكلة Exit Code 128)
+            git pull --rebase origin main
+            
+            # 5. الرفع النهائي
             git push origin main
           fi
