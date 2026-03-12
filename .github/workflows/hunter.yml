@@ -36,9 +36,8 @@ jobs:
         env:
           BOT_TOKEN:  ${{ secrets.BOT_TOKEN }}
           ADMIN_TG:   "@genie_2000"
-          # CUSTOM_SNI is no longer used — all SNI fields are cleared automatically.
-          # You can remove this line completely.
-        run: python qq.py
+        # تم تعديل الاسم هنا من qq.py إلى v2ray_hunter.py ليتطابق مع ملفك
+        run: python v2ray_hunter.py
 
       # ── 5. Commit & Push Results ─────────────────────────────────
       - name: Commit and Push
