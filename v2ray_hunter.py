@@ -8,11 +8,13 @@
 HOW TO USE:
   Normal run:           python v2ray_hunter.py
   Override SNI:         python v2ray_hunter.py --sni speedtest.net
+  Test with custom SNI: python v2ray_hunter.py --test-sni i.instagram.com
   Skip posting:         python v2ray_hunter.py --dry-run
 
 ENV VARS:
   BOT_TOKEN   — Telegram bot token (required for posting)
   CUSTOM_SNI  — SNI domain to inject into all configs
+  TEST_SNI    — SNI to use for WebSocket testing (e.g., i.instagram.com)
   ADMIN_TG    — Telegram admin username
 """
 
@@ -141,6 +143,9 @@ SUB_FILE   = "sub_link.txt"
 # Set your custom SNI here OR pass --sni on command line
 # Leave "" to use each config's built-in SNI
 CUSTOM_SNI = os.environ.get("CUSTOM_SNI", "")
+
+# SNI to use for WebSocket testing (if empty, use active_sni from config)
+TEST_SNI = os.environ.get("TEST_SNI", "")
 
 MAX_POSTS        = 5
 MAX_SUB_CONFIGS  = 200
@@ -1470,8 +1475,10 @@ def check_raw(raw: str) -> Optional[V2Config]:
 
     # اختبار WebSocket الحقيقي مع إرسال رسالة وانتظار رد
     path = "/ws"  # تم تثبيته في التعديلات
-    if not test_websocket(host, port, path, active_sni, active_sni):
-        log.debug(f"WebSocket test failed for {host}, skipping")
+    # استخدام TEST_SNI إذا كان موجودًا، وإلا استخدم active_sni
+    websocket_sni = TEST_SNI if TEST_SNI else active_sni
+    if not test_websocket(host, port, path, websocket_sni, websocket_sni):
+        log.debug(f"WebSocket test failed for {host} using SNI {websocket_sni}, skipping")
         return None
 
     return V2Config(raw=raw, raw_patched=patched, host=host, port=port,
@@ -1658,11 +1665,14 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="V2Ray Ultimate Hunter v4")
     parser.add_argument("--dry-run", action="store_true", help="Skip actual Telegram posting")
     parser.add_argument("--sni",     default="", help="Set / override CUSTOM_SNI")
+    parser.add_argument("--test-sni", default="", help="Test WebSocket with this SNI (e.g., i.instagram.com)")
     args = parser.parse_args()
 
-    global CUSTOM_SNI
+    global CUSTOM_SNI, TEST_SNI
     if args.sni:
         CUSTOM_SNI = args.sni.strip()
+    if args.test_sni:
+        TEST_SNI = args.test_sni.strip()
 
     t_start = time.time()
     log.info("╔══════════════════════════════════════════════════╗")
@@ -1670,6 +1680,7 @@ def main() -> None:
     log.info(f"║  📡 Sources: {len(SOURCES):<6} | Auto-Post | SSL+SNI       ║")
     log.info("╚══════════════════════════════════════════════════╝")
     log.info(f"🔑 SNI: {CUSTOM_SNI or '(per-config built-in)'}")
+    log.info(f"🧪 Test SNI: {TEST_SNI or '(same as active SNI)'}")
     if args.dry_run:
         log.info("🔇 Dry-run: Telegram disabled")
 
