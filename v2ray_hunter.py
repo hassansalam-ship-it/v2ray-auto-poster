@@ -1246,12 +1246,12 @@ def apply_sni(raw: str, custom_sni: str) -> tuple[str, str]:
 
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-#  WEB SOCKET TEST (متقدم: إرسال رسالة والتحقق)
+#  WEB SOCKET TEST (متقدم: إرسال رسالة والتحقق من الرد)
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 def test_websocket(host: str, port: int, path: str, sni: str = "", host_header: str = "") -> bool:
     """
-    Attempts a real WebSocket connection and sends a small message.
-    Returns True if the connection is established and message sent without exception.
+    Attempts a real WebSocket connection, sends a message, and waits for a response.
+    Returns True if the connection is established and a response is received within 2 seconds.
     """
     if not WEBSOCKET_AVAILABLE:
         return True
@@ -1266,9 +1266,13 @@ def test_websocket(host: str, port: int, path: str, sni: str = "", host_header: 
             header=headers,
             sslopt={"check_hostname": False, "server_hostname": sni or host}
         )
-        # إرسال رسالة صغيرة لاختبار قدرة الخادم على استقبال البيانات
+        # إرسال رسالة نصية "ping"
         ws.send("ping")
-        # إذا وصلنا هنا دون استثناء، الاتصال يعمل ويمكنه استقبال البيانات
+        # تعيين مهلة للاستقبال
+        ws.settimeout(2)
+        # محاولة استقبال أي رسالة (حتى لو كانت pong)
+        msg = ws.recv()
+        # إذا وصلنا إلى هنا، فقد استلمنا رداً
         ws.close()
         return True
     except Exception as e:
@@ -1464,7 +1468,7 @@ def check_raw(raw: str) -> Optional[V2Config]:
     active_sni     = CUSTOM_SNI if CUSTOM_SNI else (orig_sni or host)
     ssl_ok, ssl_cn = ssl_handshake(host, port, active_sni)
 
-    # اختبار WebSocket الحقيقي مع إرسال رسالة
+    # اختبار WebSocket الحقيقي مع إرسال رسالة وانتظار رد
     path = "/ws"  # تم تثبيته في التعديلات
     if not test_websocket(host, port, path, active_sni, active_sni):
         log.debug(f"WebSocket test failed for {host}, skipping")
