@@ -8,21 +8,22 @@
 HOW TO USE:
   Normal run:           python v2ray_hunter.py
   Override SNI:         python v2ray_hunter.py --sni speedtest.net
-  Test with custom SNI: python v2ray_hunter.py --test-sni i.instagram.com
+  Test with SNI list:   python v2ray_hunter.py --test-sni-list "host1,host2,host3"
   Skip posting:         python v2ray_hunter.py --dry-run
 
 ENV VARS:
-  BOT_TOKEN   — Telegram bot token (required for posting)
-  CUSTOM_SNI  — SNI domain to inject into all configs
-  TEST_SNI    — SNI to use for WebSocket testing (e.g., i.instagram.com)
-  ADMIN_TG    — Telegram admin username
+  BOT_TOKEN       — Telegram bot token (required for posting)
+  CUSTOM_SNI      — SNI domain to inject into all configs
+  TEST_SNI        — Single SNI to use for WebSocket testing
+  TEST_SNI_LIST   — Comma-separated list of SNIs to test (overrides TEST_SNI)
+  ADMIN_TG        — Telegram admin username
 """
 
 import os, re, ssl, sys, json, time, socket, base64
 import logging, threading, argparse, requests, random, urllib.parse
 from datetime import datetime, timezone
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, List
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
@@ -144,8 +145,14 @@ SUB_FILE   = "sub_link.txt"
 # Leave "" to use each config's built-in SNI
 CUSTOM_SNI = os.environ.get("CUSTOM_SNI", "")
 
-# SNI to use for WebSocket testing (if empty, use active_sni from config)
+# SNI to use for WebSocket testing (single or list)
 TEST_SNI = os.environ.get("TEST_SNI", "")
+TEST_SNI_LIST = os.environ.get("TEST_SNI_LIST", "")
+if TEST_SNI_LIST:
+    # Convert comma-separated string to list, stripping whitespace
+    TEST_SNI_LIST = [s.strip() for s in TEST_SNI_LIST.split(",") if s.strip()]
+else:
+    TEST_SNI_LIST = []
 
 MAX_POSTS        = 5
 MAX_SUB_CONFIGS  = 200
@@ -1281,7 +1288,7 @@ def test_websocket(host: str, port: int, path: str, sni: str = "", host_header: 
         ws.close()
         return True
     except Exception as e:
-        log.debug(f"WebSocket test failed for {host}:{port}{path}: {e}")
+        log.debug(f"WebSocket test failed for {host}:{port}{path} with SNI {sni}: {e}")
         return False
 
 
@@ -1475,10 +1482,25 @@ def check_raw(raw: str) -> Optional[V2Config]:
 
     # اختبار WebSocket الحقيقي مع إرسال رسالة وانتظار رد
     path = "/ws"  # تم تثبيته في التعديلات
-    # استخدام TEST_SNI إذا كان موجودًا، وإلا استخدم active_sni
-    websocket_sni = TEST_SNI if TEST_SNI else active_sni
-    if not test_websocket(host, port, path, websocket_sni, websocket_sni):
-        log.debug(f"WebSocket test failed for {host} using SNI {websocket_sni}, skipping")
+
+    # تحديد قائمة SNI للاختبار
+    sni_list = TEST_SNI_LIST if TEST_SNI_LIST else ([TEST_SNI] if TEST_SNI else [])
+    if not sni_list:
+        # إذا لم توجد قائمة، استخدم active_sni فقط
+        sni_list = [active_sni]
+
+    # تجربة كل SNI حتى ينجح اختبار WebSocket
+    ws_success = False
+    for test_sni in sni_list:
+        if test_websocket(host, port, path, test_sni, test_sni):
+            ws_success = True
+            log.debug(f"WebSocket test succeeded for {host} with SNI {test_sni}")
+            break
+        else:
+            log.debug(f"WebSocket test failed for {host} with SNI {test_sni}")
+
+    if not ws_success:
+        log.debug(f"All WebSocket tests failed for {host}, skipping")
         return None
 
     return V2Config(raw=raw, raw_patched=patched, host=host, port=port,
@@ -1665,14 +1687,19 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="V2Ray Ultimate Hunter v4")
     parser.add_argument("--dry-run", action="store_true", help="Skip actual Telegram posting")
     parser.add_argument("--sni",     default="", help="Set / override CUSTOM_SNI")
-    parser.add_argument("--test-sni", default="", help="Test WebSocket with this SNI (e.g., i.instagram.com)")
+    parser.add_argument("--test-sni", default="", help="Single SNI to test WebSocket with (e.g., i.instagram.com)")
+    parser.add_argument("--test-sni-list", default="", help="Comma-separated list of SNIs to test WebSocket with (overrides --test-sni)")
     args = parser.parse_args()
 
-    global CUSTOM_SNI, TEST_SNI
+    global CUSTOM_SNI, TEST_SNI, TEST_SNI_LIST
     if args.sni:
         CUSTOM_SNI = args.sni.strip()
     if args.test_sni:
         TEST_SNI = args.test_sni.strip()
+    if args.test_sni_list:
+        TEST_SNI_LIST = [s.strip() for s in args.test_sni_list.split(",") if s.strip()]
+    elif os.environ.get("TEST_SNI_LIST"):
+        TEST_SNI_LIST = [s.strip() for s in os.environ.get("TEST_SNI_LIST", "").split(",") if s.strip()]
 
     t_start = time.time()
     log.info("╔══════════════════════════════════════════════════╗")
@@ -1680,7 +1707,12 @@ def main() -> None:
     log.info(f"║  📡 Sources: {len(SOURCES):<6} | Auto-Post | SSL+SNI       ║")
     log.info("╚══════════════════════════════════════════════════╝")
     log.info(f"🔑 SNI: {CUSTOM_SNI or '(per-config built-in)'}")
-    log.info(f"🧪 Test SNI: {TEST_SNI or '(same as active SNI)'}")
+    if TEST_SNI_LIST:
+        log.info(f"🧪 Test SNI list: {', '.join(TEST_SNI_LIST)}")
+    elif TEST_SNI:
+        log.info(f"🧪 Test SNI: {TEST_SNI}")
+    else:
+        log.info("🧪 Test SNI: (same as active SNI)")
     if args.dry_run:
         log.info("🔇 Dry-run: Telegram disabled")
 
