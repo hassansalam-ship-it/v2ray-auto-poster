@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: '*/45 * * * *'
   workflow_dispatch:
+    inputs:
+      test_sni:
+        description: 'SNI to test with (e.g., i.instagram.com)'
+        required: false
+        default: ''
 
 jobs:
   hunt_and_post:
@@ -32,6 +37,7 @@ jobs:
         env:
           BOT_TOKEN:  ${{ secrets.BOT_TOKEN }}
           ADMIN_TG:   "@genie_2000"
+          TEST_SNI:   ${{ github.event.inputs.test_sni }}
         run: python v2ray_hunter.py
 
       - name: Commit and Push
