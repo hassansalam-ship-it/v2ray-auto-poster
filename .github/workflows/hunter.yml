@@ -19,28 +19,29 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      # ── 2. Python (NO cache to avoid requirements.txt error) ─────
+      # ── 2. Python ────────────────────────────────────────────────
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      # ── 3. Install Dependencies directly ─────────────────────────
+      # ── 3. Install Dependencies ──────────────────────────────────
       - name: Install Dependencies
         run: |
           pip install --upgrade pip
           pip install requests urllib3
 
-      # ── 4. Run Hunter ────────────────────────────────────────────
-      - name: Run Hunter Script
+      # ── 4. Run Hunter Script ─────────────────────────────────────
+      - name: Run Hunter
         env:
           BOT_TOKEN:  ${{ secrets.BOT_TOKEN }}
-          CUSTOM_SNI: "www.speedtest.net"
           ADMIN_TG:   "@genie_2000"
-        run: python v2ray_hunter.py
+          # CUSTOM_SNI is no longer used — all SNI fields are cleared automatically.
+          # You can remove this line completely.
+        run: python qq.py
 
-      # ── 5. Commit & Push ─────────────────────────────────────────
-      - name: Commit and Push Results
+      # ── 5. Commit & Push Results ─────────────────────────────────
+      - name: Commit and Push
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name  "GitHub Action Bot"
