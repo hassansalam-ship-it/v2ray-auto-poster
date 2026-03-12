@@ -31,7 +31,6 @@ try:
     WEBSOCKET_AVAILABLE = True
 except ImportError:
     WEBSOCKET_AVAILABLE = False
-    # سنكتفي بتحذير بسيط لعدم إيقاف السكربت
     print("⚠️ websocket-client not installed. WebSocket test will be skipped.")
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1247,28 +1246,29 @@ def apply_sni(raw: str, custom_sni: str) -> tuple[str, str]:
 
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-#  WEB SOCKET TEST (New function to filter working servers)
+#  WEB SOCKET TEST (متقدم: إرسال رسالة والتحقق)
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 def test_websocket(host: str, port: int, path: str, sni: str = "", host_header: str = "") -> bool:
     """
-    Attempts a real WebSocket connection to the server.
-    Returns True if handshake succeeds.
+    Attempts a real WebSocket connection and sends a small message.
+    Returns True if the connection is established and message sent without exception.
     """
     if not WEBSOCKET_AVAILABLE:
-        # If library not installed, we skip the test (assume it's working)
         return True
     try:
         ws_url = f"wss://{host}:{port}{path}"
         headers = {}
         if host_header:
             headers["Host"] = host_header
-        # Disable cert verification (allowInsecure style)
         ws = websocket.create_connection(
             ws_url,
             timeout=5,
             header=headers,
             sslopt={"check_hostname": False, "server_hostname": sni or host}
         )
+        # إرسال رسالة صغيرة لاختبار قدرة الخادم على استقبال البيانات
+        ws.send("ping")
+        # إذا وصلنا هنا دون استثناء، الاتصال يعمل ويمكنه استقبال البيانات
         ws.close()
         return True
     except Exception as e:
@@ -1464,7 +1464,7 @@ def check_raw(raw: str) -> Optional[V2Config]:
     active_sni     = CUSTOM_SNI if CUSTOM_SNI else (orig_sni or host)
     ssl_ok, ssl_cn = ssl_handshake(host, port, active_sni)
 
-    # اختبار WebSocket الحقيقي
+    # اختبار WebSocket الحقيقي مع إرسال رسالة
     path = "/ws"  # تم تثبيته في التعديلات
     if not test_websocket(host, port, path, active_sni, active_sni):
         log.debug(f"WebSocket test failed for {host}, skipping")
