@@ -1122,33 +1122,32 @@ def extract_sni(raw: str) -> str:
 def _inject_vless_sni(raw: str, sni: str) -> str:
     """
     VLESS patching — 5 fixes applied:
-      Fix 1+2: CLEARS sni/host/peer/servername completely then sets custom value.
-               When sni=="" fields become empty so user can set their own SNI in app.
-      Fix 3:   path=%2Fws  (URL-encoded — fixes "0 Configs Imported" on mobile apps).
+      Fix 1+2: CLEARS sni/host/peer/servername completely (sets to empty string)
+      Fix 3:   path=%2Fws (URL-encoded — fixes "0 Configs Imported" on mobile apps).
       Fix 4:   type=ws     (explicit WebSocket transport).
       Fix 5:   allowInsecure=1  (skip cert check so custom SNI works with any cert).
     """
     result = raw
 
-    # ── Fix 1+2: Clear ALL sni-related params, then set new value ─
-    # Remove each key completely first, then re-add with new value
+    # ── Fix 1+2: Clear ALL sni-related params completely (set to empty) ─
+    # Remove each key completely first, then set to empty
     for k in ("sni", "peer", "servername", "server-name"):
-        # First remove entirely (set to empty via regex)
+        # Remove any existing value
         result = re.sub(rf"([?&]{k}=)[^&\s#]*", r"\g<1>", result, flags=re.IGNORECASE)
-        # If param didn't exist, add it
+        # If param didn't exist, add it with empty value
         if not re.search(rf"[?&]{k}=", result, re.IGNORECASE):
             sep = "&" if "?" in result else "?"
             result += f"{sep}{k}="
-        # Now set to the custom value
-        result = re.sub(rf"([?&]{k}=)[^&\s#]*", rf"\g<1>{sni}", result, flags=re.IGNORECASE)
+        # Ensure it's empty (in case there was a value)
+        result = re.sub(rf"([?&]{k}=)[^&\s#]*", r"\g<1>", result, flags=re.IGNORECASE)
 
-    # host param — clear then set
+    # host param — clear completely (set to empty)
     result = re.sub(r"([?&]host=)[^&\s#]*", r"\g<1>", result, flags=re.IGNORECASE)
     if not re.search(r"[?&]host=", result, re.IGNORECASE):
         result += f"&host="
-    result = re.sub(r"([?&]host=)[^&\s#]*", rf"\g<1>{sni}", result, flags=re.IGNORECASE)
+    result = re.sub(r"([?&]host=)[^&\s#]*", r"\g<1>", result, flags=re.IGNORECASE)
 
-    # ── Fix 3: path=%2Fws  (URL-encoded /ws for mobile app compat) ─
+    # ── Fix 3: path=%2Fws (URL-encoded /ws for mobile app compat) ─
     if re.search(r"[?&]path=", result, re.IGNORECASE):
         result = re.sub(r"([?&]path=)[^&\s#]*", r"\g<1>%2Fws", result, flags=re.IGNORECASE)
     else:
@@ -1173,8 +1172,8 @@ def _inject_vmess_sni(raw: str, sni: str) -> str:
     """
     VMESS patching — 5 fixes applied inside the JSON:
       Fix 1:   Robust base64 decode (tries 4 padding variants).
-      Fix 2:   CLEARS sni="" and host="" — no built-in SNI leaks.
-               User sets their own SNI in the app after import.
+      Fix 2:   CLEARS sni="" and host="" completely — no built-in SNI.
+               All SNI fields are set to empty strings.
       Fix 3:   Forces net=ws and path=/ws (WebSocket transport).
       Fix 4:   Forces tls=tls (enable TLS encryption).
       Fix 5:   Forces allowInsecure=True + skip-cert-verify=True
@@ -1196,8 +1195,8 @@ def _inject_vmess_sni(raw: str, sni: str) -> str:
         if obj is None:
             return raw  # cannot decode — return unchanged
 
-        # ── Fix 2: Clear SNI and Host completely ──────────────────
-        obj["sni"]  = ""   # empty → app uses user's own SNI setting
+        # ── Fix 2: Clear ALL SNI and Host fields completely (set to empty) ──
+        obj["sni"]  = ""   # empty → user sets their own SNI in app
         obj["host"] = ""   # empty CDN host header — no leaks
 
         # Also clear any other sni-related fields that may exist
@@ -1228,15 +1227,14 @@ def _inject_vmess_sni(raw: str, sni: str) -> str:
 def apply_sni(raw: str, custom_sni: str) -> tuple[str, str]:
     """
     Always applies all transport fixes (path=%2Fws, type=ws, allowInsecure, tls).
-    - If custom_sni is set: replaces SNI/host with that value.
-    - If custom_sni is empty: clears SNI/host to "" so user can set manually in app.
+    - Always clears SNI/host fields to "" (empty) so user can set manually in app.
     Either way, path/type/allowInsecure fixes are ALWAYS applied.
     """
     orig = extract_sni(raw)
-    # Always call inject — sni="" clears fields, sni="domain" sets them
+    # Always call inject — sets all SNI fields to empty
     if raw.startswith("vmess://"):
-        return orig, _inject_vmess_sni(raw, custom_sni)
-    return orig, _inject_vless_sni(raw, custom_sni)
+        return orig, _inject_vmess_sni(raw, "")
+    return orig, _inject_vless_sni(raw, "")
 
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
