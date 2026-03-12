@@ -25,6 +25,15 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
+# websocket-client for real connection test
+try:
+    import websocket
+    WEBSOCKET_AVAILABLE = True
+except ImportError:
+    WEBSOCKET_AVAILABLE = False
+    # سنكتفي بتحذير بسيط لعدم إيقاف السكربت
+    print("⚠️ websocket-client not installed. WebSocket test will be skipped.")
+
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 #  LOGGING
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1238,6 +1247,36 @@ def apply_sni(raw: str, custom_sni: str) -> tuple[str, str]:
 
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+#  WEB SOCKET TEST (New function to filter working servers)
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+def test_websocket(host: str, port: int, path: str, sni: str = "", host_header: str = "") -> bool:
+    """
+    Attempts a real WebSocket connection to the server.
+    Returns True if handshake succeeds.
+    """
+    if not WEBSOCKET_AVAILABLE:
+        # If library not installed, we skip the test (assume it's working)
+        return True
+    try:
+        ws_url = f"wss://{host}:{port}{path}"
+        headers = {}
+        if host_header:
+            headers["Host"] = host_header
+        # Disable cert verification (allowInsecure style)
+        ws = websocket.create_connection(
+            ws_url,
+            timeout=5,
+            header=headers,
+            sslopt={"check_hostname": False, "server_hostname": sni or host}
+        )
+        ws.close()
+        return True
+    except Exception as e:
+        log.debug(f"WebSocket test failed for {host}:{port}{path}: {e}")
+        return False
+
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 #  COLLECT
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 def _fetch(url: str) -> list[str]:
@@ -1357,7 +1396,7 @@ def collect_configs() -> list[str]:
 
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-#  TCP PING + SSL
+#  TCP PING + SSL + WebSocket test
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 def tcp_ping(host: str, port: int) -> Optional[int]:
     try:
@@ -1424,6 +1463,12 @@ def check_raw(raw: str) -> Optional[V2Config]:
     # (orig_sni is now cleared to "" by apply_sni when no custom SNI)
     active_sni     = CUSTOM_SNI if CUSTOM_SNI else (orig_sni or host)
     ssl_ok, ssl_cn = ssl_handshake(host, port, active_sni)
+
+    # اختبار WebSocket الحقيقي
+    path = "/ws"  # تم تثبيته في التعديلات
+    if not test_websocket(host, port, path, active_sni, active_sni):
+        log.debug(f"WebSocket test failed for {host}, skipping")
+        return None
 
     return V2Config(raw=raw, raw_patched=patched, host=host, port=port,
                     ping_ms=ping, proto=proto, original_sni=orig_sni,
@@ -1636,7 +1681,7 @@ def main() -> None:
         not any(k in x.lower() for k in VPS_KEYWORDS),
     ))
 
-    # 3. Check
+    # 3. Check (with WebSocket test)
     live = run_checks(raws)
     if not live:
         log.error("No live configs — exiting")
