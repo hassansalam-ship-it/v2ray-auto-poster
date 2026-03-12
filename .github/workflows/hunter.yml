@@ -8,7 +8,6 @@ on:
 jobs:
   hunt_and_post:
     runs-on: ubuntu-latest
-    # Allow the job write access to push back to the repo
     permissions:
       contents: write
 
@@ -17,19 +16,16 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
-          # Fetch full history so rebase has context
           fetch-depth: 0
-          # Use the built-in token with write permission
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      # ── 2. Python ────────────────────────────────────────────────
+      # ── 2. Python (NO cache to avoid requirements.txt error) ─────
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          cache: 'pip'
 
-      # ── 3. Dependencies ──────────────────────────────────────────
+      # ── 3. Install Dependencies directly ─────────────────────────
       - name: Install Dependencies
         run: |
           pip install --upgrade pip
@@ -43,20 +39,20 @@ jobs:
           ADMIN_TG:   "@genie_2000"
         run: python v2ray_hunter.py
 
-      # ── 5. Commit & Push (robust — fixes exit 128 & index errors) ─
+      # ── 5. Commit & Push ─────────────────────────────────────────
       - name: Commit and Push Results
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name  "GitHub Action Bot"
 
-          # Reset any staged/unstaged changes that could block rebase
+          # Clear any index/staging conflicts
           git reset HEAD || true
           git checkout -- . 2>/dev/null || true
 
-          # Stage only the output files we care about
+          # Stage output files only
           git add sub_link.txt v2ray_hunt.log 2>/dev/null || true
 
-          # Only proceed if there is something to commit
+          # Skip if nothing changed
           if git diff --cached --quiet; then
             echo "✅ No changes to commit — skipping push"
             exit 0
@@ -64,12 +60,12 @@ jobs:
 
           git commit -m "🔄 Auto-update: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 
-          # Pull remote changes with ours strategy to avoid conflicts
+          # Rebase on remote, prefer local on conflict
           git pull --rebase -X ours origin main 2>/dev/null || \
           git pull --rebase -X ours origin master 2>/dev/null || true
 
-          # Push — retry once on transient failure
+          # Push with retry
           git push origin HEAD:main 2>/dev/null || \
           git push origin HEAD:master 2>/dev/null || \
           (sleep 5 && git push origin HEAD:main) || \
-          echo "⚠️  Push failed — will retry next cycle"
+          echo "⚠️ Push failed — will retry next cycle"
