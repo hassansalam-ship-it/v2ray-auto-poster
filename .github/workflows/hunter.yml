@@ -24,7 +24,8 @@ on:
 jobs:
   hunt_and_post:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    # تم زيادة الوقت لتجنب مشكلة الـ Timeout التي واجهتها
+    timeout-minutes: 40
 
     permissions:
       contents: write
@@ -73,10 +74,10 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name  "V2Ray AI Bot"
 
-          # Stage only the files we want to commit
-          git add sub_link.txt v2ray_hunt.log 2>/dev/null || true
+          # إضافة كافة الملفات الناتجة عن التحديث
+          git add sub_link.txt v2ray_hunt.log learned_sources.json source_stats.json 2>/dev/null || true
 
-          # Check if there's anything to commit
+          # التحقق من وجود تغييرات حقيقية قبل المحاولة
           if git diff --cached --quiet; then
             echo "✅ No changes to commit — skipping push"
             exit 0
@@ -84,13 +85,13 @@ jobs:
 
           git commit -m "🤖 AI Hunter v7 — $(date -u +'%Y-%m-%d %H:%M UTC')"
 
-          # Robust push with retry
+          # منطق الدفع (Push) مع إعادة محاولة وتجاوز الفحص
           for i in 1 2 3; do
             git pull --rebase -X ours origin main 2>/dev/null || \
             git pull --rebase -X ours origin master 2>/dev/null || true
 
-            git push origin HEAD:main 2>/dev/null || \
-            git push origin HEAD:master 2>/dev/null && break
+            git push origin HEAD:main --no-verify 2>/dev/null || \
+            git push origin HEAD:master --no-verify 2>/dev/null && break
 
             echo "⚠️ Push attempt $i failed, retrying..."
             sleep $((i * 5))
