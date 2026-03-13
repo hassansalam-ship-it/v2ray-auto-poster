@@ -1,37 +1,35 @@
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 #  🤖 V2RAY ULTIMATE HUNTER v7 — AI EDITION — GitHub Actions Workflow
-#  يعمل كل 45 دقيقة تلقائياً | يدعم التشغيل اليدوي بخيارات
+#  يعمل كل 45 دقيقة | ذاكرة AI دائمة بين الجولات | يحذف المصادر الميتة
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 name: 🤖 V2Ray AI Hunter v7
 
 on:
   schedule:
-    - cron: '*/45 * * * *'   # كل 45 دقيقة
+    - cron: '*/45 * * * *'   # كل 45 دقيقة تلقائياً
   workflow_dispatch:
     inputs:
       custom_sni:
-        description: 'Bug Host SNI (فارغ = الذكاء الاصطناعي يختار تلقائياً)'
+        description: 'Bug Host SNI (فارغ = AI يختار)'
         required: false
         default: ''
       dry_run:
-        description: 'Dry Run بدون نشر تيليغرام'
+        description: 'Dry Run (بدون نشر)'
         required: false
         default: 'false'
         type: choice
         options: ['false', 'true']
 
 jobs:
-  hunt_and_post:
+  hunt:
     runs-on: ubuntu-latest
-    # تم زيادة الوقت لتجنب مشكلة الـ Timeout التي واجهتها
-    timeout-minutes: 40
-
+    timeout-minutes: 35
     permissions:
       contents: write
 
     steps:
-      # ── 1. Checkout ────────────────────────────────────────────────────────
+      # ── 1. Checkout مع الحفاظ على الذاكرة (ai_memory.json) ───────────────
       - name: 📥 Checkout
         uses: actions/checkout@v4
         with:
@@ -39,60 +37,62 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       # ── 2. Python Setup ────────────────────────────────────────────────────
-      - name: 🐍 Setup Python 3.11
+      - name: 🐍 Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      # ── 3. Install Dependencies ────────────────────────────────────────────
-      - name: 📦 Install Dependencies
+      # ── 3. Cache pip dependencies ──────────────────────────────────────────
+      - name: 📦 Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: pip-v2ray-${{ hashFiles('**/requirements.txt') }}-v1
+          restore-keys: pip-v2ray-
+
+      # ── 4. Install dependencies ────────────────────────────────────────────
+      - name: 📦 Install deps
         run: |
           pip install --upgrade pip --quiet
           pip install requests urllib3 --quiet
 
-      # ── 4. Run AI Hunter ───────────────────────────────────────────────────
+      # ── 5. Run AI Hunter ───────────────────────────────────────────────────
       - name: 🤖 Run AI Hunter
         env:
           BOT_TOKEN:  ${{ secrets.BOT_TOKEN }}
-          ADMIN_TG:   "@genie_2000"
           CUSTOM_SNI: ${{ github.event.inputs.custom_sni || '' }}
         run: |
-          DRY_RUN="${{ github.event.inputs.dry_run || 'false' }}"
-          SNI="${{ github.event.inputs.custom_sni || '' }}"
-
           ARGS=""
-          [ "$DRY_RUN" = "true" ] && ARGS="$ARGS --dry-run"
-          [ -n "$SNI" ] && ARGS="$ARGS --sni $SNI"
+          [ "${{ github.event.inputs.dry_run }}" = "true" ] && ARGS="$ARGS --dry-run"
+          [ -n "${{ github.event.inputs.custom_sni }}" ] && ARGS="$ARGS --sni ${{ github.event.inputs.custom_sni }}"
 
-          echo "🚀 Starting V2Ray AI Hunter v7..."
-          echo "   DRY_RUN=$DRY_RUN | SNI=${SNI:-auto}"
+          echo "🚀 V2Ray AI Hunter v7 starting..."
+          echo "   dry_run=${{ github.event.inputs.dry_run || 'false' }}"
+          echo "   sni=${{ github.event.inputs.custom_sni || 'auto-AI' }}"
           python v2ray_hunter.py $ARGS
 
-      # ── 5. Commit & Push ────────────────────────────────────────────────────
-      - name: 💾 Commit & Push Subscription
+      # ── 6. Commit — يحفظ الذاكرة والملفات ────────────────────────────────
+      - name: 💾 Commit & Push
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name  "V2Ray AI Bot"
+          git config user.email "ai-bot@v2ray.hunter"
+          git config user.name  "V2Ray AI Bot"
 
-          # إضافة كافة الملفات الناتجة عن التحديث
-          git add sub_link.txt v2ray_hunt.log learned_sources.json source_stats.json 2>/dev/null || true
+          # نحفظ: subscription + AI memory + log
+          git add sub_link.txt ai_memory.json 2>/dev/null || true
+          git add v2ray_hunt.log              2>/dev/null || true
 
-          # التحقق من وجود تغييرات حقيقية قبل المحاولة
           if git diff --cached --quiet; then
-            echo "✅ No changes to commit — skipping push"
+            echo "✅ No changes to commit"
             exit 0
           fi
 
-          git commit -m "🤖 AI Hunter v7 — $(date -u +'%Y-%m-%d %H:%M UTC')"
+          TIMESTAMP=$(date -u +'%Y-%m-%d %H:%M UTC')
+          LINES=$(wc -l < sub_link.txt 2>/dev/null || echo 0)
+          git commit -m "🤖 AI Hunter v7 | ${TIMESTAMP} | sub: ${LINES}L"
 
-          # منطق الدفع (Push) مع إعادة محاولة وتجاوز الفحص
+          # Push مع retry
           for i in 1 2 3; do
-            git pull --rebase -X ours origin main 2>/dev/null || \
-            git pull --rebase -X ours origin master 2>/dev/null || true
-
-            git push origin HEAD:main --no-verify 2>/dev/null || \
-            git push origin HEAD:master --no-verify 2>/dev/null && break
-
-            echo "⚠️ Push attempt $i failed, retrying..."
-            sleep $((i * 5))
+            git pull --rebase -X ours origin HEAD 2>/dev/null || true
+            git push origin HEAD:${{ github.ref_name }} && { echo "✅ Pushed"; break; }
+            echo "⚠️ Retry $i..."; sleep $((i*5))
           done
