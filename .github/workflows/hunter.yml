@@ -1,4 +1,4 @@
-# v2ray hunter.yml (بعد التعديل) — لم يتغير
+# v2ray hunter.yml (بعد التعديل) — إزالة cache
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 #  🤖 V2RAY ULTIMATE HUNTER v8 — AI EDITION
 #  يعمل كل 45 دقيقة | ينتهي في < 20 دقيقة | ذاكرة دائمة
@@ -41,7 +41,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          cache: 'pip'
 
       - name: 📦 Install
         run: pip install requests urllib3 --quiet
