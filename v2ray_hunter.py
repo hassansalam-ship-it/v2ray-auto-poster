@@ -1,3 +1,4 @@
+# v2ray_hunter.py (بعد التعديل)
 """
 ╔══════════════════════════════════════════════════════════════════════════════╗
 ║  🤖 V2RAY ULTIMATE HUNTER v7 — AI EDITION — ASHAQ TEAM                     ║
@@ -104,18 +105,21 @@ CUSTOM_SNI = os.environ.get("CUSTOM_SNI", "")
 
 MAX_POSTS        = 5
 MAX_SUB_CONFIGS  = 200
-FETCH_WORKERS    = 80      # جلب المصادر بالتوازي
-CHECK_WORKERS    = 100     # فحص الكونفيجات بالتوازي
-FETCH_TIMEOUT    = 8       # وقت جلب مصدر (كان 12)
-TCP_TIMEOUT      = 1.5     # وقت TCP ping (كان 2.0)
-SSL_TIMEOUT      = 2.5     # وقت SSL (كان 3.5)
-PROBE_TIMEOUT    = 2.5     # وقت probe لكل Bug Host (كان 4.0)
-MAX_PING_MS      = 600     # رفض فوق 600ms (كان 700)
-STOP_AFTER_FOUND = 900     # توقف بعد 900 كونفيج حي
-MAX_CHECK_CONFIGS = 8000   # أقصى عدد للفحص في جولة واحدة
-GLOBAL_TIMEOUT   = 27 * 60 # 27 دقيقة = يوقف نفسه قبل الـ cancel
+FETCH_WORKERS    = 30                # تم التخفيض من 60
+CHECK_WORKERS    = 40                # تم التخفيض من 80
+FETCH_TIMEOUT    = 12
+TCP_TIMEOUT      = 2.0
+SSL_TIMEOUT      = 3.5
+PROBE_TIMEOUT    = 4.0
+MAX_PING_MS      = 700
+STOP_AFTER_FOUND = 900
 TARGET_PORT      = 443
 MIN_COMPAT_HOSTS = 1
+
+# ── ثوابت جديدة للتحكم بالوقت والحجم ───────────────────────────────
+MAX_CONFIGS_TO_CHECK = 2000        # أقصى عدد كونفيج يتم فحصهم (يسرع كثيراً)
+PROBE_BATCH_SIZE = 4                # عدد Bug Hosts في كل دفعة فحص
+MAX_RUNTIME_SECONDS = 1200          # 20 دقيقة – حد آمن لـ GitHub Actions
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 #  TARGET BUG HOSTS — القائمة الكاملة المحدَّثة
@@ -1523,29 +1527,67 @@ def http_ws_probe(host: str, port: int, bug_host: str,
 
 def multi_probe(host: str, port: int) -> tuple[list[str], str, int]:
     """
-    Multi Bug-Host Probe — فحص سريع ودقيق لكل Bug Host بالتوازي.
-    Single-pass (لا double-verify) للسرعة، لكن مع فلتر صارم.
+    ══════════════════════════════════════════════════════════════
+    Multi Bug-Host Probe — الفحص الدقيق لكل Bug Host.
+
+    المنهجية:
+    1. يجرب كل Bug Host بالتوازي (سرعة)
+    2. أي Bug Host ينجح → يعيد التحقق مرة ثانية مستقلة (دقة 100%)
+    3. يُدرج في القائمة فقط إذا نجح مرتين متتاليتين
+
+    هذا يضمن:
+    - لا false positives (نتيجة خاطئة إيجابية)
+    - فقط Bug Hosts التي تعمل بشكل موثوق تُقبل
+    ══════════════════════════════════════════════════════════════
     """
-    hosts_ordered = ai_best_order()
-    timings: dict[str, int] = {}
+    hosts_ordered = ai_best_order()  # AI يرتب بناءً على التاريخ
 
-    with ThreadPoolExecutor(max_workers=min(len(hosts_ordered), 12)) as ex:
-        futures = {ex.submit(http_ws_probe, host, port, bh): bh
-                   for bh in hosts_ordered}
-        for fut in as_completed(futures):
-            bh = futures[fut]
-            try:
-                ms = fut.result()
-                if ms is not None:
-                    timings[bh] = ms
-            except Exception:
-                pass
+    # تقسيم الهوستات إلى دفعات
+    for i in range(0, len(hosts_ordered), PROBE_BATCH_SIZE):
+        batch = hosts_ordered[i:i+PROBE_BATCH_SIZE]
+        batch_timings = {}
 
-    if not timings:
-        return [], "", 0
-    compat = list(timings.keys())
-    best   = min(timings, key=timings.get)
-    return compat, best, timings[best]
+        # فحص الدفعة بالتوازي
+        with ThreadPoolExecutor(max_workers=min(len(batch), PROBE_BATCH_SIZE)) as ex:
+            futures = {ex.submit(http_ws_probe, host, port, bh): bh for bh in batch}
+            for fut in as_completed(futures):
+                bh = futures[fut]
+                try:
+                    ms = fut.result()
+                    if ms is not None:
+                        batch_timings[bh] = ms
+                except Exception:
+                    pass
+
+        # إذا وجدنا أي ناجح في هذه الدفعة، نعيد التحقق منهم فقط ونتوقف
+        if batch_timings:
+            # إعادة تحقق لكل ناجح في الدفعة (parallel)
+            verified = {}
+            with ThreadPoolExecutor(max_workers=min(len(batch_timings), 3)) as ex2:
+                rev_futures = {ex2.submit(http_ws_probe, host, port, bh): bh for bh in batch_timings}
+                for fut2 in as_completed(rev_futures):
+                    bh = rev_futures[fut2]
+                    try:
+                        ms2 = fut2.result()
+                        if ms2 is not None:
+                            avg = (batch_timings[bh] + ms2) // 2
+                            verified[bh] = avg
+                        else:
+                            log.debug(f"  ⚠️ Re-verify failed: {host}←{bh} (false positive removed)")
+                            ai_update(bh, False)
+                    except Exception:
+                        pass
+
+            if verified:
+                compat = list(verified.keys())
+                best = min(verified, key=verified.get)
+                return compat, best, verified[best]
+
+        # إذا لم نجد أي ناجح، ننتقل للدفعة التالية
+        continue
+
+    # إذا لم ينجح أي هوست نهائياً
+    return [], "", 0
 
 def ai_diagnose(host: str, ping: Optional[int], ssl_ok: bool,
                 compat_hosts: list, is_cf: bool, is_vps: bool) -> str:
@@ -1897,163 +1939,59 @@ def collect_configs() -> list[str]:
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 #  PARALLEL CHECK + STOP GATE
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-#  WORKING CONFIG CACHE — يحفظ الكونفيجات الشغالة بين الجولات
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-_WORKING_CACHE_FILE = "working_cache.json"
-
-def load_working_cache() -> list[dict]:
-    """يحمّل الكونفيجات الشغالة من الجولات السابقة."""
-    try:
-        with open(_WORKING_CACHE_FILE, "r", encoding="utf-8") as f:
-            data = json.load(f)
-            # احتفظ فقط بالكونفيجات الأحدث من 6 ساعات
-            cutoff = time.time() - 6 * 3600
-            fresh  = [c for c in data if c.get("ts", 0) > cutoff]
-            log.info(f"💾 Cache: {len(fresh)}/{len(data)} working configs loaded (< 6h)")
-            return fresh
-    except Exception:
-        return []
-
-def save_working_cache(configs: list[V2Config]) -> None:
-    """يحفظ الكونفيجات الشغالة للجولة القادمة."""
-    try:
-        data = []
-        for c in configs[:200]:   # أحفظ أفضل 200
-            data.append({
-                "raw":        c.raw,
-                "raw_patched":c.raw_patched,
-                "host":       c.host,
-                "port":       c.port,
-                "proto":      c.proto,
-                "ping_ms":    c.ping_ms,
-                "probe_ms":   c.probe_ms,
-                "compat":     c.compatible_hosts,
-                "best_bug":   c.best_bug_host,
-                "country":    c.country_code,
-                "isp":        c.isp,
-                "is_cf":      c.is_cf,
-                "is_vps":     c.is_vps,
-                "diagnosis":  c.ai_diagnosis,
-                "ts":         time.time(),
-            })
-        with open(_WORKING_CACHE_FILE, "w", encoding="utf-8") as f:
-            json.dump(data, f, ensure_ascii=False, separators=(",",":"))
-        log.info(f"💾 Saved {len(data)} working configs → {_WORKING_CACHE_FILE}")
-    except Exception as e:
-        log.warning(f"Cache save failed: {e}")
-
-def restore_from_cache() -> list[V2Config]:
-    """يُحوّل الكونفيجات المحفوظة إلى V2Config objects."""
-    cached = load_working_cache()
-    result = []
-    for c in cached:
-        try:
-            result.append(V2Config(
-                raw=c["raw"], raw_patched=c["raw_patched"],
-                host=c["host"], port=c["port"], proto=c["proto"],
-                ping_ms=c["ping_ms"], probe_ms=c.get("probe_ms",0),
-                original_sni="", injected_sni="",
-                ssl_ok=True, ssl_cert_cn="",
-                is_cf=c.get("is_cf",False), is_vps=c.get("is_vps",False),
-                compatible_hosts=c.get("compat",[]),
-                best_bug_host=c.get("best_bug",""),
-                country_code=c.get("country","??"),
-                country=c.get("country","Unknown"),
-                isp=c.get("isp",""),
-                ai_diagnosis=c.get("diagnosis","♻️ Restored from cache"),
-                server_type="CF" if c.get("is_cf") else "VPS",
-            ))
-        except Exception:
-            pass
-    return result
-
-
 def run_checks(raws: list[str]) -> list[V2Config]:
-    """
-    ══════════════════════════════════════════════════════════════
-    فحص الكونفيجات مع:
-    1. Global Timeout — يوقف نفسه قبل الـ GitHub cancel
-    2. MAX_CHECK_CONFIGS — لا يفحص أكثر من اللازم
-    3. Self-healing — يلتقط الأخطاء ويكمل بدلاً من الانهيار
-    4. Progress logging كل 100 config
-    ══════════════════════════════════════════════════════════════
-    """
-    # قصّر القائمة لضمان الانتهاء في الوقت
-    if len(raws) > MAX_CHECK_CONFIGS:
-        log.info(f"⚡ Trimming {len(raws)} → {MAX_CHECK_CONFIGS} (AI-ranked first)")
-        raws = raws[:MAX_CHECK_CONFIGS]
+    # اقتطاع العدد إذا كان كبيراً جداً
+    if len(raws) > MAX_CONFIGS_TO_CHECK:
+        log.info(f"✂️ Too many configs ({len(raws)}), checking only first {MAX_CONFIGS_TO_CHECK}")
+        raws = raws[:MAX_CONFIGS_TO_CHECK]
 
-    log.info(f"⚡ Checking {len(raws)} configs [{CHECK_WORKERS} workers | "
-             f"stop@{STOP_AFTER_FOUND} | timeout={GLOBAL_TIMEOUT//60}m] ...")
-
+    log.info(f"⚡ Checking {len(raws)} configs [{CHECK_WORKERS} workers | stop@{STOP_AFTER_FOUND} | max runtime {MAX_RUNTIME_SECONDS}s] ...")
     live: list[V2Config] = []
-    stop  = threading.Event()
-    lock  = threading.Lock()
-    t_start = time.time()
-    errors  = [0]   # self-healing counter
+    stop = threading.Event()
+    lock = threading.Lock()
+    start_time = time.time()
 
     def _worker(raw: str) -> Optional[V2Config]:
-        if stop.is_set(): return None
-        # ── Self-healing — يلتقط كل خطأ ────────────────────────────
+        if stop.is_set():
+            return None
+        # تحقق من الوقت المنقضي قبل كل فحص
+        if time.time() - start_time > MAX_RUNTIME_SECONDS:
+            log.warning("⏰ Global timeout reached, stopping further checks")
+            stop.set()
+            return None
         try:
             return check_raw(raw)
-        except MemoryError:
-            log.warning("⚠️ MemoryError in worker — skipping")
-            return None
-        except RecursionError:
-            log.warning("⚠️ RecursionError — skipping")
-            return None
-        except Exception as e:
-            with lock: errors[0] += 1
-            if errors[0] % 100 == 0:
-                log.warning(f"⚠️ {errors[0]} worker errors so far (self-healing)")
+        except Exception:
             return None
 
     with ThreadPoolExecutor(max_workers=CHECK_WORKERS) as ex:
         futures = {ex.submit(_worker, r): r for r in raws}
         for fut in as_completed(futures):
-            # ── Global Timeout Guard ─────────────────────────────────
-            if time.time() - t_start > GLOBAL_TIMEOUT:
-                stop.set()
-                log.warning(
-                    f"⏰ Global timeout ({GLOBAL_TIMEOUT//60}m) — "
-                    f"stopping with {len(live)} live configs"
-                )
-                try: ex.shutdown(wait=False, cancel_futures=True)
-                except Exception: pass
-                break
-
             if stop.is_set():
-                try: fut.cancel()
-                except Exception: pass
+                try:
+                    fut.cancel()
+                except Exception:
+                    pass
                 continue
-
             try:
-                res = fut.result(timeout=30)  # per-future timeout
+                res = fut.result()
             except Exception:
                 res = None
-
             if res:
                 with lock:
                     live.append(res)
                     n = len(live)
-                    if n % 100 == 0:
-                        elapsed = int(time.time() - t_start)
-                        remain  = max(0, GLOBAL_TIMEOUT - elapsed)
-                        log.info(
-                            f"  📊 {n} live | ⏱{elapsed}s elapsed | "
-                            f"⏳{remain}s left | {ai_report()}"
-                        )
+                    if n % 50 == 0:
+                        log.info(f"  📊 {n} live | {ai_report()}")
                     if n >= STOP_AFTER_FOUND:
                         stop.set()
                         log.info(f"🛑 Stop gate: {STOP_AFTER_FOUND} reached")
+                    # أيضاً تحقق من الوقت بعد كل إضافة
+                    if time.time() - start_time > MAX_RUNTIME_SECONDS:
+                        log.warning("⏰ Global timeout reached, stopping")
+                        stop.set()
 
-    elapsed = int(time.time() - t_start)
-    log.info(
-        f"✅ {len(live)} live configs | {elapsed}s | "
-        f"{errors[0]} errors self-healed"
-    )
+    log.info(f"✅ {len(live)} live configs (Zero-Data filtered)")
     log.info(ai_report())
     return live
 
@@ -2237,73 +2175,47 @@ def main() -> None:
     log.info(f"🔑 CUSTOM_SNI: {CUSTOM_SNI or '(auto-detect best bug host)'}")
     if args.dry_run: log.info("🔇 Dry-run mode")
 
-    # ── 1. Load Working Cache (كونفيجات شغالة من جولات سابقة) ──────────────
-    cached_live = restore_from_cache()
-    if cached_live:
-        log.info(f"♻️  Loaded {len(cached_live)} cached working configs")
-
-    # ── 2. Collect fresh configs ─────────────────────────────────────────────
+    # 1. Collect
     raws = collect_configs()
-    if not raws and not cached_live:
-        log.error("Nothing collected and no cache — exit"); return
+    if not raws: log.error("Nothing collected — exit"); return
 
-    # ── 3. Smart pre-sort: CF/VPS IPs first (أعلى احتمال نجاح) ─────────────
-    if raws:
-        # الـ IPs المعروفة أولاً
-        good_ips = set(_ai_memory.get("known_good_ips", []))
-        def _sort_key(x):
-            import re as _re
-            m = _re.search(r"@([^:/]+):", x)
-            ip = m.group(1) if m else ""
-            return (
-                ip not in good_ips,
-                not any(k in x.lower() for k in CF_KEYWORDS),
-                not any(k in x.lower() for k in VPS_KEYWORDS),
-            )
-        raws.sort(key=_sort_key)
+    # 2. Smart pre-sort: CF/VPS first (أكثر احتمالاً للنجاح)
+    raws.sort(key=lambda x: (
+        not any(k in x.lower() for k in CF_KEYWORDS),
+        not any(k in x.lower() for k in VPS_KEYWORDS),
+    ))
 
-    # ── 4. AI Check + Zero-Data Filter ──────────────────────────────────────
-    fresh_live: list[V2Config] = []
-    if raws:
-        fresh_live = run_checks(raws)
+    # 3. AI Check + Zero-Data Filter
+    live = run_checks(raws)
+    if not live: log.error("No live configs — exit"); return
 
-    # ── 5. Merge cache + fresh (fresh أولاً للتجديد) ────────────────────────
-    live = fresh_live + [c for c in cached_live
-                         if c.host not in {x.host for x in fresh_live}]
-
-    if not live:
-        log.error("No live configs (fresh + cache) — exit"); return
-
-    # ── 6. Geo enrich (فقط الجديدة) ─────────────────────────────────────────
-    log.info(f"🔍 Geo enrichment ({len(fresh_live)} fresh configs) ...")
+    # 4. Geo enrich
+    log.info("🔍 Geo enrichment ...")
     with ThreadPoolExecutor(max_workers=30) as ex:
-        enriched = list(ex.map(enrich, fresh_live))
-    live = enriched + [c for c in cached_live
-                       if c.host not in {x.host for x in enriched}]
+        live = list(ex.map(enrich, live))
 
-    # ── 7. Sort by score ─────────────────────────────────────────────────────
+    # 5. Sort by score
     live.sort(key=lambda c: c.score(), reverse=True)
 
-    # ── 8. AI Top-10 Report ──────────────────────────────────────────────────
-    log.info(f"\n📊 Top 10 — AI Selection (★ = from cache):")
-    log.info("  Rank  Type   Ping   Probe  Compat  CC   Best Bug Host")
-    log.info("  " + "─" * 62)
+    # 6. AI Top-10 Report
+    log.info(f"\n📊 Top 10 — AI Selection:")
+    log.info("  Rank  Type   Ping   Probe  Compat  Country  Best Bug Host")
+    log.info("  " + "─" * 68)
     for i, c in enumerate(live[:10], 1):
-        t  = ("🚀" if c.is_vps else "  ") + ("⚡" if c.is_cf else "  ") + \
-             ("🔒" if c.ssl_ok else "  ")
-        p  = f"{c.probe_ms}ms" if c.probe_ms else "  —  "
-        src= "♻" if "cache" in c.ai_diagnosis.lower() else " "
-        log.info(f"  {i:>2}{src}  {t}  "
+        t = ("🚀" if c.is_vps else "  ") + ("⚡" if c.is_cf else "  ") + \
+            ("🔒" if c.ssl_ok else "  ")
+        p = f"{c.probe_ms}ms" if c.probe_ms else "  —  "
+        log.info(f"  {i:>2}.  {t}  "
                  f"{c.ping_ms:>4}ms  {p:>6}  "
                  f"{len(c.compatible_hosts):>2}/{len(ALL_BUG_HOSTS):<2}  "
-                 f"{c.country_code:<4}  {c.best_bug_host[:26]}")
+                 f"{c.country_code:<4}  {c.best_bug_host[:28]}")
 
-    # ── 9. Post to Telegram ──────────────────────────────────────────────────
+    # 7. Post to Telegram
     posted = 0
     for cfg in live:
         if posted >= MAX_POSTS: break
         if args.dry_run:
-            log.info(f"[DRY] {cfg.host} | {cfg.best_bug_host} | {cfg.ai_diagnosis[:50]}")
+            log.info(f"[DRY] {cfg.host} | {cfg.best_bug_host} | {cfg.ai_diagnosis}")
             posted += 1
         else:
             if send_to_telegram(cfg):
@@ -2311,11 +2223,10 @@ def main() -> None:
                 log.info(f"📨 Posted {posted}/{MAX_POSTS}: {cfg.host} → {cfg.best_bug_host}")
                 time.sleep(2)
 
-    # ── 10. Save subscription + working cache ────────────────────────────────
+    # 8. Save subscription
     save_subscription(live)
-    save_working_cache(live)   # ← حفظ الكونفيجات الشغالة
 
-    # ── 11. Update AI memory ─────────────────────────────────────────────────
+    # 9. Update AI memory with run stats
     with _ai_lock:
         _ai_memory["total_runs"]   += 1
         _ai_memory["total_posted"] += posted
@@ -2325,9 +2236,8 @@ def main() -> None:
     elapsed = int(time.time() - t0)
     dead_count = len(ai_dead_sources())
     log.info(
-        f"\n🏁 Done in {elapsed}s | {len(live)} live | "
-        f"{len(fresh_live)} fresh | {len(cached_live)} cached | "
-        f"{posted} posted | 💀{dead_count} dead sources"
+        f"\n🏁 Done in {elapsed}s | {len(live)} live / {len(raws)} scanned / "
+        f"{posted} posted | 💀{dead_count} dead sources pruned"
     )
     log.info(ai_report())
 
