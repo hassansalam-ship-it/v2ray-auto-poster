@@ -24,7 +24,7 @@ on:
 jobs:
   hunt:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 60
     permissions:
       contents: write
 
@@ -78,8 +78,8 @@ jobs:
           git config user.name  "V2Ray AI Bot"
 
           # نحفظ: subscription + AI memory + log
-          git add sub_link.txt ai_memory.json 2>/dev/null || true
-          git add v2ray_hunt.log              2>/dev/null || true
+          git add sub_link.txt ai_memory.json working_cache.json 2>/dev/null || true
+          git add v2ray_hunt.log 2>/dev/null || true
 
           if git diff --cached --quiet; then
             echo "✅ No changes to commit"
