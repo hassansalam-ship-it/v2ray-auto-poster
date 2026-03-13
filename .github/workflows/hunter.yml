@@ -1,71 +1,97 @@
-name: V2Ray Hunter v5 - 45min Cycle
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+#  🤖 V2RAY ULTIMATE HUNTER v7 — AI EDITION — GitHub Actions Workflow
+#  يعمل كل 45 دقيقة تلقائياً | يدعم التشغيل اليدوي بخيارات
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+name: 🤖 V2Ray AI Hunter v7
 
 on:
   schedule:
-    - cron: '*/45 * * * *'
+    - cron: '*/45 * * * *'   # كل 45 دقيقة
   workflow_dispatch:
+    inputs:
+      custom_sni:
+        description: 'Bug Host SNI (فارغ = الذكاء الاصطناعي يختار تلقائياً)'
+        required: false
+        default: ''
+      dry_run:
+        description: 'Dry Run بدون نشر تيليغرام'
+        required: false
+        default: 'false'
+        type: choice
+        options: ['false', 'true']
 
 jobs:
   hunt_and_post:
     runs-on: ubuntu-latest
+    timeout-minutes: 35
+
     permissions:
       contents: write
 
     steps:
-      # ── 1. Checkout ──────────────────────────────────────────────
-      - name: Checkout Code
+      # ── 1. Checkout ────────────────────────────────────────────────────────
+      - name: 📥 Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      # ── 2. Python (NO cache to avoid requirements.txt error) ─────
-      - name: Set up Python
+      # ── 2. Python Setup ────────────────────────────────────────────────────
+      - name: 🐍 Setup Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      # ── 3. Install Dependencies directly ─────────────────────────
-      - name: Install Dependencies
+      # ── 3. Install Dependencies ────────────────────────────────────────────
+      - name: 📦 Install Dependencies
         run: |
-          pip install --upgrade pip
-          pip install requests urllib3
+          pip install --upgrade pip --quiet
+          pip install requests urllib3 --quiet
 
-      # ── 4. Run Hunter ────────────────────────────────────────────
-      - name: Run Hunter Script
+      # ── 4. Run AI Hunter ───────────────────────────────────────────────────
+      - name: 🤖 Run AI Hunter
         env:
           BOT_TOKEN:  ${{ secrets.BOT_TOKEN }}
-          CUSTOM_SNI: "www.speedtest.net"
           ADMIN_TG:   "@genie_2000"
-        run: python v2ray_hunter.py
+          CUSTOM_SNI: ${{ github.event.inputs.custom_sni || '' }}
+        run: |
+          DRY_RUN="${{ github.event.inputs.dry_run || 'false' }}"
+          SNI="${{ github.event.inputs.custom_sni || '' }}"
 
-      # ── 5. Commit & Push ─────────────────────────────────────────
-      - name: Commit and Push Results
+          ARGS=""
+          [ "$DRY_RUN" = "true" ] && ARGS="$ARGS --dry-run"
+          [ -n "$SNI" ] && ARGS="$ARGS --sni $SNI"
+
+          echo "🚀 Starting V2Ray AI Hunter v7..."
+          echo "   DRY_RUN=$DRY_RUN | SNI=${SNI:-auto}"
+          python v2ray_hunter.py $ARGS
+
+      # ── 5. Commit & Push ────────────────────────────────────────────────────
+      - name: 💾 Commit & Push Subscription
         run: |
           git config --local user.email "action@github.com"
-          git config --local user.name  "GitHub Action Bot"
+          git config --local user.name  "V2Ray AI Bot"
 
-          # Clear any index/staging conflicts
-          git reset HEAD || true
-          git checkout -- . 2>/dev/null || true
-
-          # Stage output files only
+          # Stage only the files we want to commit
           git add sub_link.txt v2ray_hunt.log 2>/dev/null || true
 
-          # Skip if nothing changed
+          # Check if there's anything to commit
           if git diff --cached --quiet; then
             echo "✅ No changes to commit — skipping push"
             exit 0
           fi
 
-          git commit -m "🔄 Auto-update: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
+          git commit -m "🤖 AI Hunter v7 — $(date -u +'%Y-%m-%d %H:%M UTC')"
 
-          # Rebase on remote, prefer local on conflict
-          git pull --rebase -X ours origin main 2>/dev/null || \
-          git pull --rebase -X ours origin master 2>/dev/null || true
+          # Robust push with retry
+          for i in 1 2 3; do
+            git pull --rebase -X ours origin main 2>/dev/null || \
+            git pull --rebase -X ours origin master 2>/dev/null || true
 
-          # Push with retry
-          git push origin HEAD:main 2>/dev/null || \
-          git push origin HEAD:master 2>/dev/null || \
-          (sleep 5 && git push origin HEAD:main) || \
-          echo "⚠️ Push failed — will retry next cycle"
+            git push origin HEAD:main 2>/dev/null || \
+            git push origin HEAD:master 2>/dev/null && break
+
+            echo "⚠️ Push attempt $i failed, retrying..."
+            sleep $((i * 5))
+          done
