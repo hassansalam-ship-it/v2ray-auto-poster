@@ -1,4 +1,4 @@
-# v2ray hunter.yml (بعد التعديل) — إزالة cache
+# v2ray hunter.yml (بعد التعديل) — بدون cache مع إضافة خطوة عرض السجل
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 #  🤖 V2RAY ULTIMATE HUNTER v8 — AI EDITION
 #  يعمل كل 45 دقيقة | ينتهي في < 20 دقيقة | ذاكرة دائمة
@@ -56,6 +56,21 @@ jobs:
           [ -n "$SNI" ] && ARGS="$ARGS --sni $SNI"
           echo "🚀 V2Ray AI Hunter v8 | sni=${SNI:-auto-AI}"
           timeout 1080 python v2ray_hunter.py $ARGS || true
+
+      - name: 📊 عرض آخر 30 سطراً من السجل
+        run: |
+          echo "================ آخر 30 سطر من v2ray_hunt.log ================"
+          if [ -f v2ray_hunt.log ]; then
+            tail -30 v2ray_hunt.log
+          else
+            echo "❌ ملف v2ray_hunt.log غير موجود"
+          fi
+          echo "==============================================================="
+          if [ -f sub_link.txt ]; then
+            echo "✅ تم إنشاء sub_link.txt (عدد الكونفيجات: $(wc -l < sub_link.txt))"
+          else
+            echo "❌ sub_link.txt غير موجود – لا توجد كونفيج حية أو فشل الحفظ"
+          fi
 
       - name: 💾 Commit & Push
         run: |
