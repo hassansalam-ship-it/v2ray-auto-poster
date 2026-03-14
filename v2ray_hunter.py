@@ -1,4 +1,4 @@
-# v2ray_hunter.py (بعد التعديل)
+# v2ray_hunter.py (بعد التعديل مع إضافة تحسينات التشخيص)
 """
 ╔══════════════════════════════════════════════════════════════════════════════╗
 ║  🤖 V2RAY ULTIMATE HUNTER v7 — AI EDITION — ASHAQ TEAM                     ║
@@ -2111,7 +2111,9 @@ def build_message(cfg: V2Config) -> str:
 #  TELEGRAM + SUB FILE
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 def send_to_telegram(cfg: V2Config) -> bool:
-    if not BOT_TOKEN: log.error("BOT_TOKEN not set"); return False
+    if not BOT_TOKEN:
+        log.error("❌ BOT_TOKEN غير موجود في البيئة. لن يتم الإرسال.")
+        return False
     payload = {
         "chat_id": CHAT_ID, "text": build_message(cfg),
         "parse_mode": "HTML", "disable_web_page_preview": True,
@@ -2128,10 +2130,14 @@ def send_to_telegram(cfg: V2Config) -> bool:
             if res.status_code == 429:
                 w = res.json().get("parameters",{}).get("retry_after",20)
                 log.warning(f"Rate limit — sleep {w}s"); time.sleep(w); continue
-            if res.ok: return True
-            log.warning(f"Telegram {res.status_code}: {res.text[:80]}"); return False
+            if res.ok:
+                log.info(f"✅ تم الإرسال إلى تليغرام: {cfg.host}")
+                return True
+            log.error(f"❌ فشل الإرسال (HTTP {res.status_code}): {res.text[:200]}")
+            return False
         except requests.RequestException as e:
-            log.warning(f"Telegram attempt {attempt+1}: {e}"); time.sleep(3)
+            log.warning(f"⚠️ محاولة {attempt+1} فشلت: {e}")
+            time.sleep(3)
     return False
 
 def save_subscription(configs: list[V2Config]) -> None:
@@ -2143,6 +2149,44 @@ def save_subscription(configs: list[V2Config]) -> None:
         log.info(f"💾 Saved {len(top)} configs → {SUB_FILE}")
     except OSError as e:
         log.error(f"Cannot write sub: {e}")
+
+# ─── دالة لاختبار توكن البوت والقناة قبل البدء ─────────────────────────────
+def test_telegram_bot():
+    """إرسال رسالة اختبارية للتأكد من صلاحية التوكن والقناة"""
+    if not BOT_TOKEN:
+        log.error("❌ BOT_TOKEN غير موجود، لن يتم الإرسال.")
+        return False
+    try:
+        url = f"https://api.telegram.org/bot{BOT_TOKEN}/getMe"
+        r = requests.get(url, timeout=10)
+        if r.ok:
+            bot_name = r.json().get("result", {}).get("first_name", "Unknown")
+            log.info(f"✅ اتصال تليغرام ناجح: @{bot_name}")
+        else:
+            log.error(f"❌ توكن البوت غير صالح: {r.text[:100]}")
+            return False
+    except Exception as e:
+        log.error(f"❌ فشل الاتصال بتليغرام: {e}")
+        return False
+
+    # اختبار الإرسال إلى القناة
+    test_payload = {
+        "chat_id": CHAT_ID,
+        "text": "🧪 اختبار من AI Hunter v7 - البوت يعمل بنجاح ✅",
+        "parse_mode": "HTML"
+    }
+    try:
+        r2 = requests.post(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage",
+                           json=test_payload, timeout=10)
+        if r2.ok:
+            log.info(f"✅ تم إرسال رسالة اختبار إلى {CHAT_ID}")
+            return True
+        else:
+            log.error(f"❌ فشل إرسال الاختبار إلى {CHAT_ID}: {r2.text[:200]}")
+            return False
+    except Exception as e:
+        log.error(f"❌ استثناء أثناء اختبار الإرسال: {e}")
+        return False
 
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -2175,6 +2219,12 @@ def main() -> None:
     log.info(f"🔑 CUSTOM_SNI: {CUSTOM_SNI or '(auto-detect best bug host)'}")
     if args.dry_run: log.info("🔇 Dry-run mode")
 
+    # اختبار تليغرام قبل البدء (إذا لم يكن dry-run)
+    if not args.dry_run:
+        test_telegram_bot()
+    else:
+        log.info("🔇 وضع الاختبار الجاف، لن يتم إرسال أي رسالة.")
+
     # 1. Collect
     raws = collect_configs()
     if not raws: log.error("Nothing collected — exit"); return
@@ -2187,7 +2237,9 @@ def main() -> None:
 
     # 3. AI Check + Zero-Data Filter
     live = run_checks(raws)
-    if not live: log.error("No live configs — exit"); return
+    if not live:
+        log.error("No live configs — exit")
+        return
 
     # 4. Geo enrich
     log.info("🔍 Geo enrichment ...")
@@ -2222,6 +2274,8 @@ def main() -> None:
                 posted += 1
                 log.info(f"📨 Posted {posted}/{MAX_POSTS}: {cfg.host} → {cfg.best_bug_host}")
                 time.sleep(2)
+            else:
+                log.error(f"❌ فشل إرسال {cfg.host} إلى تليغرام")
 
     # 8. Save subscription
     save_subscription(live)
@@ -2240,6 +2294,14 @@ def main() -> None:
         f"{posted} posted | 💀{dead_count} dead sources pruned"
     )
     log.info(ai_report())
+
+    # تشخيص نهائي إذا لم يتم نشر أي شيء
+    if posted == 0 and not args.dry_run:
+        log.error("🚨 لم يتم نشر أي رسالة! الأسباب المحتملة:")
+        log.error("1. BOT_TOKEN غير صحيح أو غير مضبوط في Secrets")
+        log.error("2. البوت ليس مشرفاً في القناة @V2rayashaq")
+        log.error("3. لا توجد كونفيج حية (Zero-Data filter)")
+        log.error("4. فشل الاتصال بتليغرام (انظر الأخطاء أعلاه)")
 
 
 if __name__ == "__main__":
