@@ -1,4 +1,4 @@
-# v2ray_hunter.py (بعد التعديل مع إضافة تحسينات التشخيص)
+# v2ray_hunter.py (بعد التعديل البسيط جداً – فقط إضافة تسجيل)
 """
 ╔══════════════════════════════════════════════════════════════════════════════╗
 ║  🤖 V2RAY ULTIMATE HUNTER v7 — AI EDITION — ASHAQ TEAM                     ║
@@ -2153,20 +2153,34 @@ def save_subscription(configs: list[V2Config]) -> None:
 # ─── دالة لاختبار توكن البوت والقناة قبل البدء ─────────────────────────────
 def test_telegram_bot():
     """إرسال رسالة اختبارية للتأكد من صلاحية التوكن والقناة"""
+    with open("bot_status.txt", "w", encoding="utf-8") as f:
+        f.write("🔄 جاري اختبار اتصال تليغرام...\n")
     if not BOT_TOKEN:
-        log.error("❌ BOT_TOKEN غير موجود، لن يتم الإرسال.")
+        msg = "❌ BOT_TOKEN غير موجود، لن يتم الإرسال."
+        log.error(msg)
+        with open("bot_status.txt", "a", encoding="utf-8") as f:
+            f.write(msg + "\n")
         return False
     try:
         url = f"https://api.telegram.org/bot{BOT_TOKEN}/getMe"
         r = requests.get(url, timeout=10)
         if r.ok:
             bot_name = r.json().get("result", {}).get("first_name", "Unknown")
-            log.info(f"✅ اتصال تليغرام ناجح: @{bot_name}")
+            msg = f"✅ اتصال تليغرام ناجح: @{bot_name}"
+            log.info(msg)
+            with open("bot_status.txt", "a", encoding="utf-8") as f:
+                f.write(msg + "\n")
         else:
-            log.error(f"❌ توكن البوت غير صالح: {r.text[:100]}")
+            msg = f"❌ توكن البوت غير صالح: {r.text[:100]}"
+            log.error(msg)
+            with open("bot_status.txt", "a", encoding="utf-8") as f:
+                f.write(msg + "\n")
             return False
     except Exception as e:
-        log.error(f"❌ فشل الاتصال بتليغرام: {e}")
+        msg = f"❌ فشل الاتصال بتليغرام: {e}"
+        log.error(msg)
+        with open("bot_status.txt", "a", encoding="utf-8") as f:
+            f.write(msg + "\n")
         return False
 
     # اختبار الإرسال إلى القناة
@@ -2179,13 +2193,22 @@ def test_telegram_bot():
         r2 = requests.post(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage",
                            json=test_payload, timeout=10)
         if r2.ok:
-            log.info(f"✅ تم إرسال رسالة اختبار إلى {CHAT_ID}")
+            msg = f"✅ تم إرسال رسالة اختبار إلى {CHAT_ID}"
+            log.info(msg)
+            with open("bot_status.txt", "a", encoding="utf-8") as f:
+                f.write(msg + "\n")
             return True
         else:
-            log.error(f"❌ فشل إرسال الاختبار إلى {CHAT_ID}: {r2.text[:200]}")
+            msg = f"❌ فشل إرسال الاختبار إلى {CHAT_ID}: {r2.text[:200]}"
+            log.error(msg)
+            with open("bot_status.txt", "a", encoding="utf-8") as f:
+                f.write(msg + "\n")
             return False
     except Exception as e:
-        log.error(f"❌ استثناء أثناء اختبار الإرسال: {e}")
+        msg = f"❌ استثناء أثناء اختبار الإرسال: {e}"
+        log.error(msg)
+        with open("bot_status.txt", "a", encoding="utf-8") as f:
+            f.write(msg + "\n")
         return False
 
 
@@ -2263,19 +2286,27 @@ def main() -> None:
                  f"{c.country_code:<4}  {c.best_bug_host[:28]}")
 
     # 7. Post to Telegram
+    log.info(f"📤 بدء نشر {len(live)} كونفيج حي (الحد الأقصى {MAX_POSTS})...")
     posted = 0
-    for cfg in live:
-        if posted >= MAX_POSTS: break
-        if args.dry_run:
-            log.info(f"[DRY] {cfg.host} | {cfg.best_bug_host} | {cfg.ai_diagnosis}")
-            posted += 1
-        else:
-            if send_to_telegram(cfg):
+    for idx, cfg in enumerate(live):
+        if posted >= MAX_POSTS:
+            log.info(f"✅ تم الوصول للحد الأقصى {MAX_POSTS}، التوقف عن النشر.")
+            break
+        try:
+            if args.dry_run:
+                log.info(f"[DRY] {cfg.host} | {cfg.best_bug_host} | {cfg.ai_diagnosis}")
                 posted += 1
-                log.info(f"📨 Posted {posted}/{MAX_POSTS}: {cfg.host} → {cfg.best_bug_host}")
-                time.sleep(2)
             else:
-                log.error(f"❌ فشل إرسال {cfg.host} إلى تليغرام")
+                if send_to_telegram(cfg):
+                    posted += 1
+                    log.info(f"📨 Posted {posted}/{MAX_POSTS}: {cfg.host} → {cfg.best_bug_host}")
+                    time.sleep(2)
+                else:
+                    log.error(f"❌ فشل إرسال {cfg.host} إلى تليغرام")
+        except Exception as e:
+            log.exception(f"💥 استثناء غير متوقع أثناء محاولة إرسال {cfg.host}: {e}")
+
+    log.info(f"📊 تم النشر: {posted} كونفيج.")
 
     # 8. Save subscription
     save_subscription(live)
@@ -2302,7 +2333,12 @@ def main() -> None:
         log.error("2. البوت ليس مشرفاً في القناة @V2rayashaq")
         log.error("3. لا توجد كونفيج حية (Zero-Data filter)")
         log.error("4. فشل الاتصال بتليغرام (انظر الأخطاء أعلاه)")
-
+        # كتابة سبب الفشل في ملف منفصل
+        with open("telegram_status.txt", "w", encoding="utf-8") as f:
+            f.write("POSTED=0\n")
+            f.write("REASONS:\n")
+            f.write("- BOT_TOKEN موجود؟ " + ("نعم" if BOT_TOKEN else "لا") + "\n")
+            # يمكن إضافة المزيد من المعلومات
 
 if __name__ == "__main__":
     main()
