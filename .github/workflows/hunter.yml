@@ -1,4 +1,4 @@
-# v2ray hunter.yml (بعد التعديل النهائي) – مع عرض آخر 100 سطر من السجل
+# v2ray hunter.yml (بعد التعديل النهائي) – مع عرض آخر 100 سطر وحالة البوت
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 #  🤖 V2RAY ULTIMATE HUNTER v8 — AI EDITION
 #  يعمل كل 45 دقيقة | ينتهي في < 20 دقيقة | ذاكرة دائمة
@@ -72,11 +72,21 @@ jobs:
             echo "❌ sub_link.txt غير موجود – لا توجد كونفيج حية أو فشل الحفظ"
           fi
 
+      - name: 🤖 عرض حالة البوت
+        run: |
+          echo "================ حالة اتصال تليغرام ================"
+          if [ -f bot_status.txt ]; then
+            cat bot_status.txt
+          else
+            echo "❌ ملف bot_status.txt غير موجود (لم يتم اختبار البوت)"
+          fi
+          echo "===================================================="
+
       - name: 💾 Commit & Push
         run: |
           git config user.email "v2ray-ai@bot.local"
           git config user.name  "V2Ray AI Bot"
-          git add sub_link.txt ai_memory.json working_cache.json v2ray_hunt.log 2>/dev/null || true
+          git add sub_link.txt ai_memory.json working_cache.json v2ray_hunt.log bot_status.txt telegram_status.txt 2>/dev/null || true
           if git diff --cached --quiet; then echo "Nothing to commit"; exit 0; fi
           git commit -m "🤖 AI v8 | $(date -u +'%Y-%m-%d %H:%M UTC')"
           for i in 1 2 3; do
