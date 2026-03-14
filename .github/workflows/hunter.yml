@@ -1,4 +1,4 @@
-# v2ray hunter.yml (بعد التعديل النهائي) – مع عرض آخر 100 سطر وحالة البوت
+# v2ray hunter.yml (بعد التعديل) – مع عرض تفاصيل الـ live configs والنشر
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 #  🤖 V2RAY ULTIMATE HUNTER v8 — AI EDITION
 #  يعمل كل 45 دقيقة | ينتهي في < 20 دقيقة | ذاكرة دائمة
@@ -57,20 +57,27 @@ jobs:
           echo "🚀 V2Ray AI Hunter v8 | sni=${SNI:-auto-AI}"
           timeout 1080 python v2ray_hunter.py $ARGS || true
 
-      - name: 📊 عرض آخر 100 سطر من السجل
+      - name: 🔍 عرض عدد الكونفيجات الحية
         run: |
-          echo "================ آخر 100 سطر من v2ray_hunt.log ================"
-          if [ -f v2ray_hunt.log ]; then
-            tail -100 v2ray_hunt.log
+          echo "عدد الكونفيجات الحية:"
+          if [ -f live_count.txt ]; then
+            cat live_count.txt
           else
-            echo "❌ ملف v2ray_hunt.log غير موجود"
+            echo "0 (لم يتم إنشاء الملف)"
           fi
-          echo "==============================================================="
-          if [ -f sub_link.txt ]; then
-            echo "✅ تم إنشاء sub_link.txt (عدد الكونفيجات: $(wc -l < sub_link.txt))"
+          echo ""
+          echo "آخر 20 سطر من السجل تحتوي PASS:"
+          grep "✅ PASS" v2ray_hunt.log | tail -20 || echo "لا توجد كونفيج حية"
+
+      - name: 📊 عرض استجابات تليغرام التفصيلية
+        run: |
+          echo "================ استجابات تليغرام (آخر 50 سطر) ================"
+          if [ -f telegram_responses.log ]; then
+            tail -50 telegram_responses.log
           else
-            echo "❌ sub_link.txt غير موجود – لا توجد كونفيج حية أو فشل الحفظ"
+            echo "❌ ملف telegram_responses.log غير موجود"
           fi
+          echo "================================================================"
 
       - name: 🤖 عرض حالة البوت
         run: |
@@ -82,11 +89,21 @@ jobs:
           fi
           echo "===================================================="
 
+      - name: 📤 عرض آخر محاولات النشر من السجل
+        run: |
+          echo "================ آخر 20 سطر من سجل النشر ================"
+          if [ -f v2ray_hunt.log ]; then
+            grep -E "Posted|فشل إرسال|تم الإرسال|✅ تم|❌ فشل" v2ray_hunt.log | tail -20
+          else
+            echo "❌ ملف v2ray_hunt.log غير موجود"
+          fi
+          echo "=========================================================="
+
       - name: 💾 Commit & Push
         run: |
           git config user.email "v2ray-ai@bot.local"
           git config user.name  "V2Ray AI Bot"
-          git add sub_link.txt ai_memory.json working_cache.json v2ray_hunt.log bot_status.txt telegram_status.txt 2>/dev/null || true
+          git add sub_link.txt ai_memory.json working_cache.json v2ray_hunt.log bot_status.txt telegram_status.txt telegram_responses.log live_count.txt 2>/dev/null || true
           if git diff --cached --quiet; then echo "Nothing to commit"; exit 0; fi
           git commit -m "🤖 AI v8 | $(date -u +'%Y-%m-%d %H:%M UTC')"
           for i in 1 2 3; do
