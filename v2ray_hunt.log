@@ -48601,3 +48601,132 @@
 13:01:24 │ INFO    │ 
 🏁 Done in 401s | 900 live / 15997 scanned / 5 posted
 13:01:24 │ INFO    │ 🤖 AI Report: 1331/9422 passed (14.1%) | Best host: m.tiktok.com
+15:04:00 │ INFO    │ ⏰ Hard deadline set: 20m from now
+15:04:00 │ INFO    │ ╔══════════════════════════════════════════════════════╗
+15:04:00 │ INFO    │ ║  🤖 V2RAY ULTIMATE HUNTER v8 — AI EDITION           ║
+15:04:00 │ INFO    │ ║  857  sources | 20m deadline | WS+TLS+443        ║
+15:04:00 │ INFO    │ ╚══════════════════════════════════════════════════════╝
+15:04:00 │ INFO    │ 🧠 AI: run#0 | 0 good IPs | 0 dead src | sni=auto
+15:04:00 │ INFO    │ 🌐 Fetching 600/857 sources [80w | 0 dead skipped]
+15:04:01 │ INFO    │ ✓   22  ←  https://raw.githubusercontent.com/ermaozi/get_subscribe/main/subs
+15:04:01 │ INFO    │ ✓    2  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+15:04:01 │ INFO    │ ✓    5  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+15:04:01 │ INFO    │ ✓  145  ←  https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/main/s
+15:04:01 │ INFO    │ ✓    1  ←  https://raw.githubusercontent.com/Everyday-VPN/Everyday-VPN/main/
+15:04:01 │ INFO    │ ✓    4  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+15:04:02 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+15:04:02 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+15:04:02 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+15:04:02 │ INFO    │ ✓   14  ←  https://raw.githubusercontent.com/Surfboardv2ray/TGParse/main/spl
+15:04:02 │ INFO    │ ✓   41  ←  https://raw.githubusercontent.com/roosterkid/openproxylist/main/V
+15:04:02 │ INFO    │ ✓    9  ←  https://raw.githubusercontent.com/ermaozi01/free_clash_vpn/main/s
+15:04:02 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+15:04:02 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+15:04:02 │ INFO    │ ✓    1  ←  https://raw.githubusercontent.com/awesome-vpn/awesome-vpn/master/
+15:04:02 │ INFO    │ ✓   37  ←  https://raw.githubusercontent.com/resasanian/Mirza/main/sub
+15:04:02 │ INFO    │ ✓   28  ←  https://raw.githubusercontent.com/resasanian/Mirza/main/best
+15:04:02 │ INFO    │ ✓  301  ←  https://raw.githubusercontent.com/shabane/kamaji/master/hub/merge
+15:04:02 │ INFO    │ ✓  120  ←  https://raw.githubusercontent.com/MhdiTaheri/V2rayCollector_Py/ma
+15:04:02 │ INFO    │ ✓   31  ←  https://raw.githubusercontent.com/youfoundamin/V2rayCollector/mai
+15:04:02 │ INFO    │ ✓  215  ←  https://raw.githubusercontent.com/4n0nymou3/multi-proxy-config-fe
+15:04:02 │ INFO    │ ✓  144  ←  https://raw.githubusercontent.com/ndsphonemy/proxy-sub/main/speed
+15:04:02 │ INFO    │ ✓ 1681  ←  https://raw.githubusercontent.com/Leon406/SubCrawler/master/sub/s
+15:04:02 │ INFO    │ ✓  319  ←  https://raw.githubusercontent.com/ndsphonemy/proxy-sub/main/defau
+15:04:02 │ INFO    │ ✓  657  ←  https://raw.githubusercontent.com/SoliSpirit/v2ray-configs/main/a
+15:04:02 │ INFO    │ ✓  145  ←  https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/main/s
+15:04:02 │ INFO    │ ✓    8  ←  https://raw.githubusercontent.com/adiwzx/freenode/main/adispeed.t
+15:04:02 │ INFO    │ ✓    1  ←  https://raw.githubusercontent.com/resasanian/Mirza/main/vless
+15:04:02 │ INFO    │ ✓ 1254  ←  https://raw.githubusercontent.com/mheidari98/.proxy/main/vless
+15:04:03 │ INFO    │ ✓  688  ←  https://raw.githubusercontent.com/youfoundamin/V2rayCollector/mai
+15:04:03 │ INFO    │ ✓    9  ←  https://raw.githubusercontent.com/shabane/kamaji/master/hub/vmess
+15:04:03 │ INFO    │ ✓   17  ←  https://raw.githubusercontent.com/mheidari98/.proxy/main/vmess
+15:04:03 │ INFO    │ ✓ 1270  ←  https://raw.githubusercontent.com/mheidari98/.proxy/main/all
+15:04:03 │ INFO    │ ✓  294  ←  https://raw.githubusercontent.com/shabane/kamaji/master/hub/vless
+15:04:03 │ INFO    │ 📦 3871 unique | 34/600 active sources
+15:04:03 │ INFO    │ ⚡ Checking 3871 configs [100w | stop@50 | ⏳1197s left]
+15:04:03 │ INFO    │ ✅ 1.1.1.0|VLESS|1/12|3ms→en.help.roblox.com
+15:04:04 │ INFO    │ ✅ 104.18.185.26|VLESS|11/12|4ms→m.youtube.com
+15:04:04 │ INFO    │ ✅ 104.17.106.12|VLESS|11/12|5ms→m.tiktok.com
+15:04:04 │ INFO    │ ✅ 104.18.185.26|VLESS|11/12|3ms→m.youtube.com
+15:04:04 │ INFO    │ ✅ 104.16.250.22|VLESS|11/12|2ms→m.facebook.com
+15:04:04 │ INFO    │ ✅ 104.17.46.112|VLESS|11/12|4ms→www.wechat.com
+15:04:04 │ INFO    │ ✅ 104.18.185.26|VLESS|11/12|2ms→www.pubgmobile.com
+15:04:05 │ INFO    │ ✅ 151.101.194.133|VLESS|1/12|2ms→open.spotify.com
+15:04:05 │ INFO    │ ✅ speedtest.net|VLESS|1/12|35ms→open.spotify.com
+15:04:05 │ INFO    │ ✅ 151.101.194.133|VLESS|1/12|4ms→open.spotify.com
+15:04:05 │ INFO    │ ✅ Zmaoz.Faculty.Ucdavis.Edu|VLESS|1/12|95ms→open.spotify.com
+15:04:05 │ INFO    │ ✅ bwdraper.faculty.ucdavis.edu|VLESS|1/12|70ms→open.spotify.com
+15:04:05 │ INFO    │ ✅ 151.101.194.133|VLESS|1/12|6ms→open.spotify.com
+15:04:05 │ INFO    │ ✅ bwdraper.faculty.ucdavis.edu|VLESS|1/12|3ms→open.spotify.com
+15:04:05 │ INFO    │ ✅ s1.db-link.in|VLESS|9/12|263ms→web.telegram.org
+15:04:05 │ INFO    │ ✅ s1.db-link.in|VLESS|10/12|263ms→invite.viber.com
+15:04:06 │ INFO    │ ✅ 146.75.74.62|VLESS|1/12|75ms→open.spotify.com
+15:04:08 │ INFO    │ ✅ 141.94.220.210|VLESS|11/12|87ms→web.telegram.org
+15:04:08 │ INFO    │ ✅ nodejs.org|VLESS|11/12|12ms→web.whatsapp.com
+15:04:08 │ INFO    │ ✅ 202.61.193.248|VLESS|12/12|101ms→m.tiktok.com
+15:04:09 │ INFO    │ ✅ v.as.x10.mx|VLESS|8/12|383ms→invite.viber.com
+15:04:10 │ INFO    │ ✅ 5.253.43.216|VLESS|8/12|116ms→web.whatsapp.com
+15:04:10 │ INFO    │ ✅ 151.101.10.79|VLESS|1/12|90ms→open.spotify.com
+15:04:10 │ INFO    │ ✅ transferwise.com|VLESS|11/12|41ms→www.wechat.com
+15:04:11 │ INFO    │ ✅ 160.79.105.118|VLESS|1/12|9ms→en.help.roblox.com
+15:04:11 │ INFO    │ ✅ 160.79.104.178|VLESS|1/12|3ms→en.help.roblox.com
+15:04:11 │ INFO    │ ✅ 160.79.105.106|VLESS|1/12|7ms→en.help.roblox.com
+15:04:11 │ INFO    │ ✅ 46.101.146.53|VLESS|11/12|94ms→www.pubgmobile.com
+15:04:11 │ INFO    │ ✅ 64.227.124.213|VLESS|11/12|93ms→www.pubgmobile.com
+15:04:11 │ INFO    │ ✅ 160.79.105.163|VLESS|1/12|9ms→en.help.roblox.com
+15:04:11 │ INFO    │ ✅ 160.79.104.91|VLESS|1/12|3ms→en.help.roblox.com
+15:04:11 │ INFO    │ ✅ 139.59.151.190|VLESS|11/12|94ms→web.telegram.org
+15:04:12 │ INFO    │ ✅ 38.180.113.22|VLESS|11/12|131ms→open.spotify.com
+15:04:12 │ INFO    │ ✅ 160.79.105.38|VLESS|1/12|6ms→en.help.roblox.com
+15:04:12 │ INFO    │ ✅ 188.166.164.73|VLESS|11/12|107ms→www.snapchat.com
+15:04:12 │ INFO    │ ✅ 160.79.105.66|VLESS|1/12|10ms→en.help.roblox.com
+15:04:12 │ INFO    │ ✅ 160.79.104.35|VLESS|1/12|3ms→en.help.roblox.com
+15:04:12 │ INFO    │ ✅ 209.38.241.118|VLESS|11/12|92ms→web.whatsapp.com
+15:04:13 │ INFO    │ ✅ 209.38.201.199|VLESS|11/12|95ms→www.pubgmobile.com
+15:04:13 │ INFO    │ ✅ 150.230.7.216|VLESS|6/12|164ms→m.facebook.com
+15:04:14 │ INFO    │ ✅ s2.skullvpn.xyz|VLESS|12/12|67ms→www.snapchat.com
+15:04:14 │ INFO    │ ✅ fastly1.hamrahflow.ir|VLESS|1/12|178ms→open.spotify.com
+15:04:15 │ INFO    │ ✅ 173.255.250.199|VLESS|11/12|73ms→open.spotify.com
+15:04:15 │ INFO    │ ✅ 151.101.66.133|VLESS|1/12|10ms→open.spotify.com
+15:04:15 │ INFO    │ ✅ 178.62.53.238|VLESS|11/12|83ms→www.wechat.com
+15:04:15 │ INFO    │   📊 10 live | ⏳1185s | AI#0 369/7420(5%) top:spotify(44),facebook(33) dead:0
+15:04:15 │ INFO    │   📊 20 live | ⏳1185s | AI#0 369/7428(5%) top:spotify(44),facebook(33) dead:0
+15:04:15 │ INFO    │   📊 30 live | ⏳1185s | AI#0 369/7428(5%) top:spotify(44),facebook(33) dead:0
+15:04:15 │ INFO    │   📊 40 live | ⏳1185s | AI#0 369/7428(5%) top:spotify(44),facebook(33) dead:0
+15:04:15 │ INFO    │ ✅ 209.97.187.203|VLESS|11/12|83ms→m.tiktok.com
+15:04:15 │ INFO    │ ✅ 3.67.232.136|VLESS|10/12|93ms→m.instagram.com
+15:04:15 │ INFO    │ ✅ 3.86.85.68|VLESS|10/12|5ms→www.wechat.com
+15:04:15 │ INFO    │ ✅ 3.69.0.8|VLESS|10/12|97ms→m.instagram.com
+15:04:15 │ INFO    │ ✅ 134.122.110.17|VLESS|11/12|82ms→www.snapchat.com
+15:04:15 │ INFO    │   📊 50 live | ⏳1184s | AI#0 375/7506(5%) top:spotify(44),telegram(34) dead:0
+15:04:15 │ INFO    │ 🛑 Stop@50 reached
+15:04:15 │ INFO    │ ✅ 185.221.237.134|VLESS|10/12|97ms→www.pubgmobile.com
+15:04:16 │ INFO    │ ✅ 3.68.31.54|VLESS|10/12|97ms→m.instagram.com
+15:04:17 │ INFO    │ ✅ 164.52.2.100|VLESS|10/12|235ms→www.wechat.com
+15:04:17 │ INFO    │ ✅ all.mdvpnsec.cfd|VLESS|11/12|209ms→en.help.roblox.com
+15:04:22 │ INFO    │ ✅ 164.52.2.100|VLESS|10/12|228ms→www.wechat.com
+15:04:22 │ INFO    │ ✅ 50 live | 0 errors healed
+15:04:22 │ INFO    │ 🔍 Geo enrichment (50 configs) ...
+15:04:23 │ INFO    │ 
+📊 Top 10 configs:
+15:04:23 │ INFO    │   #  Type     Ping  Probe  Compat  CC   Host
+15:04:23 │ INFO    │   ──────────────────────────────────────────────────────────
+15:04:23 │ INFO    │    1  🚀  🔒   67ms 224ms  12/12  CZ   s2.skullvpn.xyz
+15:04:23 │ INFO    │    2  🚀  🔒  101ms 403ms  12/12  DE   202.61.193.248
+15:04:23 │ INFO    │    3  🚀⚡🔒    5ms  28ms  11/12  CA   104.17.106.12
+15:04:23 │ INFO    │    4  🚀⚡🔒    2ms  64ms  11/12  CA   104.16.250.22
+15:04:23 │ INFO    │    5  🚀⚡🔒   12ms  77ms  11/12  CA   nodejs.org
+15:04:23 │ INFO    │    6  🚀⚡🔒    4ms  61ms  11/12  CA   104.18.185.26
+15:04:23 │ INFO    │    7  🚀⚡🔒    4ms  59ms  11/12  CA   104.17.46.112
+15:04:23 │ INFO    │    8  🚀⚡🔒    3ms  61ms  11/12  CA   104.18.185.26
+15:04:23 │ INFO    │    9  🚀⚡🔒   41ms  75ms  11/12  CA   transferwise.com
+15:04:23 │ INFO    │   10  🚀⚡🔒    2ms  62ms  11/12  CA   104.18.185.26
+15:04:23 │ INFO    │ 📨 1/5: s2.skullvpn.xyz → www.snapchat.com
+15:04:25 │ INFO    │ 📨 2/5: 202.61.193.248 → m.tiktok.com
+15:04:28 │ INFO    │ 📨 3/5: 104.17.106.12 → m.tiktok.com
+15:04:30 │ INFO    │ 📨 4/5: 104.16.250.22 → m.facebook.com
+15:04:33 │ INFO    │ 📨 5/5: nodejs.org → web.whatsapp.com
+15:04:35 │ INFO    │ 💾 Sub saved: 50 configs → sub_link.txt
+15:04:35 │ INFO    │ 💾 Cache saved: 50 configs
+15:04:35 │ INFO    │ 
+🏁 Done in 34s | 50 fresh | 0 cached | 5 posted | AI#1 386/7644(5%) top:spotify(45),telegram(35) dead:0
