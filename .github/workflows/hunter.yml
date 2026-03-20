@@ -1,22 +1,21 @@
-# v2ray hunter.yml (بعد التعديل) – مع عرض تفاصيل الـ live configs والنشر
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 #  🤖 V2RAY ULTIMATE HUNTER v8 — AI EDITION
-#  يعمل كل 45 دقيقة | ينتهي في < 20 دقيقة | ذاكرة دائمة
+#  يعمل كل 30 دقيقة | Hard Deadline 20min | ذاكرة دائمة بين الجولات
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 name: 🤖 V2Ray AI Hunter v8
 
 on:
   schedule:
-    - cron: '*/45 * * * *'
+    - cron: '*/30 * * * *'   # كل 30 دقيقة
   workflow_dispatch:
     inputs:
       sni:
-        description: 'Bug Host SNI (فارغ = AI auto)'
+        description: 'Bug Host SNI (فارغ = AI يختار)'
         required: false
         default: ''
       dry_run:
-        description: 'Dry Run (no Telegram)'
+        description: 'Dry Run (بدون نشر)'
         required: false
         default: 'false'
         type: choice
@@ -25,7 +24,7 @@ on:
 jobs:
   hunt:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 25   # 25min < hard deadline البرنامج الداخلي (20min)
 
     permissions:
       contents: write
@@ -42,71 +41,38 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: 📦 Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: v2ray-pip-v8
+          restore-keys: v2ray-pip-
+
       - name: 📦 Install
         run: pip install requests urllib3 --quiet
 
-      - name: 🤖 Run AI Hunter v8
+      - name: 🤖 Run Hunter
         env:
           BOT_TOKEN:  ${{ secrets.BOT_TOKEN }}
           CUSTOM_SNI: ${{ github.event.inputs.sni || '' }}
         run: |
           ARGS=""
           [ "${{ github.event.inputs.dry_run }}" = "true" ] && ARGS="--dry-run"
-          SNI="${{ github.event.inputs.sni || '' }}"
-          [ -n "$SNI" ] && ARGS="$ARGS --sni $SNI"
-          echo "🚀 V2Ray AI Hunter v8 | sni=${SNI:-auto-AI}"
-          timeout 1080 python v2ray_hunter.py $ARGS || true
-
-      - name: 🔍 عرض عدد الكونفيجات الحية
-        run: |
-          echo "عدد الكونفيجات الحية:"
-          if [ -f live_count.txt ]; then
-            cat live_count.txt
-          else
-            echo "0 (لم يتم إنشاء الملف)"
-          fi
-          echo ""
-          echo "آخر 20 سطر من السجل تحتوي PASS:"
-          grep "✅ PASS" v2ray_hunt.log | tail -20 || echo "لا توجد كونفيج حية"
-
-      - name: 📊 عرض استجابات تليغرام التفصيلية
-        run: |
-          echo "================ استجابات تليغرام (آخر 50 سطر) ================"
-          if [ -f telegram_responses.log ]; then
-            tail -50 telegram_responses.log
-          else
-            echo "❌ ملف telegram_responses.log غير موجود"
-          fi
-          echo "================================================================"
-
-      - name: 🤖 عرض حالة البوت
-        run: |
-          echo "================ حالة اتصال تليغرام ================"
-          if [ -f bot_status.txt ]; then
-            cat bot_status.txt
-          else
-            echo "❌ ملف bot_status.txt غير موجود (لم يتم اختبار البوت)"
-          fi
-          echo "===================================================="
-
-      - name: 📤 عرض آخر محاولات النشر من السجل
-        run: |
-          echo "================ آخر 20 سطر من سجل النشر ================"
-          if [ -f v2ray_hunt.log ]; then
-            grep -E "Posted|فشل إرسال|تم الإرسال|✅ تم|❌ فشل" v2ray_hunt.log | tail -20
-          else
-            echo "❌ ملف v2ray_hunt.log غير موجود"
-          fi
-          echo "=========================================================="
+          [ -n "${{ github.event.inputs.sni }}" ] && ARGS="$ARGS --sni ${{ github.event.inputs.sni }}"
+          echo "🚀 V2Ray AI Hunter v8 | dry=${{ github.event.inputs.dry_run || 'false' }}"
+          timeout 22m python v2ray_hunter.py $ARGS || echo "⏰ timeout — normal exit"
 
       - name: 💾 Commit & Push
         run: |
           git config user.email "v2ray-ai@bot.local"
           git config user.name  "V2Ray AI Bot"
-          git add sub_link.txt ai_memory.json working_cache.json v2ray_hunt.log bot_status.txt telegram_status.txt telegram_responses.log live_count.txt 2>/dev/null || true
-          if git diff --cached --quiet; then echo "Nothing to commit"; exit 0; fi
-          git commit -m "🤖 AI v8 | $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git add sub_link.txt ai_memory.json working_cache.json v2ray_hunt.log 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "✅ Nothing to commit"; exit 0
+          fi
+          git commit -m "🤖 v8 | $(date -u +'%H:%M UTC %d/%m')"
           for i in 1 2 3; do
             git pull --rebase -X ours origin HEAD 2>/dev/null || true
-            git push origin HEAD:${{ github.ref_name }} && break || sleep $((i*3))
+            git push && { echo "✅ Pushed"; break; }
+            sleep $((i*4))
           done
