@@ -49342,3 +49342,8 @@
 23:00:42 │ INFO    │ ⚡ Checking 3985 configs [100w | stop@50 | ⏳1197s left]
 23:00:47 │ INFO    │ ✅ 0 live | 0 errors healed
 23:00:47 │ ERROR   │ No live configs (fresh + cache) — exit
+23:23:01 │ INFO    │ ╔══════════════════════════════════════════════════════╗
+23:23:01 │ INFO    │ ║  🤖 V2RAY ULTIMATE HUNTER v9 — AGGRESSIVE AI        ║
+23:23:01 │ INFO    │ ║  974  sources | 20m deadline | CF WS+TLS+443       ║
+23:23:01 │ INFO    │ ╚══════════════════════════════════════════════════════╝
+23:23:01 │ INFO    │ 🤖 AI: No data yet
