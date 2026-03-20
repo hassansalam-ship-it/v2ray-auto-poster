@@ -48868,3 +48868,72 @@
 15:41:17 │ INFO    │ 💾 Cache saved: 50 configs
 15:41:17 │ INFO    │ 
 🏁 Done in 15s | 0 fresh | 50 cached | 5 posted | AI#3 386/7656(5%) top:spotify(45),telegram(35) dead:0
+16:01:43 │ INFO    │ ⏰ Hard deadline set: 20m from now
+16:01:43 │ INFO    │ ╔══════════════════════════════════════════════════════╗
+16:01:43 │ INFO    │ ║  🤖 V2RAY ULTIMATE HUNTER v8 — AI EDITION           ║
+16:01:43 │ INFO    │ ║  857  sources | 20m deadline | WS+TLS+443        ║
+16:01:43 │ INFO    │ ╚══════════════════════════════════════════════════════╝
+16:01:43 │ INFO    │ 🧠 AI: run#3 | 47 good IPs | 0 dead src | sni=auto
+16:01:43 │ INFO    │ ♻️  Cache: 50/50 configs (< 2h)
+16:01:43 │ INFO    │ ♻️  50 cached configs loaded (< 2h)
+16:01:43 │ INFO    │ 🌐 Fetching 600/857 sources [80w | 0 dead skipped]
+16:01:44 │ INFO    │ ✓   31  ←  https://raw.githubusercontent.com/youfoundamin/V2rayCollector/mai
+16:01:44 │ INFO    │ ✓  319  ←  https://raw.githubusercontent.com/ndsphonemy/proxy-sub/main/defau
+16:01:44 │ INFO    │ ✓    8  ←  https://raw.githubusercontent.com/adiwzx/freenode/main/adispeed.t
+16:01:44 │ INFO    │ ✓    4  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+16:01:44 │ INFO    │ ✓   22  ←  https://raw.githubusercontent.com/ermaozi/get_subscribe/main/subs
+16:01:45 │ INFO    │ ✓    1  ←  https://raw.githubusercontent.com/awesome-vpn/awesome-vpn/master/
+16:01:45 │ INFO    │ ✓  144  ←  https://raw.githubusercontent.com/ndsphonemy/proxy-sub/main/speed
+16:01:45 │ INFO    │ ✓   40  ←  https://raw.githubusercontent.com/roosterkid/openproxylist/main/V
+16:01:45 │ INFO    │ ✓    1  ←  https://raw.githubusercontent.com/resasanian/Mirza/main/vless
+16:01:45 │ INFO    │ ✓   28  ←  https://raw.githubusercontent.com/resasanian/Mirza/main/best
+16:01:45 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+16:01:45 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+16:01:45 │ INFO    │ ✓  211  ←  https://raw.githubusercontent.com/4n0nymou3/multi-proxy-config-fe
+16:01:45 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+16:01:45 │ INFO    │ ✓   14  ←  https://raw.githubusercontent.com/Surfboardv2ray/TGParse/main/spl
+16:01:45 │ INFO    │ ✓    1  ←  https://raw.githubusercontent.com/Everyday-VPN/Everyday-VPN/main/
+16:01:45 │ INFO    │ ✓    2  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+16:01:45 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+16:01:45 │ INFO    │ ✓    5  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+16:01:45 │ INFO    │ ✓    9  ←  https://raw.githubusercontent.com/ermaozi01/free_clash_vpn/main/s
+16:01:45 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+16:01:45 │ INFO    │ ✓    9  ←  https://raw.githubusercontent.com/shabane/kamaji/master/hub/vmess
+16:01:45 │ INFO    │ ✓   37  ←  https://raw.githubusercontent.com/resasanian/Mirza/main/sub
+16:01:45 │ INFO    │ ✓  145  ←  https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/main/s
+16:01:45 │ INFO    │ ✓  114  ←  https://raw.githubusercontent.com/MhdiTaheri/V2rayCollector_Py/ma
+16:01:45 │ INFO    │ ✓  145  ←  https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/main/s
+16:01:45 │ INFO    │ ✓  294  ←  https://raw.githubusercontent.com/shabane/kamaji/master/hub/vless
+16:01:45 │ INFO    │ ✓  301  ←  https://raw.githubusercontent.com/shabane/kamaji/master/hub/merge
+16:01:45 │ INFO    │ ✓  692  ←  https://raw.githubusercontent.com/youfoundamin/V2rayCollector/mai
+16:01:45 │ INFO    │ ✓  657  ←  https://raw.githubusercontent.com/SoliSpirit/v2ray-configs/main/a
+16:01:46 │ INFO    │ ✓ 1254  ←  https://raw.githubusercontent.com/mheidari98/.proxy/main/vless
+16:01:46 │ INFO    │ ✓ 1676  ←  https://raw.githubusercontent.com/Leon406/SubCrawler/master/sub/s
+16:01:46 │ INFO    │ ✓   17  ←  https://raw.githubusercontent.com/mheidari98/.proxy/main/vmess
+16:01:46 │ INFO    │ ✓ 1270  ←  https://raw.githubusercontent.com/mheidari98/.proxy/main/all
+16:01:46 │ INFO    │ 📦 3847 unique | 34/600 active sources
+16:01:46 │ INFO    │ ⚡ Checking 3847 configs [100w | stop@50 | ⏳1196s left]
+16:01:46 │ INFO    │ ✅ 0 live | 0 errors healed
+16:01:46 │ INFO    │ 
+📊 Top 10 configs:
+16:01:46 │ INFO    │   #  Type     Ping  Probe  Compat  CC   Host
+16:01:46 │ INFO    │   ──────────────────────────────────────────────────────────
+16:01:46 │ INFO    │    1  🚀⚡🔒    5ms  28ms  11/12  CA   104.17.106.12
+16:01:46 │ INFO    │    2  🚀⚡🔒    2ms  64ms  11/12  CA   104.16.250.22
+16:01:46 │ INFO    │    3  🚀⚡🔒   12ms  77ms  11/12  CA   nodejs.org
+16:01:46 │ INFO    │    4  🚀⚡🔒    4ms  61ms  11/12  CA   104.18.185.26
+16:01:46 │ INFO    │    5  🚀⚡🔒    4ms  59ms  11/12  CA   104.17.46.112
+16:01:46 │ INFO    │    6  🚀⚡🔒    3ms  61ms  11/12  CA   104.18.185.26
+16:01:46 │ INFO    │    7  🚀⚡🔒   41ms  75ms  11/12  CA   transferwise.com
+16:01:46 │ INFO    │    8  🚀⚡🔒    2ms  62ms  11/12  CA   104.18.185.26
+16:01:46 │ INFO    │    9  🚀        5ms  28ms  10/12  US   3.86.85.68
+16:01:46 │ INFO    │   10  🚀  🔒   67ms 224ms  12/12  CZ   s2.skullvpn.xyz
+16:01:47 │ INFO    │ 📨 1/5: 104.17.106.12 → m.tiktok.com
+16:01:49 │ INFO    │ 📨 2/5: 104.16.250.22 → m.facebook.com
+16:01:52 │ INFO    │ 📨 3/5: nodejs.org → web.whatsapp.com
+16:01:54 │ INFO    │ 📨 4/5: 104.18.185.26 → m.youtube.com
+16:01:57 │ INFO    │ 📨 5/5: 104.17.46.112 → www.wechat.com
+16:01:59 │ INFO    │ 💾 Sub saved: 50 configs → sub_link.txt
+16:01:59 │ INFO    │ 💾 Cache saved: 50 configs
+16:01:59 │ INFO    │ 
+🏁 Done in 15s | 0 fresh | 50 cached | 5 posted | AI#4 386/7656(5%) top:spotify(45),telegram(35) dead:0
