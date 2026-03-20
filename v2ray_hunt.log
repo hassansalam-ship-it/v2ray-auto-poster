@@ -49072,3 +49072,48 @@
 17:26:40 │ INFO    │ ⚡ Checking 3842 configs [100w | stop@50 | ⏳1197s left]
 17:26:40 │ INFO    │ ✅ 0 live | 0 errors healed
 17:26:40 │ ERROR   │ No live configs (fresh + cache) — exit
+18:09:37 │ INFO    │ ⏰ Hard deadline set: 20m from now
+18:09:37 │ INFO    │ ╔══════════════════════════════════════════════════════╗
+18:09:37 │ INFO    │ ║  🤖 V2RAY ULTIMATE HUNTER v8 — AI EDITION           ║
+18:09:37 │ INFO    │ ║  857  sources | 20m deadline | WS+TLS+443        ║
+18:09:37 │ INFO    │ ╚══════════════════════════════════════════════════════╝
+18:09:37 │ INFO    │ 🧠 AI: run#4 | 47 good IPs | 0 dead src | sni=auto
+18:09:37 │ INFO    │ 🌐 Fetching 600/857 sources [80w | 0 dead skipped]
+18:09:37 │ INFO    │ ✓   28  ←  https://raw.githubusercontent.com/resasanian/Mirza/main/best
+18:09:37 │ INFO    │ ✓   47  ←  https://raw.githubusercontent.com/roosterkid/openproxylist/main/V
+18:09:38 │ INFO    │ ✓    4  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+18:09:38 │ INFO    │ ✓    1  ←  https://raw.githubusercontent.com/awesome-vpn/awesome-vpn/master/
+18:09:38 │ INFO    │ ✓    9  ←  https://raw.githubusercontent.com/shabane/kamaji/master/hub/vmess
+18:09:38 │ INFO    │ ✓    1  ←  https://raw.githubusercontent.com/resasanian/Mirza/main/vless
+18:09:38 │ INFO    │ ✓   22  ←  https://raw.githubusercontent.com/ermaozi/get_subscribe/main/subs
+18:09:38 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+18:09:38 │ INFO    │ ✓  114  ←  https://raw.githubusercontent.com/MhdiTaheri/V2rayCollector_Py/ma
+18:09:38 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+18:09:38 │ INFO    │ ✓    1  ←  https://raw.githubusercontent.com/Everyday-VPN/Everyday-VPN/main/
+18:09:38 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+18:09:38 │ INFO    │ ✓    2  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+18:09:38 │ INFO    │ ✓    9  ←  https://raw.githubusercontent.com/ermaozi01/free_clash_vpn/main/s
+18:09:38 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+18:09:38 │ INFO    │ ✓   37  ←  https://raw.githubusercontent.com/resasanian/Mirza/main/sub
+18:09:38 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+18:09:38 │ INFO    │ ✓    8  ←  https://raw.githubusercontent.com/adiwzx/freenode/main/adispeed.t
+18:09:38 │ INFO    │ ✓    5  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+18:09:38 │ INFO    │ ✓  144  ←  https://raw.githubusercontent.com/ndsphonemy/proxy-sub/main/speed
+18:09:38 │ INFO    │ ✓   57  ←  https://raw.githubusercontent.com/Surfboardv2ray/TGParse/main/spl
+18:09:38 │ INFO    │ ✓  211  ←  https://raw.githubusercontent.com/4n0nymou3/multi-proxy-config-fe
+18:09:38 │ INFO    │ ✓   31  ←  https://raw.githubusercontent.com/youfoundamin/V2rayCollector/mai
+18:09:38 │ INFO    │ ✓  145  ←  https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/main/s
+18:09:38 │ INFO    │ ✓  319  ←  https://raw.githubusercontent.com/ndsphonemy/proxy-sub/main/defau
+18:09:38 │ INFO    │ ✓  301  ←  https://raw.githubusercontent.com/shabane/kamaji/master/hub/merge
+18:09:38 │ INFO    │ ✓  145  ←  https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/main/s
+18:09:38 │ INFO    │ ✓ 1676  ←  https://raw.githubusercontent.com/Leon406/SubCrawler/master/sub/s
+18:09:38 │ INFO    │ ✓  294  ←  https://raw.githubusercontent.com/shabane/kamaji/master/hub/vless
+18:09:39 │ INFO    │ ✓ 1287  ←  https://raw.githubusercontent.com/mheidari98/.proxy/main/vless
+18:09:39 │ INFO    │ ✓  692  ←  https://raw.githubusercontent.com/youfoundamin/V2rayCollector/mai
+18:09:39 │ INFO    │ ✓  705  ←  https://raw.githubusercontent.com/SoliSpirit/v2ray-configs/main/a
+18:09:39 │ INFO    │ ✓   17  ←  https://raw.githubusercontent.com/mheidari98/.proxy/main/vmess
+18:09:39 │ INFO    │ ✓ 1303  ←  https://raw.githubusercontent.com/mheidari98/.proxy/main/all
+18:09:39 │ INFO    │ 📦 3842 unique | 34/600 active sources
+18:09:39 │ INFO    │ ⚡ Checking 3842 configs [100w | stop@50 | ⏳1197s left]
+18:09:40 │ INFO    │ ✅ 0 live | 0 errors healed
+18:09:40 │ ERROR   │ No live configs (fresh + cache) — exit
