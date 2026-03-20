@@ -59,6 +59,17 @@ jobs:
           ARGS=""
           [ "${{ github.event.inputs.dry_run }}" = "true" ] && ARGS="--dry-run"
           [ -n "${{ github.event.inputs.sni }}" ] && ARGS="$ARGS --sni ${{ github.event.inputs.sni }}"
+
+          # حذف الكاش القديم من نسخ سابقة لضمان فحص جديد
+          # (الكاش القديم يحتوي على كونفيجات Downlink=0B)
+          if [ -f working_cache.json ]; then
+            VER=$(python3 -c "import json; d=json.load(open('working_cache.json')); print(d[0].get('cache_ver','old') if d else 'empty')" 2>/dev/null || echo "old")
+            if [ "$VER" != "v8-strict-101" ]; then
+              echo "🗑️  Deleting old cache (ver=$VER) — forcing fresh scan"
+              rm -f working_cache.json
+            fi
+          fi
+
           echo "🚀 V2Ray AI Hunter v8 | dry=${{ github.event.inputs.dry_run || 'false' }}"
           timeout 22m python v2ray_hunter.py $ARGS || echo "⏰ timeout — normal exit"
 
@@ -66,7 +77,9 @@ jobs:
         run: |
           git config user.email "v2ray-ai@bot.local"
           git config user.name  "V2Ray AI Bot"
-          git add sub_link.txt ai_memory.json working_cache.json v2ray_hunt.log 2>/dev/null || true
+          git add sub_link.txt ai_memory.json v2ray_hunt.log 2>/dev/null || true
+          # working_cache.json يُحفظ محلياً فقط — لا يُرفع للريبو (منع توزيع كاش فاشل)
+          git add working_cache.json 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "✅ Nothing to commit"; exit 0
           fi
