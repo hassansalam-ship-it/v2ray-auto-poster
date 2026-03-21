@@ -1,30 +1,36 @@
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-#  🤖 V2RAY ULTIMATE HUNTER v8 — AI EDITION
-#  يعمل كل 30 دقيقة | Hard Deadline 20min | ذاكرة دائمة بين الجولات
+#  🤖 V2RAY ULTIMATE HUNTER v10 — VIRUS MODE
+#  كل ساعتين | Self-evolving | يضيف مصادر تلقائياً | AI يتطور
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-name: 🤖 V2Ray AI Hunter v8
+name: 🤖 V2Ray AI Hunter v10
 
 on:
   schedule:
-    - cron: '*/30 * * * *'   # كل 30 دقيقة
+    - cron: '0 */2 * * *'
   workflow_dispatch:
     inputs:
       sni:
-        description: 'Bug Host SNI (فارغ = AI يختار)'
+        description: 'Bug Host SNI'
         required: false
         default: ''
       dry_run:
-        description: 'Dry Run (بدون نشر)'
+        description: 'Dry Run'
         required: false
         default: 'false'
         type: choice
-        options: ['false', 'true']
+        options: ['false','true']
+      force_fresh:
+        description: 'Delete cache + fresh scan'
+        required: false
+        default: 'false'
+        type: choice
+        options: ['false','true']
 
 jobs:
   hunt:
     runs-on: ubuntu-latest
-    timeout-minutes: 25   # 25min < hard deadline البرنامج الداخلي (20min)
+    timeout-minutes: 22
 
     permissions:
       contents: write
@@ -45,11 +51,19 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/pip
-          key: v2ray-pip-v8
-          restore-keys: v2ray-pip-
+          key: v10-pip-v1
 
       - name: 📦 Install
         run: pip install requests urllib3 --quiet
+
+      - name: 🦠 Cache Version Check
+        run: |
+          if [ "${{ github.event.inputs.force_fresh }}" = "true" ]; then
+            echo "Force fresh — deleting cache"; rm -f working_cache.json
+          elif [ -f working_cache.json ]; then
+            VER=$(python3 -c "import json; d=json.load(open('working_cache.json')); print(d[0].get('ver','old') if d else 'empty')" 2>/dev/null || echo "error")
+            [ "$VER" != "v10-aggressive" ] && { echo "Old cache ($VER) — deleting"; rm -f working_cache.json; }
+          fi
 
       - name: 🤖 Run Hunter
         env:
@@ -59,33 +73,25 @@ jobs:
           ARGS=""
           [ "${{ github.event.inputs.dry_run }}" = "true" ] && ARGS="--dry-run"
           [ -n "${{ github.event.inputs.sni }}" ] && ARGS="$ARGS --sni ${{ github.event.inputs.sni }}"
-
-          # حذف الكاش القديم من نسخ سابقة لضمان فحص جديد
-          # (الكاش القديم يحتوي على كونفيجات Downlink=0B)
-          if [ -f working_cache.json ]; then
-            VER=$(python3 -c "import json; d=json.load(open('working_cache.json')); print(d[0].get('cache_ver','old') if d else 'empty')" 2>/dev/null || echo "old")
-            if [ "$VER" != "v8-strict-101" ]; then
-              echo "🗑️  Deleting old cache (ver=$VER) — forcing fresh scan"
-              rm -f working_cache.json
-            fi
-          fi
-
-          echo "🚀 V2Ray AI Hunter v8 | dry=${{ github.event.inputs.dry_run || 'false' }}"
-          timeout 22m python v2ray_hunter.py $ARGS || echo "⏰ timeout — normal exit"
+          echo "🚀 V2Ray AI Hunter v10 — VIRUS MODE"
+          timeout 20m python v2ray_hunter.py $ARGS || echo "⏰ timeout — AI handled"
 
       - name: 💾 Commit & Push
         run: |
-          git config user.email "v2ray-ai@bot.local"
-          git config user.name  "V2Ray AI Bot"
-          git add sub_link.txt ai_memory.json v2ray_hunt.log 2>/dev/null || true
-          # working_cache.json يُحفظ محلياً فقط — لا يُرفع للريبو (منع توزيع كاش فاشل)
-          git add working_cache.json 2>/dev/null || true
-          if git diff --cached --quiet; then
-            echo "✅ Nothing to commit"; exit 0
-          fi
-          git commit -m "🤖 v8 | $(date -u +'%H:%M UTC %d/%m')"
+          git config user.email "v10@ai.bot"
+          git config user.name  "V2Ray AI v10"
+          git add sub_link.txt ai_memory.json working_cache.json v2ray_hunt.log 2>/dev/null || true
+          if git diff --cached --quiet; then echo "Nothing to commit"; exit 0; fi
+          STATS=$(python3 -c "
+import json
+try:
+    d=json.load(open('ai_memory.json'))
+    print(f\"R{d.get('runs','?')}|P{d.get('total_passed','?')}|D{len(d.get('discovered_sources',[]))}\")
+except: print('v10')
+" 2>/dev/null || echo "v10")
+          git commit -m "🦠 v10|$(date -u +'%H:%M %d/%m')|$STATS"
           for i in 1 2 3; do
             git pull --rebase -X ours origin HEAD 2>/dev/null || true
-            git push && { echo "✅ Pushed"; break; }
-            sleep $((i*4))
+            git push && break
+            sleep $((i*3))
           done
