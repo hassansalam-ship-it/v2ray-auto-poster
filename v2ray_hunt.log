@@ -50757,3 +50757,133 @@
 🏁 30s | 22 fresh | 0 cached | 5 posted | +22 discovered
 15:57:29 │ INFO    │ 🤖 v10|STRICT|Run#12|Pass:17.8%|Struct:61.8%|TCP:5.3%|Probe:9.2%|Total:346/1941
 15:57:29 │ INFO    │ AI#12 457/14318(3%) top:help(17),nnet(3) disc:475
+16:59:02 │ INFO    │ ╔══════════════════════════════════════════════════════╗
+16:59:02 │ INFO    │ ║  🤖 V2RAY ULTIMATE HUNTER v10 — VIRUS MODE          ║
+16:59:02 │ INFO    │ ║  171  sources | 18m deadline | STRICT     mode       ║
+16:59:02 │ INFO    │ ╚══════════════════════════════════════════════════════╝
+16:59:02 │ INFO    │ 🤖 v10|STRICT|Run#12|Pass:17.8%|Struct:61.8%|TCP:5.3%|Probe:9.2%|Total:346/1941
+16:59:02 │ INFO    │ 🧠 AI#12 457/14318(3%) top:help(17),nnet(3) disc:475 | good:230 | sni=auto
+16:59:02 │ INFO    │ ✅ BOT_TOKEN: ***SEEA
+16:59:02 │ INFO    │ 🦠 Evolution scan ...
+16:59:05 │ INFO    │ ♻️  Cache: 22/22
+16:59:05 │ INFO    │ ♻️  Re-verifying 22 cached ...
+16:59:29 │ INFO    │ ♻️  20/22 verified
+16:59:29 │ INFO    │ 🌐 Fetching 592/646 [150w | 560 dead | +475 new]
+16:59:30 │ INFO    │ ✓   15  ←  https://raw.githubusercontent.com/MrMohebi/xray-proxy-grabber-tel
+16:59:30 │ INFO    │ ✓    1  ←  https://raw.githubusercontent.com/awesome-vpn/awesome-vpn/master/
+16:59:31 │ INFO    │ ✓   29  ←  https://raw.githubusercontent.com/peasoft/NoMoreWalls/master/list
+16:59:31 │ INFO    │ ✓   78  ←  https://raw.githubusercontent.com/MrMohebi/xray-proxy-grabber-tel
+16:59:31 │ INFO    │ ✓   12  ←  https://t.me/s/FreakConfig
+16:59:31 │ INFO    │ ✓  145  ←  https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/main/s
+16:59:31 │ INFO    │ ✓   12  ←  https://raw.githubusercontent.com/Surfboardv2ray/TGParse/main/spl
+16:59:31 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+16:59:31 │ INFO    │ ✓    2  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+16:59:31 │ INFO    │ ✓    1  ←  https://raw.githubusercontent.com/Everyday-VPN/Everyday-VPN/main/
+16:59:31 │ INFO    │ ✓   29  ←  https://raw.githubusercontent.com/peasoft/NoMoreWalls/master/list
+16:59:31 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+16:59:31 │ INFO    │ ✓   16  ←  https://raw.githubusercontent.com/roosterkid/openproxylist/main/V
+16:59:31 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+16:59:32 │ INFO    │ ✓   16  ←  https://raw.githubusercontent.com/roosterkid/openproxylist/main/V
+16:59:32 │ INFO    │ ✓    3  ←  https://t.me/s/Configforvpn01
+16:59:32 │ INFO    │ ✓    7  ←  https://t.me/s/free4allVPN
+16:59:32 │ INFO    │ ✓    4  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+16:59:32 │ INFO    │ ✓   22  ←  https://raw.githubusercontent.com/ermaozi/get_subscribe/main/subs
+16:59:32 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+16:59:32 │ INFO    │ ✓    7  ←  https://t.me/s/hiddify_free
+16:59:32 │ INFO    │ ✓    7  ←  https://t.me/s/vless_vmess
+16:59:32 │ INFO    │ ✓    7  ←  https://t.me/s/v2ray_configs_pool
+16:59:32 │ INFO    │ ✓    9  ←  https://raw.githubusercontent.com/resasanian/Mirza/main/best.txt
+16:59:32 │ INFO    │ ✓    1  ←  https://t.me/s/FreeVlessVpn
+16:59:32 │ INFO    │ ✓   29  ←  https://t.me/s/Outline_Vpn
+16:59:32 │ INFO    │ ✓    6  ←  https://t.me/s/vmess_vless_v2rayng
+16:59:32 │ INFO    │ ✓    2  ←  https://t.me/s/v2ray_configs
+16:59:32 │ INFO    │ ✓  647  ←  https://raw.githubusercontent.com/youfoundamin/V2rayCollector/mai
+16:59:32 │ INFO    │ ✓    3  ←  https://t.me/s/v2line
+16:59:32 │ INFO    │ ✓    1  ←  https://t.me/s/iP_CF
+16:59:32 │ INFO    │ ✓  145  ←  https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/main/s
+16:59:32 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+16:59:32 │ INFO    │ ✓   23  ←  https://t.me/s/v2ray_swhil
+16:59:32 │ INFO    │ ✓   31  ←  https://raw.githubusercontent.com/youfoundamin/V2rayCollector/mai
+16:59:32 │ INFO    │ ✓    2  ←  https://t.me/s/ArV2ray
+16:59:32 │ INFO    │ ✓    5  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+16:59:33 │ INFO    │ ✓   54  ←  https://t.me/s/oneclickvpnkeys
+16:59:33 │ INFO    │ ✓  196  ←  https://raw.githubusercontent.com/AzadNetCH/Clash/main/AzadNet.tx
+16:59:33 │ INFO    │ ✓ 1738  ←  https://raw.githubusercontent.com/Leon406/SubCrawler/master/sub/s
+16:59:33 │ INFO    │ ✓ 1471  ←  https://raw.githubusercontent.com/Surfboardv2ray/TGParse/main/spl
+16:59:33 │ INFO    │ ✓ 2102  ←  https://raw.githubusercontent.com/SoliSpirit/v2ray-configs/main/a
+16:59:33 │ INFO    │ ✓ 2654  ←  https://raw.githubusercontent.com/mheidari98/.proxy/main/vless
+16:59:33 │ INFO    │ ✓   29  ←  https://raw.githubusercontent.com/mheidari98/.proxy/main/vmess
+16:59:33 │ INFO    │ ✓ 2682  ←  https://raw.githubusercontent.com/mheidari98/.proxy/main/all
+16:59:33 │ INFO    │ 📦 4741 unique | 45/592 active | ~2963 WS+443
+16:59:33 │ INFO    │ 🤖 Mode: STRICT | ping<600ms | probe<2500ms
+16:59:33 │ INFO    │ ⚡ Checking 4741 [⏳1048s | stop@50 | 150w]
+16:59:33 │ INFO    │   🔍 200 checked | 0 live | 2000/s | ⏳1048s | 🤖 v10|STRICT|Run#12|Pass:17.8%|Struct:61.8%|TCP:5.3%|Probe:9
+16:59:33 │ INFO    │   🔍 400 checked | 0 live | 2000/s | ⏳1048s | 🤖 v10|STRICT|Run#12|Pass:17.8%|Struct:61.6%|TCP:5.2%|Probe:9
+16:59:33 │ INFO    │   🔍 600 checked | 0 live | 2000/s | ⏳1048s | 🤖 v10|STRICT|Run#12|Pass:17.8%|Struct:61.6%|TCP:5.2%|Probe:9
+16:59:33 │ INFO    │   🔍 800 checked | 0 live | 2000/s | ⏳1048s | 🤖 v10|STRICT|Run#12|Pass:17.8%|Struct:61.6%|TCP:5.2%|Probe:9
+16:59:34 │ INFO    │   🔍 1000 checked | 0 live | 1353/s | ⏳1048s | 🤖 v10|STRICT|Run#12|Pass:17.7%|Struct:61.5%|TCP:5.3%|Probe:9
+16:59:34 │ INFO    │   🔍 1200 checked | 0 live | 2000/s | ⏳1048s | 🤖 v10|STRICT|Run#12|Pass:17.7%|Struct:61.4%|TCP:5.3%|Probe:9
+16:59:34 │ INFO    │   🔍 1400 checked | 0 live | 2000/s | ⏳1048s | 🤖 v10|STRICT|Run#12|Pass:17.7%|Struct:61.4%|TCP:5.3%|Probe:9
+16:59:34 │ INFO    │   🔍 1600 checked | 0 live | 2000/s | ⏳1048s | 🤖 v10|STRICT|Run#12|Pass:17.7%|Struct:61.4%|TCP:5.3%|Probe:9
+16:59:34 │ INFO    │   🔍 1800 checked | 0 live | 2000/s | ⏳1048s | 🤖 v10|STRICT|Run#12|Pass:17.7%|Struct:61.4%|TCP:5.3%|Probe:9
+16:59:34 │ INFO    │   🔍 2000 checked | 0 live | 2000/s | ⏳1047s | 🤖 v10|STRICT|Run#12|Pass:17.7%|Struct:61.4%|TCP:5.3%|Probe:9
+16:59:34 │ INFO    │   🔍 2200 checked | 0 live | 2000/s | ⏳1047s | 🤖 v10|STRICT|Run#12|Pass:17.7%|Struct:61.4%|TCP:5.3%|Probe:9
+16:59:34 │ INFO    │   🔍 2400 checked | 0 live | 2000/s | ⏳1047s | 🤖 v10|STRICT|Run#12|Pass:17.7%|Struct:61.4%|TCP:5.3%|Probe:9
+16:59:34 │ INFO    │   🔍 2600 checked | 0 live | 2000/s | ⏳1047s | 🤖 v10|STRICT|Run#12|Pass:17.7%|Struct:61.4%|TCP:5.3%|Probe:9
+16:59:34 │ INFO    │   🔍 2800 checked | 0 live | 2000/s | ⏳1047s | 🤖 v10|STRICT|Run#12|Pass:17.7%|Struct:61.4%|TCP:5.3%|Probe:9
+16:59:34 │ INFO    │   🔍 3000 checked | 0 live | 2000/s | ⏳1047s | 🤖 v10|STRICT|Run#12|Pass:17.6%|Struct:61.2%|TCP:5.4%|Probe:9
+16:59:34 │ INFO    │   🔍 3200 checked | 0 live | 2000/s | ⏳1047s | 🤖 v10|STRICT|Run#12|Pass:17.6%|Struct:61.2%|TCP:5.4%|Probe:9
+16:59:34 │ INFO    │   🔍 3400 checked | 0 live | 2000/s | ⏳1047s | 🤖 v10|STRICT|Run#12|Pass:17.6%|Struct:61.2%|TCP:5.4%|Probe:9
+16:59:34 │ INFO    │   🔍 3600 checked | 0 live | 2000/s | ⏳1047s | 🤖 v10|STRICT|Run#12|Pass:17.6%|Struct:61.2%|TCP:5.4%|Probe:9
+16:59:34 │ INFO    │   🔍 3800 checked | 0 live | 2000/s | ⏳1047s | 🤖 v10|STRICT|Run#12|Pass:17.6%|Struct:61.2%|TCP:5.4%|Probe:9
+16:59:34 │ INFO    │   🔍 4000 checked | 0 live | 2000/s | ⏳1047s | 🤖 v10|STRICT|Run#12|Pass:17.6%|Struct:61.2%|TCP:5.4%|Probe:9
+16:59:34 │ INFO    │ ✅ norman.ns.cloudflare.com|VLESS|1/12|16ms→norman.ns.cloudflare
+16:59:34 │ INFO    │   🔍 4200 checked | 0 live | 2000/s | ⏳1047s | 🤖 v10|STRICT|Run#12|Pass:17.6%|Struct:61.4%|TCP:5.4%|Probe:9
+16:59:34 │ INFO    │   🔍 4400 checked | 1 live | 2000/s | ⏳1047s | 🤖 v10|STRICT|Run#12|Pass:17.3%|Struct:61.9%|TCP:5.3%|Probe:8
+16:59:34 │ INFO    │   🔍 4600 checked | 1 live | 2000/s | ⏳1047s | 🤖 v10|STRICT|Run#12|Pass:17.1%|Struct:62.5%|TCP:5.2%|Probe:8
+16:59:35 │ INFO    │ ✅ 172.67.145.44|VLESS|1/12|9ms→en.help.roblox.com
+16:59:35 │ INFO    │ ✅ 172.67.141.105|VLESS|1/12|6ms→en.help.roblox.com
+16:59:35 │ INFO    │ ✅ 162.159.12.151|VLESS|1/12|29ms→en.help.roblox.com
+16:59:35 │ INFO    │ ✅ 104.16.89.18|VLESS|1/12|6ms→en.help.roblox.com
+16:59:35 │ INFO    │   📊 5 live | ⏳1046s | AI#12 482/14463(3%) top:help(21),nnet(3) disc:475
+16:59:35 │ INFO    │ ✅ 172.64.35.45|VLESS|1/12|6ms→en.help.roblox.com
+16:59:35 │ INFO    │ ✅ 162.159.12.151|VLESS|1/12|21ms→en.help.roblox.com
+16:59:35 │ INFO    │ ✅ 104.21.39.117|VLESS|1/12|9ms→en.help.roblox.com
+16:59:35 │ INFO    │ ✅ 172.64.146.37|VLESS|1/12|6ms→en.help.roblox.com
+16:59:35 │ INFO    │ ✅ 172.64.147.236|VLESS|1/12|6ms→en.help.roblox.com
+16:59:35 │ INFO    │   📊 10 live | ⏳1046s | AI#12 487/14468(3%) top:help(26),nnet(3) disc:475
+16:59:36 │ INFO    │ ✅ 162.159.44.45|VLESS|1/12|30ms→en.help.roblox.com
+16:59:37 │ INFO    │ ✅ ffv.xx6.ccwu.cc|VLESS|1/12|6ms→ffv.xx6.ccwu.cc
+17:00:10 │ INFO    │ ✅ 89.248.207.37|VLESS|2/12|118ms→m.facebook.com
+17:00:10 │ INFO    │ ✅ 13 live | 4741 checked | 0 errors
+   🤖 v10|STRICT|Run#12|Pass:17.7%|Struct:62.5%|TCP:5.4%|Probe:8.8%|Total:359/2032
+17:00:10 │ INFO    │ 🔍 Geo (13) ...
+17:00:10 │ INFO    │ 
+📊 Top 10:
+17:00:10 │ INFO    │   #   Type  Ping   Probe  Compat  CC   Host
+17:00:10 │ INFO    │    1.   🚀    118ms  522ms  2/12  RU   89.248.207.37
+17:00:10 │ INFO    │    2. ⚡🚀      9ms  200ms  1/12  CA   172.67.145.44
+17:00:10 │ INFO    │    3. ⚡🚀      6ms  218ms  1/12  CA   172.67.141.105
+17:00:10 │ INFO    │    4. ⚡🚀     29ms  199ms  1/12  CA   162.159.12.151
+17:00:10 │ INFO    │    5. ⚡🚀      6ms  219ms  1/12  CA   104.16.89.18
+17:00:10 │ INFO    │    6. ⚡🚀      6ms  206ms  1/12  CA   172.64.35.45
+17:00:10 │ INFO    │    7. ⚡🚀     21ms  184ms  1/12  CA   162.159.12.151
+17:00:10 │ INFO    │    8. ⚡🚀      9ms  190ms  1/12  CA   104.21.39.117
+17:00:10 │ INFO    │    9. ⚡🚀      6ms  236ms  1/12  CA   172.64.146.37
+17:00:10 │ INFO    │   10. ⚡🚀      6ms  191ms  1/12  CA   172.64.147.236
+17:00:11 │ INFO    │ ✅ TG sent OK: 89.248.207.37
+17:00:11 │ INFO    │ 📨 1/5: 89.248.207.37→m.facebook.com
+17:00:13 │ INFO    │ ✅ TG sent OK: 172.67.145.44
+17:00:13 │ INFO    │ 📨 2/5: 172.67.145.44→en.help.roblox.com
+17:00:15 │ INFO    │ ✅ TG sent OK: 172.67.141.105
+17:00:15 │ INFO    │ 📨 3/5: 172.67.141.105→en.help.roblox.com
+17:00:18 │ INFO    │ ✅ TG sent OK: 162.159.12.151
+17:00:18 │ INFO    │ 📨 4/5: 162.159.12.151→en.help.roblox.com
+17:00:20 │ INFO    │ ✅ TG sent OK: 104.16.89.18
+17:00:20 │ INFO    │ 📨 5/5: 104.16.89.18→en.help.roblox.com
+17:00:22 │ INFO    │ 💾 Sub: 22 → sub_link.txt
+17:00:22 │ INFO    │ 💾 Cache: 22 saved
+17:00:22 │ INFO    │ 
+🏁 80s | 13 fresh | 20 cached | 5 posted | +0 discovered
+17:00:22 │ INFO    │ 🤖 v10|STRICT|Run#13|Pass:17.7%|Struct:62.5%|TCP:5.4%|Probe:8.8%|Total:359/2032
+17:00:22 │ INFO    │ AI#13 491/14483(3%) top:help(27),nnet(3) disc:475
