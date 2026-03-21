@@ -45,24 +45,36 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/pip
-          key: v10-pip-v2
+          key: v10-pip-v3
 
       - name: Install
         run: pip install requests urllib3 --quiet
+
+      - name: Verify files
+        run: |
+          echo "=== Repo contents ==="
+          ls -la
+          echo "=== Python file check ==="
+          if [ -f v2ray_hunter.py ]; then
+            echo "OK: v2ray_hunter.py found ($(wc -l < v2ray_hunter.py) lines)"
+          else
+            echo "ERROR: v2ray_hunter.py NOT FOUND"
+            echo "Files in repo:"
+            find . -name "*.py" | head -20
+            exit 1
+          fi
 
       - name: Cache check
         run: |
           FORCE="${{ github.event.inputs.force_fresh }}"
           if [ "$FORCE" = "true" ]; then
             rm -f working_cache.json
-            echo "Cache deleted (force fresh)"
+            echo "Cache deleted"
           elif [ -f working_cache.json ]; then
             VER=$(python3 -c "import json; f=open('working_cache.json'); d=json.load(f); print(d[0].get('ver','old') if d else 'empty')" 2>/dev/null || echo "error")
             if [ "$VER" != "v10-aggressive" ]; then
               rm -f working_cache.json
               echo "Old cache removed: $VER"
-            else
-              echo "Cache OK: $VER"
             fi
           fi
 
@@ -76,11 +88,11 @@ jobs:
           SNI="${{ github.event.inputs.sni }}"
           [ "$DRY" = "true" ] && ARGS="--dry-run"
           [ -n "$SNI" ] && ARGS="$ARGS --sni $SNI"
-          echo "=== V2Ray AI Hunter v10 - VIRUS MODE ==="
-          echo "Sources: 974+ | Deadline: 18min | Schedule: every 2h"
-          timeout 20m python v2ray_hunter.py $ARGS
+          echo "=== V2Ray AI Hunter v10 ==="
+          echo "File: $(wc -l < v2ray_hunter.py) lines"
+          timeout 20m python3 v2ray_hunter.py $ARGS
           RC=$?
-          [ $RC -eq 124 ] && echo "External timeout - internal AI deadline handled"
+          [ $RC -eq 124 ] && echo "Timeout - AI handled"
           exit 0
 
       - name: Commit and Push
@@ -92,9 +104,8 @@ jobs:
             echo "Nothing to commit"
             exit 0
           fi
-          STATS=$(python3 -c "import json; d=json.load(open('ai_memory.json')); print('R'+str(d.get('runs',0))+'|P'+str(d.get('total_passed',0))+'|D'+str(len(d.get('discovered_sources',[]))))" 2>/dev/null || echo "v10")
-          TS=$(date -u +'%H:%M %d/%m')
-          git commit -m "v10|$TS|$STATS"
+          STATS=$(python3 -c "import json; d=json.load(open('ai_memory.json')); print('R'+str(d.get('runs',0))+'|P'+str(d.get('total_passed',0)))" 2>/dev/null || echo "v10")
+          git commit -m "v10|$(date -u +'%H:%M %d/%m')|$STATS"
           for i in 1 2 3; do
             git pull --rebase -X ours origin HEAD 2>/dev/null || true
             git push && break
