@@ -1,0 +1,100 @@
+name: V2Ray CF Worker Publisher
+
+on:
+  schedule:
+    - cron: '0 */2 * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry Run - no Telegram post'
+        required: false
+        default: 'false'
+        type: choice
+        options: ['false', 'true']
+      verify_only:
+        description: 'Verify existing worker only'
+        required: false
+        default: 'false'
+        type: choice
+        options: ['false', 'true']
+      force_redeploy:
+        description: 'Force redeploy worker'
+        required: false
+        default: 'false'
+        type: choice
+        options: ['false', 'true']
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install deps
+        run: pip install requests urllib3 --quiet
+
+      - name: Verify required secrets
+        run: |
+          echo "Checking required secrets..."
+          if [ -z "${{ secrets.CF_ACCOUNT_ID }}" ]; then
+            echo "ERROR: CF_ACCOUNT_ID secret is missing!"
+            echo "Go to: GitHub repo → Settings → Secrets → New secret"
+            echo "Add: CF_ACCOUNT_ID = your Cloudflare Account ID"
+            exit 1
+          fi
+          if [ -z "${{ secrets.CF_API_TOKEN }}" ]; then
+            echo "ERROR: CF_API_TOKEN secret is missing!"
+            echo "Go to: Cloudflare → My Profile → API Tokens → Create Token"
+            echo "Permissions needed: Workers Scripts: Edit"
+            exit 1
+          fi
+          if [ -z "${{ secrets.BOT_TOKEN }}" ]; then
+            echo "ERROR: BOT_TOKEN secret is missing!"
+            exit 1
+          fi
+          echo "✅ All secrets present"
+
+      - name: Deploy CF Worker
+        env:
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_WORKER_NAME: ${{ secrets.CF_WORKER_NAME || 'ashaq-v2ray' }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+        run: |
+          ARGS=""
+          [ "${{ github.event.inputs.dry_run }}" = "true" ] && ARGS="--dry-run"
+          [ "${{ github.event.inputs.verify_only }}" = "true" ] && ARGS="--verify-only"
+          echo "=== CF Worker Publisher v12 ==="
+          echo "Worker: ${CF_WORKER_NAME}"
+          echo "Account: ${CF_ACCOUNT_ID:0:8}****"
+          python3 cf_manager.py $ARGS
+
+      - name: Save UUID and results
+        run: |
+          git config user.email "v12@ai.bot"
+          git config user.name "V2Ray AI v12"
+          git add worker_uuid.txt sub_link.txt 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "Nothing to commit"
+            exit 0
+          fi
+          git commit -m "worker|$(date -u +'%H:%M %d/%m')|$(cat worker_uuid.txt 2>/dev/null | cut -c1-8)****"
+          for i in 1 2 3; do
+            git pull --rebase -X ours origin HEAD 2>/dev/null || true
+            git push && break
+            sleep $((i*3))
+          done
