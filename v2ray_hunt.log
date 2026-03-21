@@ -50355,3 +50355,222 @@
 🏁 32s | 31 fresh | 5 cached | 5 posted | +0 discovered
 10:56:13 │ INFO    │ 🤖 v10|STRICT|Run#10|Pass:15.6%|Struct:63.8%|TCP:5.8%|Probe:9.5%|Total:255/1634
 10:56:13 │ INFO    │ AI#10 435/12896(3%) top:nnet(3),viber(1) disc:453
+11:00:06 │ INFO    │ ╔══════════════════════════════════════════════════════╗
+11:00:06 │ INFO    │ ║  🤖 V2RAY ULTIMATE HUNTER v10 — VIRUS MODE          ║
+11:00:06 │ INFO    │ ║  983  sources | 18m deadline | STRICT     mode       ║
+11:00:06 │ INFO    │ ╚══════════════════════════════════════════════════════╝
+11:00:06 │ INFO    │ 🤖 v10|STRICT|Run#10|Pass:15.6%|Struct:63.8%|TCP:5.8%|Probe:9.5%|Total:255/1634
+11:00:06 │ INFO    │ 🧠 AI#10 435/12896(3%) top:nnet(3),viber(1) disc:453 | good:186 | sni=auto
+11:00:06 │ INFO    │ ✅ BOT_TOKEN: ***SEEA
+11:00:06 │ INFO    │ 🦠 Evolution scan ...
+11:00:09 │ INFO    │ 🌐 Fetching 800/1431 [150w | 560 dead | +453 new]
+11:00:10 │ INFO    │ ✓    1  ←  https://raw.githubusercontent.com/resasanian/Mirza/main/vless
+11:00:10 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+11:00:11 │ INFO    │ ✓   34  ←  https://raw.githubusercontent.com/youfoundamin/V2rayCollector/mai
+11:00:11 │ INFO    │ ✓    4  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+11:00:11 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+11:00:11 │ INFO    │ ✓    1  ←  https://raw.githubusercontent.com/Everyday-VPN/Everyday-VPN/main/
+11:00:11 │ INFO    │ ✓    1  ←  https://raw.githubusercontent.com/awesome-vpn/awesome-vpn/master/
+11:00:11 │ INFO    │ ✓    6  ←  https://t.me/s/vpnfail_v2ray
+11:00:11 │ INFO    │ ✓  189  ←  https://raw.githubusercontent.com/4n0nymou3/multi-proxy-config-fe
+11:00:11 │ INFO    │ ✓    2  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+11:00:11 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+11:00:11 │ INFO    │ ✓    5  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+11:00:11 │ INFO    │ ✓    4  ←  https://raw.githubusercontent.com/shabane/kamaji/master/hub/vmess
+11:00:11 │ INFO    │ ✓   22  ←  https://raw.githubusercontent.com/ermaozi/get_subscribe/main/subs
+11:00:11 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+11:00:11 │ INFO    │ ✓    1  ←  https://t.me/s/V2rayFree
+11:00:11 │ INFO    │ ✓    2  ←  https://t.me/s/gcp_v2ray
+11:00:11 │ INFO    │ ✓   33  ←  https://raw.githubusercontent.com/roosterkid/openproxylist/main/V
+11:00:11 │ INFO    │ ✓   28  ←  https://raw.githubusercontent.com/resasanian/Mirza/main/best
+11:00:11 │ INFO    │ ✓   37  ←  https://raw.githubusercontent.com/resasanian/Mirza/main/sub
+11:00:11 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+11:00:12 │ INFO    │ ✓    3  ←  https://t.me/s/CfV2ray
+11:00:12 │ INFO    │ ✓  144  ←  https://raw.githubusercontent.com/ndsphonemy/proxy-sub/main/speed
+11:00:12 │ INFO    │ ✓    8  ←  https://raw.githubusercontent.com/adiwzx/freenode/main/adispeed.t
+11:00:12 │ INFO    │ ✓    4  ←  https://t.me/s/FreeVpnVless
+11:00:12 │ INFO    │ ✓    8  ←  https://t.me/s/v2ray_collector
+11:00:12 │ INFO    │ ✓    4  ←  https://t.me/s/frev2rayng
+11:00:12 │ INFO    │ ✓    2  ←  https://t.me/s/free_vpn_v2ray
+11:00:12 │ INFO    │ ✓    9  ←  https://raw.githubusercontent.com/ermaozi01/free_clash_vpn/main/s
+11:00:12 │ INFO    │ ✓   12  ←  https://raw.githubusercontent.com/Surfboardv2ray/TGParse/main/spl
+11:00:12 │ INFO    │ ✓    1  ←  https://t.me/s/iP_CF
+11:00:12 │ INFO    │ ✓  145  ←  https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/main/s
+11:00:12 │ INFO    │ ✓   51  ←  https://t.me/s/v2rayconfigs
+11:00:12 │ INFO    │ ✓    5  ←  https://t.me/s/V2ray_Alpha
+11:00:12 │ INFO    │ ✓    3  ←  https://t.me/s/v2ray_free_conf
+11:00:12 │ INFO    │ ✓  319  ←  https://raw.githubusercontent.com/ndsphonemy/proxy-sub/main/defau
+11:00:12 │ INFO    │ ✓    1  ←  https://t.me/s/proxyiran
+11:00:12 │ INFO    │ ✓   29  ←  https://raw.githubusercontent.com/peasoft/NoMoreWalls/master/list
+11:00:13 │ INFO    │ ✓  145  ←  https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/main/s
+11:00:13 │ INFO    │ ✓    7  ←  https://t.me/s/v2ray_configs_pool
+11:00:13 │ INFO    │ ✓    8  ←  https://raw.githubusercontent.com/MrMohebi/xray-proxy-grabber-tel
+11:00:13 │ INFO    │ ✓    7  ←  https://t.me/s/free4allVPN
+11:00:13 │ INFO    │ ✓   29  ←  https://raw.githubusercontent.com/peasoft/NoMoreWalls/master/list
+11:00:13 │ INFO    │ ✓   23  ←  https://t.me/s/v2ray_swhil
+11:00:13 │ INFO    │ ✓    2  ←  https://t.me/s/ArV2ray
+11:00:13 │ INFO    │ ✓  271  ←  https://raw.githubusercontent.com/shabane/kamaji/master/hub/vless
+11:00:13 │ INFO    │ ✓   39  ←  https://raw.githubusercontent.com/MrMohebi/xray-proxy-grabber-tel
+11:00:13 │ INFO    │ ✓    2  ←  https://t.me/s/v2ray_configs
+11:00:14 │ INFO    │ ✓   33  ←  https://raw.githubusercontent.com/roosterkid/openproxylist/main/V
+11:00:13 │ INFO    │ ✓    1  ←  https://t.me/s/FreeVlessVpn
+11:00:13 │ INFO    │ ✓    3  ←  https://t.me/s/v2line
+11:00:13 │ INFO    │ ✓    9  ←  https://raw.githubusercontent.com/resasanian/Mirza/main/best.txt
+11:00:13 │ INFO    │ ✓    7  ←  https://t.me/s/vless_vmess
+11:00:13 │ INFO    │ ✓  273  ←  https://raw.githubusercontent.com/shabane/kamaji/master/hub/merge
+11:00:14 │ INFO    │ ✓   47  ←  https://t.me/s/oneclickvpnkeys
+11:00:14 │ INFO    │ ✓    6  ←  https://t.me/s/vmess_vless_v2rayng
+11:00:14 │ INFO    │ ✓   29  ←  https://t.me/s/Outline_Vpn
+11:00:14 │ INFO    │ ✓  660  ←  https://raw.githubusercontent.com/youfoundamin/V2rayCollector/mai
+11:00:13 │ INFO    │ ✓    3  ←  https://t.me/s/Configforvpn01
+11:00:14 │ INFO    │ ✓   12  ←  https://t.me/s/FreakConfig
+11:00:14 │ INFO    │ ✓  196  ←  https://raw.githubusercontent.com/AzadNetCH/Clash/main/AzadNet.tx
+11:00:14 │ INFO    │ ✓  115  ←  https://raw.githubusercontent.com/MhdiTaheri/V2rayCollector_Py/ma
+11:00:14 │ INFO    │ ✓ 1739  ←  https://raw.githubusercontent.com/Leon406/SubCrawler/master/sub/s
+11:00:14 │ INFO    │ ✓ 1739  ←  https://raw.githubusercontent.com/Leon406/SubCrawler/main/sub/sha
+11:00:14 │ INFO    │ ✓ 1440  ←  https://raw.githubusercontent.com/Surfboardv2ray/TGParse/main/spl
+11:00:15 │ INFO    │ ✓   29  ←  https://raw.githubusercontent.com/mheidari98/.proxy/main/vmess
+11:00:15 │ INFO    │ ✓ 2599  ←  https://raw.githubusercontent.com/mheidari98/.proxy/main/vless
+11:00:15 │ INFO    │ ✓ 2055  ←  https://raw.githubusercontent.com/SoliSpirit/v2ray-configs/main/a
+11:00:15 │ INFO    │ ✓ 2627  ←  https://raw.githubusercontent.com/mheidari98/.proxy/main/all
+11:00:15 │ INFO    │ 📦 5219 unique | 69/800 active | ~3309 WS+443
+11:00:15 │ INFO    │ 🤖 Mode: STRICT | ping<600ms | probe<2000ms
+11:00:15 │ INFO    │ ⚡ Checking 5219 [⏳1071s | stop@50 | 150w]
+11:00:15 │ INFO    │   🔍 200 checked | 0 live | 2000/s | ⏳1071s | 🤖 v10|STRICT|Run#10|Pass:15.4%|Struct:63.1%|TCP:5.7%|Probe:9
+11:00:15 │ INFO    │   🔍 400 checked | 0 live | 2000/s | ⏳1071s | 🤖 v10|STRICT|Run#10|Pass:15.4%|Struct:62.8%|TCP:5.7%|Probe:9
+11:00:15 │ INFO    │   🔍 600 checked | 0 live | 2000/s | ⏳1071s | 🤖 v10|STRICT|Run#10|Pass:15.4%|Struct:62.8%|TCP:5.7%|Probe:9
+11:00:15 │ INFO    │   🔍 800 checked | 0 live | 2000/s | ⏳1070s | 🤖 v10|STRICT|Run#10|Pass:15.4%|Struct:62.8%|TCP:5.7%|Probe:9
+11:00:16 │ INFO    │   🔍 1000 checked | 0 live | 272/s | ⏳1070s | 🤖 v10|STRICT|Run#10|Pass:14.9%|Struct:61.2%|TCP:5.6%|Probe:9
+11:00:16 │ INFO    │   🔍 1200 checked | 0 live | 2000/s | ⏳1070s | 🤖 v10|STRICT|Run#10|Pass:14.9%|Struct:61.2%|TCP:5.6%|Probe:9
+11:00:16 │ INFO    │   🔍 1400 checked | 0 live | 2000/s | ⏳1070s | 🤖 v10|STRICT|Run#10|Pass:14.9%|Struct:61.2%|TCP:5.6%|Probe:9
+11:00:16 │ INFO    │   🔍 1600 checked | 0 live | 2000/s | ⏳1070s | 🤖 v10|STRICT|Run#10|Pass:14.9%|Struct:61.2%|TCP:5.6%|Probe:9
+11:00:17 │ INFO    │   🔍 1800 checked | 0 live | 280/s | ⏳1069s | 🤖 v10|STRICT|Run#10|Pass:14.9%|Struct:61.2%|TCP:5.6%|Probe:9
+11:00:17 │ INFO    │   🔍 2000 checked | 0 live | 2000/s | ⏳1069s | 🤖 v10|STRICT|Run#10|Pass:14.8%|Struct:61.1%|TCP:5.5%|Probe:9
+11:00:17 │ INFO    │   🔍 2200 checked | 0 live | 2000/s | ⏳1069s | 🤖 v10|STRICT|Run#10|Pass:14.4%|Struct:60.0%|TCP:5.4%|Probe:8
+11:00:17 │ INFO    │   🔍 2400 checked | 0 live | 2000/s | ⏳1069s | 🤖 v10|STRICT|Run#10|Pass:14.4%|Struct:60.0%|TCP:5.4%|Probe:8
+11:00:17 │ INFO    │   🔍 2600 checked | 0 live | 2000/s | ⏳1069s | 🤖 v10|STRICT|Run#10|Pass:14.4%|Struct:60.0%|TCP:5.4%|Probe:8
+11:00:17 │ INFO    │   🔍 2800 checked | 0 live | 2000/s | ⏳1069s | 🤖 v10|STRICT|Run#10|Pass:14.4%|Struct:60.0%|TCP:5.4%|Probe:8
+11:00:17 │ INFO    │   🔍 3000 checked | 0 live | 2000/s | ⏳1069s | 🤖 v10|STRICT|Run#10|Pass:14.4%|Struct:60.0%|TCP:5.4%|Probe:8
+11:00:17 │ INFO    │ ✅ 172.64.229.120|VLESS|1/12|2ms→(cf-detected)
+11:00:17 │ INFO    │ ✅ 104.21.75.235|VLESS|1/12|14ms→(cf-detected)
+11:00:17 │ INFO    │ ✅ 104.17.234.128|VLESS|1/12|3ms→(cf-detected)
+11:00:17 │ INFO    │ ✅ 104.18.0.144|VLESS|1/12|12ms→(cf-detected)
+11:00:17 │ INFO    │ ✅ 104.17.234.128|VLESS|1/12|5ms→(cf-detected)
+11:00:17 │ INFO    │ ✅ 172.64.152.23|VLESS|1/12|6ms→(cf-detected)
+11:00:17 │ INFO    │ ✅ 172.64.229.20|VLESS|1/12|3ms→(cf-detected)
+11:00:17 │ INFO    │ ✅ 104.21.18.41|VLESS|1/12|6ms→(cf-detected)
+11:00:17 │ INFO    │ ✅ 104.17.234.128|VLESS|1/12|4ms→(cf-detected)
+11:00:17 │ INFO    │ ✅ 162.159.12.151|VLESS|1/12|7ms→(cf-detected)
+11:00:17 │ INFO    │ ✅ 104.16.2.90|VLESS|1/12|12ms→(cf-detected)
+11:00:17 │ INFO    │ ✅ 172.64.155.209|VLESS|1/12|3ms→(cf-detected)
+11:00:17 │ INFO    │ ✅ 104.17.234.128|VLESS|1/12|7ms→(cf-detected)
+11:00:17 │ INFO    │ ✅ 104.17.234.128|VLESS|1/12|3ms→(cf-detected)
+11:00:17 │ INFO    │ ✅ 104.20.1.252|VLESS|1/12|3ms→(cf-detected)
+11:00:17 │ INFO    │ ✅ 104.21.14.158|VLESS|1/12|5ms→(cf-detected)
+11:00:17 │ INFO    │ ✅ 172.64.155.209|VLESS|1/12|4ms→(cf-detected)
+11:00:17 │ INFO    │ ✅ 172.66.132.196|VLESS|1/12|13ms→(cf-detected)
+11:00:17 │ INFO    │ ✅ 162.159.44.142|VLESS|1/12|31ms→(cf-detected)
+11:00:17 │ INFO    │ ✅ 104.17.234.128|VLESS|1/12|7ms→(cf-detected)
+11:00:17 │ INFO    │ ✅ 104.17.234.128|VLESS|1/12|5ms→(cf-detected)
+11:00:18 │ INFO    │ ✅ 172.64.145.38|VLESS|1/12|6ms→(cf-detected)
+11:00:18 │ INFO    │ ✅ 104.17.234.128|VLESS|1/12|5ms→(cf-detected)
+11:00:18 │ INFO    │ ✅ 104.20.0.31|VLESS|1/12|6ms→(cf-detected)
+11:00:18 │ INFO    │ ✅ 104.17.234.128|VLESS|1/12|5ms→(cf-detected)
+11:00:18 │ INFO    │ ✅ 162.159.152.4|VLESS|1/12|6ms→(cf-detected)
+11:00:18 │ INFO    │ ✅ 162.159.16.63|VLESS|1/12|5ms→(cf-detected)
+11:00:18 │ INFO    │ ✅ 104.17.234.128|VLESS|1/12|3ms→(cf-detected)
+11:00:18 │ INFO    │ ✅ 104.17.234.128|VLESS|1/12|4ms→(cf-detected)
+11:00:18 │ INFO    │   🔍 3200 checked | 0 live | 238/s | ⏳1068s | 🤖 v10|STRICT|Run#10|Pass:16.0%|Struct:60.0%|TCP:5.4%|Probe:8
+11:00:18 │ INFO    │   🔍 3400 checked | 0 live | 2000/s | ⏳1068s | 🤖 v10|STRICT|Run#10|Pass:16.0%|Struct:60.0%|TCP:5.4%|Probe:8
+11:00:18 │ INFO    │   🔍 3600 checked | 0 live | 2000/s | ⏳1068s | 🤖 v10|STRICT|Run#10|Pass:16.0%|Struct:60.0%|TCP:5.4%|Probe:8
+11:00:18 │ INFO    │   🔍 3800 checked | 0 live | 2000/s | ⏳1068s | 🤖 v10|STRICT|Run#10|Pass:16.0%|Struct:60.0%|TCP:5.4%|Probe:8
+11:00:18 │ INFO    │ ✅ 104.17.98.251|VLESS|1/12|12ms→(cf-detected)
+11:00:18 │ INFO    │ ✅ 172.67.193.88|VLESS|1/12|12ms→(cf-detected)
+11:00:18 │ INFO    │ ✅ 172.67.140.108|VLESS|1/12|6ms→(cf-detected)
+11:00:18 │ INFO    │ ✅ 104.19.141.3|VLESS|1/12|17ms→(cf-detected)
+11:00:18 │ INFO    │ ✅ 172.67.137.154|VLESS|1/12|6ms→(cf-detected)
+11:00:18 │ INFO    │ ✅ 172.67.215.39|VLESS|1/12|16ms→(cf-detected)
+11:00:18 │ INFO    │ ✅ 104.21.0.128|VLESS|1/12|9ms→(cf-detected)
+11:00:18 │ INFO    │ ✅ 104.21.44.213|VLESS|1/12|8ms→(cf-detected)
+11:00:18 │ INFO    │   📊 5 live | ⏳1068s | AI#10 435/13871(3%) top:nnet(3),viber(1) disc:453
+11:00:18 │ INFO    │   🔍 4000 checked | 6 live | 2000/s | ⏳1068s | 🤖 v10|STRICT|Run#10|Pass:16.4%|Struct:60.1%|TCP:5.5%|Probe:8
+11:00:18 │ INFO    │   🔍 4200 checked | 8 live | 2000/s | ⏳1068s | 🤖 v10|STRICT|Run#10|Pass:16.2%|Struct:60.5%|TCP:5.4%|Probe:8
+11:00:18 │ INFO    │   📊 10 live | ⏳1068s | AI#10 435/13875(3%) top:nnet(3),viber(1) disc:453
+11:00:18 │ INFO    │   🔍 4400 checked | 11 live | 2000/s | ⏳1068s | 🤖 v10|STRICT|Run#10|Pass:15.7%|Struct:61.8%|TCP:5.2%|Probe:8
+11:00:18 │ INFO    │ ✅ 104.21.23.210|VLESS|1/12|6ms→(cf-detected)
+11:00:18 │ INFO    │   🔍 4600 checked | 13 live | 2000/s | ⏳1068s | 🤖 v10|STRICT|Run#10|Pass:15.8%|Struct:61.8%|TCP:5.2%|Probe:8
+11:00:18 │ INFO    │   📊 15 live | ⏳1068s | AI#10 435/13887(3%) top:nnet(3),viber(1) disc:453
+11:00:18 │ INFO    │   🔍 4800 checked | 15 live | 2000/s | ⏳1068s | 🤖 v10|STRICT|Run#10|Pass:15.8%|Struct:61.8%|TCP:5.2%|Probe:8
+11:00:18 │ INFO    │ ✅ chat.openai.com|VLESS|1/12|34ms→(cf-detected)
+11:00:18 │ INFO    │   🔍 5000 checked | 17 live | 2000/s | ⏳1068s | 🤖 v10|STRICT|Run#10|Pass:15.8%|Struct:61.8%|TCP:5.3%|Probe:8
+11:00:18 │ INFO    │   📊 20 live | ⏳1068s | AI#10 435/13888(3%) top:nnet(3),viber(1) disc:453
+11:00:18 │ INFO    │   📊 25 live | ⏳1068s | AI#10 435/13888(3%) top:nnet(3),viber(1) disc:453
+11:00:18 │ INFO    │   📊 30 live | ⏳1068s | AI#10 435/13888(3%) top:nnet(3),viber(1) disc:453
+11:00:18 │ INFO    │   📊 35 live | ⏳1068s | AI#10 435/13888(3%) top:nnet(3),viber(1) disc:453
+11:00:18 │ INFO    │ ✅ 172.67.141.105|VLESS|1/12|8ms→(cf-detected)
+11:00:18 │ INFO    │   📊 40 live | ⏳1068s | AI#10 435/13889(3%) top:nnet(3),viber(1) disc:453
+11:00:18 │ INFO    │ ✅ 104.21.23.22|VLESS|1/12|4ms→(cf-detected)
+11:00:18 │ INFO    │ ✅ digitalocean.com|VLESS|1/12|93ms→(cf-detected)
+11:00:18 │ INFO    │ ✅ 104.21.80.1|VLESS|1/12|5ms→(cf-detected)
+11:00:18 │ INFO    │ ✅ 172.67.74.19|VLESS|1/12|13ms→(cf-detected)
+11:00:18 │ INFO    │ ✅ 104.16.144.63|VLESS|1/12|7ms→(cf-detected)
+11:00:18 │ INFO    │ ✅ 172.67.160.139|VLESS|1/12|17ms→(cf-detected)
+11:00:18 │ INFO    │   📊 45 live | ⏳1067s | AI#10 435/13899(3%) top:nnet(3),viber(1) disc:453
+11:00:18 │ INFO    │ ✅ 188.114.96.0|VLESS|1/12|11ms→(cf-detected)
+11:00:18 │ INFO    │ ✅ 104.21.34.170|VLESS|1/12|5ms→(cf-detected)
+11:00:18 │ INFO    │ ✅ 104.17.97.6|VLESS|1/12|7ms→(cf-detected)
+11:00:18 │ INFO    │ ✅ 172.67.204.84|VLESS|1/12|15ms→(cf-detected)
+11:00:18 │ INFO    │   📊 50 live | ⏳1067s | AI#10 435/13916(3%) top:nnet(3),viber(1) disc:453
+11:00:18 │ INFO    │ 🛑 Stop@50
+11:00:18 │ INFO    │ ✅ masterserver1-masterserver1-masterserver1-masterserver1.fijixi5394.workers.dev|VLESS|1/12|27ms→(cf-detected)
+11:00:18 │ INFO    │ ✅ 104.21.22.135|VLESS|1/12|5ms→(cf-detected)
+11:00:18 │ INFO    │ ✅ 104.16.147.32|VLESS|1/12|5ms→(cf-detected)
+11:00:18 │ INFO    │ ✅ 188.114.97.0|VLESS|1/12|12ms→(cf-detected)
+11:00:18 │ INFO    │ ✅ 104.21.43.168|VLESS|1/12|26ms→(cf-detected)
+11:00:18 │ INFO    │ ✅ 172.67.163.76|VLESS|1/12|7ms→(cf-detected)
+11:00:18 │ INFO    │ ✅ 104.26.13.101|VLESS|1/12|13ms→(cf-detected)
+11:00:19 │ INFO    │ ✅ masterserver1-masterserver1-masterserver1-masterserver1.balej78191.workers.dev|VLESS|1/12|36ms→(cf-detected)
+11:00:19 │ INFO    │ ✅ usa.visa.com|VLESS|1/12|48ms→(cf-detected)
+11:00:19 │ INFO    │ ✅ 104.26.0.221|VLESS|1/12|11ms→(cf-detected)
+11:00:19 │ INFO    │ ✅ mybb.com|VLESS|1/12|92ms→(cf-detected)
+11:00:19 │ INFO    │ ✅ codepen.io|VLESS|1/12|173ms→(cf-detected)
+11:00:19 │ INFO    │   🔍 5200 checked | 50 live | 186/s | ⏳1067s | 🤖 v10|STRICT|Run#10|Pass:17.1%|Struct:61.8%|TCP:5.3%|Probe:8
+11:00:19 │ INFO    │ ✅ 162.159.45.232|VLESS|1/12|28ms→(cf-detected)
+11:00:19 │ INFO    │ ✅ medium.com|VLESS|1/12|9ms→(cf-detected)
+11:00:19 │ INFO    │ ✅ udemy.com|VLESS|1/12|93ms→(cf-detected)
+11:00:19 │ INFO    │ ✅ mianfeijiedianscp.buzz|VLESS|1/12|35ms→(cf-detected)
+11:00:20 │ INFO    │ ✅ nodejs.org|VLESS|1/12|13ms→(cf-detected)
+11:00:20 │ INFO    │ ✅ termux.net|VLESS|1/12|15ms→(cf-detected)
+11:00:21 │ INFO    │ ✅ 1password.com|VLESS|1/12|41ms→(cf-detected)
+11:00:38 │ INFO    │ ✅ 50 live | 5219 checked | 0 errors
+   🤖 v10|STRICT|Run#10|Pass:17.4%|Struct:61.8%|TCP:5.3%|Probe:9.5%|Total:324/1859
+11:00:38 │ INFO    │ 🔍 Geo (50) ...
+11:00:38 │ INFO    │ 
+📊 Top 10:
+11:00:38 │ INFO    │   #   Type  Ping   Probe  Compat  CC   Host
+11:00:38 │ INFO    │    1. ⚡🚀🔒    3ms    3ms  1/12  CA   104.20.1.252
+11:00:38 │ INFO    │    2. ⚡🚀🔒   13ms   13ms  1/12  CA   172.66.132.196
+11:00:38 │ INFO    │    3. ⚡🚀🔒   34ms   34ms  1/12  CA   chat.openai.com
+11:00:38 │ INFO    │    4. ⚡🚀🔒    7ms    7ms  1/12  CA   104.16.144.63
+11:00:38 │ INFO    │    5. ⚡🚀🔒   11ms   11ms  1/12  CA   188.114.96.0
+11:00:38 │ INFO    │    6. ⚡🚀      3ms    3ms  1/12  CA   172.64.155.209
+11:00:38 │ INFO    │    7. ⚡🚀      3ms    3ms  1/12  CA   172.64.229.20
+11:00:38 │ INFO    │    8. ⚡🚀      6ms    6ms  1/12  CA   104.21.18.41
+11:00:38 │ INFO    │    9. ⚡🚀      2ms    2ms  1/12  CA   172.64.229.120
+11:00:38 │ INFO    │   10. ⚡🚀      4ms    4ms  1/12  CA   172.64.155.209
+11:00:38 │ INFO    │ ✅ TG sent OK: 104.20.1.252
+11:00:38 │ INFO    │ 📨 1/5: 104.20.1.252→(cf-detected)
+11:00:41 │ INFO    │ ✅ TG sent OK: 172.66.132.196
+11:00:41 │ INFO    │ 📨 2/5: 172.66.132.196→(cf-detected)
+11:00:43 │ INFO    │ ✅ TG sent OK: chat.openai.com
+11:00:43 │ INFO    │ 📨 3/5: chat.openai.com→(cf-detected)
+11:00:46 │ INFO    │ ✅ TG sent OK: 104.16.144.63
+11:00:46 │ INFO    │ 📨 4/5: 104.16.144.63→(cf-detected)
+11:00:48 │ INFO    │ ✅ TG sent OK: 188.114.96.0
+11:00:48 │ INFO    │ 📨 5/5: 188.114.96.0→(cf-detected)
+11:00:50 │ INFO    │ 💾 Sub: 50 → sub_link.txt
+11:00:50 │ INFO    │ 💾 Cache: 50 saved
+11:00:50 │ INFO    │ 
+🏁 43s | 50 fresh | 0 cached | 5 posted | +0 discovered
+11:00:50 │ INFO    │ 🤖 v10|STRICT|Run#11|Pass:17.4%|Struct:61.8%|TCP:5.3%|Probe:9.5%|Total:324/1859
+11:00:50 │ INFO    │ AI#11 435/14079(3%) top:nnet(3),viber(1) disc:453
