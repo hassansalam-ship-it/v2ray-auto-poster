@@ -50198,3 +50198,160 @@
 🏁 37s | 50 fresh | 4 cached | 5 posted | +0 discovered
 09:02:53 │ INFO    │ 🤖 v10|STRICT|Run#9|Pass:16.4%|Struct:62.1%|TCP:5.8%|Probe:10.4%|Total:224/1363
 09:02:53 │ INFO    │ AI#9 427/12340(3%) top:viber(1),whatsapp(1) disc:453
+10:55:40 │ INFO    │ ╔══════════════════════════════════════════════════════╗
+10:55:40 │ INFO    │ ║  🤖 V2RAY ULTIMATE HUNTER v10 — VIRUS MODE          ║
+10:55:40 │ INFO    │ ║  983  sources | 18m deadline | STRICT     mode       ║
+10:55:40 │ INFO    │ ╚══════════════════════════════════════════════════════╝
+10:55:40 │ INFO    │ 🤖 v10|STRICT|Run#9|Pass:16.4%|Struct:62.1%|TCP:5.8%|Probe:10.4%|Total:224/1363
+10:55:40 │ INFO    │ 🧠 AI#9 427/12340(3%) top:viber(1),whatsapp(1) disc:453 | good:169 | sni=auto
+10:55:40 │ INFO    │ ✅ BOT_TOKEN: ***SEEA
+10:55:40 │ INFO    │ 🦠 Evolution scan ...
+10:55:43 │ INFO    │ ♻️  Cache: 54/54
+10:55:43 │ INFO    │ ♻️  Re-verifying 54 cached ...
+10:55:44 │ INFO    │ ♻️  5/54 verified
+10:55:44 │ INFO    │ 🌐 Fetching 800/1431 [150w | 0 dead | +453 new]
+10:55:45 │ INFO    │ ✓    9  ←  https://raw.githubusercontent.com/ermaozi01/free_clash_vpn/main/s
+10:55:45 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+10:55:46 │ INFO    │ ✓   28  ←  https://raw.githubusercontent.com/resasanian/Mirza/main/best
+10:55:46 │ INFO    │ ✓    2  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+10:55:46 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+10:55:46 │ INFO    │ ✓    5  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+10:55:46 │ INFO    │ ✓    1  ←  https://raw.githubusercontent.com/resasanian/Mirza/main/vless
+10:55:46 │ INFO    │ ✓    4  ←  https://raw.githubusercontent.com/shabane/kamaji/master/hub/vmess
+10:55:46 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+10:55:46 │ INFO    │ ✓    1  ←  https://raw.githubusercontent.com/awesome-vpn/awesome-vpn/master/
+10:55:46 │ INFO    │ ✓  189  ←  https://raw.githubusercontent.com/4n0nymou3/multi-proxy-config-fe
+10:55:46 │ INFO    │ ✓   37  ←  https://raw.githubusercontent.com/resasanian/Mirza/main/sub
+10:55:46 │ INFO    │ ✓    2  ←  https://t.me/s/v2ray_free_conf
+10:55:46 │ INFO    │ ✓    1  ←  https://raw.githubusercontent.com/Everyday-VPN/Everyday-VPN/main/
+10:55:46 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+10:55:46 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+10:55:46 │ INFO    │ ✓    1  ←  https://t.me/s/proxyiran
+10:55:46 │ INFO    │ ✓    8  ←  https://raw.githubusercontent.com/adiwzx/freenode/main/adispeed.t
+10:55:46 │ INFO    │ ✓   22  ←  https://raw.githubusercontent.com/ermaozi/get_subscribe/main/subs
+10:55:46 │ INFO    │ ✓    4  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+10:55:46 │ INFO    │ ✓   33  ←  https://raw.githubusercontent.com/roosterkid/openproxylist/main/V
+10:55:46 │ INFO    │ ✓    4  ←  https://t.me/s/frev2rayng
+10:55:47 │ INFO    │ ✓    4  ←  https://t.me/s/FreeVpnVless
+10:55:47 │ INFO    │ ✓    8  ←  https://t.me/s/v2ray_collector
+10:55:47 │ INFO    │ ✓    1  ←  https://t.me/s/iP_CF
+10:55:47 │ INFO    │ ✓    7  ←  https://t.me/s/v2ray_configs_pool
+10:55:47 │ INFO    │ ✓    2  ←  https://t.me/s/gcp_v2ray
+10:55:47 │ INFO    │ ✓  271  ←  https://raw.githubusercontent.com/shabane/kamaji/master/hub/vless
+10:55:47 │ INFO    │ ✓    1  ←  https://t.me/s/V2rayFree
+10:55:47 │ INFO    │ ✓  145  ←  https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/main/s
+10:55:47 │ INFO    │ ✓    6  ←  https://t.me/s/vpnfail_v2ray
+10:55:47 │ INFO    │ ✓    2  ←  https://t.me/s/free_vpn_v2ray
+10:55:47 │ INFO    │ ✓    3  ←  https://t.me/s/CfV2ray
+10:55:47 │ INFO    │ ✓    5  ←  https://t.me/s/V2ray_Alpha
+10:55:47 │ INFO    │ ✓  144  ←  https://raw.githubusercontent.com/ndsphonemy/proxy-sub/main/speed
+10:55:47 │ INFO    │ ✓   51  ←  https://t.me/s/v2rayconfigs
+10:55:47 │ INFO    │ ✓   34  ←  https://raw.githubusercontent.com/youfoundamin/V2rayCollector/mai
+10:55:48 │ INFO    │ ✓  115  ←  https://raw.githubusercontent.com/MhdiTaheri/V2rayCollector_Py/ma
+10:55:48 │ INFO    │ ✓  660  ←  https://raw.githubusercontent.com/youfoundamin/V2rayCollector/mai
+10:55:49 │ INFO    │ ✓  319  ←  https://raw.githubusercontent.com/ndsphonemy/proxy-sub/main/defau
+10:55:49 │ INFO    │ ✓ 1440  ←  https://raw.githubusercontent.com/Surfboardv2ray/TGParse/main/spl
+10:55:49 │ INFO    │ ✓  273  ←  https://raw.githubusercontent.com/shabane/kamaji/master/hub/merge
+10:55:49 │ INFO    │ ✓   12  ←  https://raw.githubusercontent.com/Surfboardv2ray/TGParse/main/spl
+10:55:49 │ INFO    │ ✓  145  ←  https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/main/s
+10:55:49 │ INFO    │ ✓ 1739  ←  https://raw.githubusercontent.com/Leon406/SubCrawler/master/sub/s
+10:55:50 │ INFO    │ ✓   29  ←  https://raw.githubusercontent.com/mheidari98/.proxy/main/vmess
+10:55:50 │ INFO    │ ✓ 2599  ←  https://raw.githubusercontent.com/mheidari98/.proxy/main/vless
+10:55:50 │ INFO    │ ✓ 2055  ←  https://raw.githubusercontent.com/SoliSpirit/v2ray-configs/main/a
+10:55:50 │ INFO    │ ✓ 2627  ←  https://raw.githubusercontent.com/mheidari98/.proxy/main/all
+10:55:50 │ INFO    │ 📦 4994 unique | 49/800 active | ~3185 WS+443
+10:55:50 │ INFO    │ 🤖 Mode: STRICT | ping<600ms | probe<2000ms
+10:55:50 │ INFO    │ ⚡ Checking 4994 [⏳1069s | stop@50 | 150w]
+10:55:50 │ INFO    │   🔍 200 checked | 0 live | 2000/s | ⏳1069s | 🤖 v10|STRICT|Run#9|Pass:16.4%|Struct:62.0%|TCP:5.8%|Probe:10
+10:55:50 │ INFO    │   🔍 400 checked | 0 live | 2000/s | ⏳1069s | 🤖 v10|STRICT|Run#9|Pass:16.3%|Struct:61.7%|TCP:5.8%|Probe:10
+10:55:50 │ INFO    │   🔍 600 checked | 0 live | 2000/s | ⏳1069s | 🤖 v10|STRICT|Run#9|Pass:16.3%|Struct:61.7%|TCP:5.8%|Probe:10
+10:55:50 │ INFO    │   🔍 800 checked | 0 live | 2000/s | ⏳1069s | 🤖 v10|STRICT|Run#9|Pass:16.3%|Struct:61.5%|TCP:5.7%|Probe:10
+10:55:50 │ INFO    │   🔍 1000 checked | 0 live | 2000/s | ⏳1069s | 🤖 v10|STRICT|Run#9|Pass:16.2%|Struct:61.3%|TCP:5.7%|Probe:10
+10:55:51 │ INFO    │   🔍 1200 checked | 0 live | 1615/s | ⏳1069s | 🤖 v10|STRICT|Run#9|Pass:16.2%|Struct:61.3%|TCP:5.7%|Probe:10
+10:55:51 │ INFO    │   🔍 1400 checked | 0 live | 1144/s | ⏳1069s | 🤖 v10|STRICT|Run#9|Pass:16.2%|Struct:61.4%|TCP:5.7%|Probe:10
+10:55:51 │ INFO    │   🔍 1600 checked | 0 live | 2000/s | ⏳1069s | 🤖 v10|STRICT|Run#9|Pass:16.1%|Struct:61.3%|TCP:5.7%|Probe:10
+10:55:51 │ INFO    │   🔍 1800 checked | 0 live | 2000/s | ⏳1069s | 🤖 v10|STRICT|Run#9|Pass:16.1%|Struct:61.3%|TCP:5.7%|Probe:10
+10:55:51 │ INFO    │   🔍 2000 checked | 0 live | 2000/s | ⏳1069s | 🤖 v10|STRICT|Run#9|Pass:15.9%|Struct:60.8%|TCP:5.6%|Probe:10
+10:55:51 │ INFO    │   🔍 2200 checked | 0 live | 2000/s | ⏳1069s | 🤖 v10|STRICT|Run#9|Pass:15.6%|Struct:60.3%|TCP:5.5%|Probe:9.
+10:55:51 │ INFO    │   🔍 2400 checked | 0 live | 2000/s | ⏳1069s | 🤖 v10|STRICT|Run#9|Pass:15.6%|Struct:60.1%|TCP:5.5%|Probe:9.
+10:55:51 │ INFO    │   🔍 2600 checked | 0 live | 2000/s | ⏳1069s | 🤖 v10|STRICT|Run#9|Pass:15.6%|Struct:60.1%|TCP:5.5%|Probe:9.
+10:55:51 │ INFO    │   🔍 2800 checked | 0 live | 1619/s | ⏳1068s | 🤖 v10|STRICT|Run#9|Pass:15.6%|Struct:60.0%|TCP:5.5%|Probe:9.
+10:55:51 │ INFO    │   🔍 3000 checked | 0 live | 2000/s | ⏳1068s | 🤖 v10|STRICT|Run#9|Pass:15.6%|Struct:60.0%|TCP:5.5%|Probe:9.
+10:55:51 │ INFO    │   🔍 3200 checked | 0 live | 2000/s | ⏳1068s | 🤖 v10|STRICT|Run#9|Pass:15.6%|Struct:60.0%|TCP:5.5%|Probe:9.
+10:55:51 │ INFO    │   🔍 3400 checked | 0 live | 2000/s | ⏳1068s | 🤖 v10|STRICT|Run#9|Pass:15.5%|Struct:60.0%|TCP:5.5%|Probe:9.
+10:55:51 │ INFO    │   🔍 3600 checked | 0 live | 2000/s | ⏳1068s | 🤖 v10|STRICT|Run#9|Pass:15.5%|Struct:60.1%|TCP:5.5%|Probe:9.
+10:55:51 │ INFO    │   🔍 3800 checked | 0 live | 2000/s | ⏳1068s | 🤖 v10|STRICT|Run#9|Pass:15.4%|Struct:60.2%|TCP:5.5%|Probe:9.
+10:55:51 │ INFO    │   🔍 4000 checked | 0 live | 2000/s | ⏳1068s | 🤖 v10|STRICT|Run#9|Pass:15.2%|Struct:60.6%|TCP:5.6%|Probe:9.
+10:55:51 │ INFO    │   🔍 4200 checked | 0 live | 2000/s | ⏳1068s | 🤖 v10|STRICT|Run#9|Pass:14.8%|Struct:61.5%|TCP:5.6%|Probe:9.
+10:55:51 │ INFO    │   🔍 4400 checked | 0 live | 2000/s | ⏳1068s | 🤖 v10|STRICT|Run#9|Pass:14.2%|Struct:62.7%|TCP:5.4%|Probe:9.
+10:55:51 │ INFO    │   🔍 4600 checked | 0 live | 2000/s | ⏳1068s | 🤖 v10|STRICT|Run#9|Pass:13.7%|Struct:63.8%|TCP:5.2%|Probe:8.
+10:55:51 │ INFO    │   🔍 4800 checked | 0 live | 2000/s | ⏳1068s | 🤖 v10|STRICT|Run#9|Pass:13.7%|Struct:63.8%|TCP:5.3%|Probe:8.
+10:55:52 │ INFO    │ ✅ 172.64.155.209|VLESS|1/12|6ms→(cf-detected)
+10:55:52 │ INFO    │ ✅ 172.64.155.209|VLESS|1/12|3ms→(cf-detected)
+10:55:52 │ INFO    │ ✅ 162.159.152.4|VLESS|1/12|3ms→(cf-detected)
+10:55:52 │ INFO    │ ✅ 104.21.14.158|VLESS|1/12|3ms→(cf-detected)
+10:55:52 │ INFO    │ ✅ 172.64.229.20|VLESS|1/12|2ms→(cf-detected)
+10:55:52 │ INFO    │   📊 5 live | ⏳1068s | AI#9 432/12691(3%) top:viber(1),whatsapp(1) disc:453
+10:55:52 │ INFO    │ ✅ 172.64.229.85|VLESS|1/12|7ms→(cf-detected)
+10:55:52 │ INFO    │ ✅ 172.64.229.20|VLESS|1/12|3ms→(cf-detected)
+10:55:52 │ INFO    │ ✅ 172.64.229.165|VLESS|1/12|10ms→(cf-detected)
+10:55:52 │ INFO    │ ✅ 172.66.44.75|VLESS|1/12|2ms→(cf-detected)
+10:55:52 │ INFO    │ ✅ 172.64.156.0|VLESS|1/12|2ms→(cf-detected)
+10:55:52 │ INFO    │   📊 10 live | ⏳1067s | AI#9 433/12698(3%) top:viber(1),whatsapp(1) disc:453
+10:55:52 │ INFO    │ ✅ 104.26.15.85|VLESS|1/12|2ms→(cf-detected)
+10:55:52 │ INFO    │ ✅ 172.64.147.223|VLESS|1/12|18ms→(cf-detected)
+10:55:52 │ INFO    │ ✅ 104.17.155.101|VLESS|1/12|2ms→(cf-detected)
+10:55:52 │ INFO    │ ✅ 172.64.229.120|VLESS|1/12|7ms→(cf-detected)
+10:55:52 │ INFO    │ ✅ 104.20.1.252|VLESS|1/12|6ms→(cf-detected)
+10:55:52 │ INFO    │   📊 15 live | ⏳1067s | AI#9 433/12705(3%) top:viber(1),whatsapp(1) disc:453
+10:55:52 │ INFO    │ ✅ vpn.nnet.online|VLESS|1/12|13ms→(cf-detected)
+10:55:52 │ INFO    │ ✅ 172.64.229.120|VLESS|1/12|4ms→(cf-detected)
+10:55:52 │ INFO    │ ✅ vpn.nnet.online|VLESS|1/12|4ms→(cf-detected)
+10:55:52 │ INFO    │ ✅ 162.159.7.2|VLESS|1/12|2ms→(cf-detected)
+10:55:53 │ INFO    │ ✅ masterserver1.ceyisol868.workers.dev|VLESS|1/12|23ms→(cf-detected)
+10:55:53 │ INFO    │   📊 20 live | ⏳1067s | AI#9 435/12733(3%) top:nnet(3),viber(1) disc:453
+10:55:53 │ INFO    │ ✅ 162.159.24.111|VLESS|1/12|2ms→(cf-detected)
+10:55:53 │ INFO    │ ✅ 162.159.38.78|VLESS|1/12|27ms→(cf-detected)
+10:55:53 │ INFO    │ ✅ 188.114.98.2|VLESS|1/12|2ms→(cf-detected)
+10:55:53 │ INFO    │ ✅ 188.114.98.2|VLESS|1/12|3ms→(cf-detected)
+10:55:53 │ INFO    │ ✅ 162.159.44.142|VLESS|1/12|27ms→(cf-detected)
+10:55:53 │ INFO    │   📊 25 live | ⏳1066s | AI#9 435/12802(3%) top:nnet(3),viber(1) disc:453
+10:55:53 │ INFO    │ ✅ 162.159.135.42|VLESS|1/12|2ms→(cf-detected)
+10:55:53 │ INFO    │ ✅ CHAtgPT.coM|VLESS|1/12|5ms→(cf-detected)
+10:55:54 │ INFO    │ ✅ cf.008500.xyz|VLESS|1/12|75ms→(cf-detected)
+10:55:54 │ INFO    │ ✅ www.speedtest.net|VLESS|1/12|120ms→(cf-detected)
+10:55:55 │ INFO    │ ✅ mcioo.frss.ir|VLESS|1/12|173ms→(cf-detected)
+10:55:55 │ INFO    │   📊 30 live | ⏳1065s | AI#9 435/12890(3%) top:nnet(3),viber(1) disc:453
+10:55:56 │ INFO    │ ✅ mpc.mobayandeh.top|VLESS|1/12|223ms→(cf-detected)
+10:56:01 │ INFO    │ ✅ 31 live | 4994 checked | 0 errors
+   🤖 v10|STRICT|Run#9|Pass:15.6%|Struct:63.8%|TCP:5.8%|Probe:9.5%|Total:255/1634
+10:56:01 │ INFO    │ 🔍 Geo (31) ...
+10:56:01 │ INFO    │ 
+📊 Top 10:
+10:56:01 │ INFO    │   #   Type  Ping   Probe  Compat  CC   Host
+10:56:01 │ INFO    │    1. ⚡🚀🔒    6ms    6ms  1/12  CA   104.20.1.252
+10:56:01 │ INFO    │    2. ⚡🚀🔒   13ms   13ms  1/12  CA   vpn.nnet.online
+10:56:01 │ INFO    │    3. ⚡🚀🔒    4ms    4ms  1/12  CA   vpn.nnet.online
+10:56:01 │ INFO    │    4. ⚡🚀🔒   23ms   23ms  1/12  CA   masterserver1.ceyisol868.worke
+10:56:01 │ INFO    │    5. ⚡🚀🔒    2ms    2ms  1/12  CA   188.114.98.2
+10:56:01 │ INFO    │    6. ⚡🚀🔒    3ms    3ms  1/12  CA   188.114.98.2
+10:56:01 │ INFO    │    7. ⚡🚀🔒    2ms    2ms  1/12  CA   162.159.135.42
+10:56:01 │ INFO    │    8. ⚡🚀🔒    5ms    5ms  1/12  CA   CHAtgPT.coM
+10:56:01 │ INFO    │    9. ⚡🚀🔒   75ms   75ms  1/12  US   cf.008500.xyz
+10:56:01 │ INFO    │   10. ⚡🚀🔒   15ms   11ms  1/12  CA   104.17.74.206
+10:56:01 │ INFO    │ ✅ TG sent OK: 104.20.1.252
+10:56:01 │ INFO    │ 📨 1/5: 104.20.1.252→(cf-detected)
+10:56:04 │ INFO    │ ✅ TG sent OK: vpn.nnet.online
+10:56:04 │ INFO    │ 📨 2/5: vpn.nnet.online→(cf-detected)
+10:56:06 │ INFO    │ ✅ TG sent OK: vpn.nnet.online
+10:56:06 │ INFO    │ 📨 3/5: vpn.nnet.online→(cf-detected)
+10:56:08 │ INFO    │ ✅ TG sent OK: masterserver1.ceyisol868.workers.dev
+10:56:08 │ INFO    │ 📨 4/5: masterserver1.ceyisol868.workers.dev→(cf-detected)
+10:56:11 │ INFO    │ ✅ TG sent OK: 188.114.98.2
+10:56:11 │ INFO    │ 📨 5/5: 188.114.98.2→(cf-detected)
+10:56:13 │ INFO    │ 💾 Sub: 36 → sub_link.txt
+10:56:13 │ INFO    │ 💾 Cache: 36 saved
+10:56:13 │ INFO    │ 
+🏁 32s | 31 fresh | 5 cached | 5 posted | +0 discovered
+10:56:13 │ INFO    │ 🤖 v10|STRICT|Run#10|Pass:15.6%|Struct:63.8%|TCP:5.8%|Probe:9.5%|Total:255/1634
+10:56:13 │ INFO    │ AI#10 435/12896(3%) top:nnet(3),viber(1) disc:453
