@@ -1,0 +1,127 @@
+name: V2Ray AI Hunter v12
+
+on:
+  schedule:
+    - cron: '0 */2 * * *'
+  workflow_dispatch:
+    inputs:
+      sni:
+        description: 'Custom Bug Host SNI'
+        required: false
+        default: ''
+      dry_run:
+        description: 'Dry Run (no Telegram post)'
+        required: false
+        default: 'false'
+        type: choice
+        options: ['false', 'true']
+      force_fresh:
+        description: 'Delete cache and rescan'
+        required: false
+        default: 'false'
+        type: choice
+        options: ['false', 'true']
+      use_xray:
+        description: 'Use xray binary for real probe'
+        required: false
+        default: 'true'
+        type: choice
+        options: ['true', 'false']
+
+jobs:
+  hunt:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: v12-pip-v1
+
+      - name: Install Python deps
+        run: pip install requests urllib3 pysocks --quiet
+
+      - name: Download xray binary
+        if: ${{ github.event.inputs.use_xray != 'false' }}
+        run: |
+          mkdir -p /tmp/xray
+          echo "Downloading xray binary..."
+          XRAY_URL="https://github.com/XTLS/Xray-core/releases/latest/download/Xray-linux-64.zip"
+          curl -L "$XRAY_URL" -o /tmp/xray.zip --retry 3 --retry-delay 2 -s
+          if [ $? -eq 0 ] && [ -f /tmp/xray.zip ]; then
+            unzip -q /tmp/xray.zip -d /tmp/xray/
+            chmod +x /tmp/xray/xray
+            echo "XRAY_PATH=/tmp/xray/xray" >> $GITHUB_ENV
+            echo "xray version: $(/tmp/xray/xray version | head -1)"
+          else
+            echo "xray download failed — using WS probe fallback"
+          fi
+
+      - name: Cache check
+        run: |
+          FORCE="${{ github.event.inputs.force_fresh }}"
+          if [ "$FORCE" = "true" ]; then
+            rm -f working_cache.json && echo "Cache deleted"
+          elif [ -f working_cache.json ]; then
+            VER=$(python3 -c "import json; d=json.load(open('working_cache.json')); print(d[0].get('ver','old') if d else 'empty')" 2>/dev/null || echo "error")
+            if [ "$VER" != "v12-maximum" ]; then
+              rm -f working_cache.json && echo "Old cache ($VER) removed"
+            fi
+          fi
+
+      - name: Verify script
+        run: |
+          if [ -f v2ray_hunter.py ]; then
+            echo "Script found: $(wc -l < v2ray_hunter.py) lines"
+            python3 -c "import ast; ast.parse(open('v2ray_hunter.py').read()); print('Syntax OK')"
+          else
+            echo "ERROR: v2ray_hunter.py NOT FOUND"
+            ls -la
+            exit 1
+          fi
+
+      - name: Run Hunter v12
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          CUSTOM_SNI: ${{ github.event.inputs.sni || '' }}
+        run: |
+          ARGS=""
+          DRY="${{ github.event.inputs.dry_run }}"
+          SNI="${{ github.event.inputs.sni }}"
+          [ "$DRY" = "true" ] && ARGS="--dry-run"
+          [ -n "$SNI" ] && ARGS="$ARGS --sni $SNI"
+          echo "=== V2Ray AI Hunter v12 — MAXIMUM POWER ==="
+          echo "xray: ${XRAY_PATH:-not available}"
+          timeout 20m python3 v2ray_hunter.py $ARGS
+          EXIT=$?
+          [ $EXIT -eq 124 ] && echo "External timeout — AI internal deadline handled"
+          exit 0
+
+      - name: Commit and Push
+        run: |
+          git config user.email "v12@ai.bot"
+          git config user.name "V2Ray AI v12"
+          git add sub_link.txt ai_memory.json working_cache.json v2ray_hunt.log 2>/dev/null || true
+          if git diff --cached --quiet; then echo "Nothing to commit"; exit 0; fi
+          STATS=$(python3 -c "import json; d=json.load(open('ai_memory.json')); print('R'+str(d.get('runs',0))+'|P'+str(d.get('total_passed',0)))" 2>/dev/null || echo "v12")
+          git commit -m "v12|$(date -u +'%H:%M %d/%m')|$STATS"
+          for i in 1 2 3; do
+            git pull --rebase -X ours origin HEAD 2>/dev/null || true
+            git push && break
+            sleep $((i*3))
+          done
