@@ -49352,3 +49352,78 @@
 00:00:46 │ INFO    │ ║  974  sources | 20m deadline | CF WS+TLS+443       ║
 00:00:46 │ INFO    │ ╚══════════════════════════════════════════════════════╝
 00:00:46 │ INFO    │ 🤖 AI: No data yet
+02:53:09 │ INFO    │ ╔══════════════════════════════════════════════════════╗
+02:53:09 │ INFO    │ ║  🤖 V2RAY ULTIMATE HUNTER v10 — VIRUS MODE          ║
+02:53:09 │ INFO    │ ║  974  sources | 18m deadline | AGGRESSIVE mode       ║
+02:53:09 │ INFO    │ ╚══════════════════════════════════════════════════════╝
+02:53:09 │ INFO    │ 🤖 v10|AGGRESSIVE|Run#4|Pass:0.0%|Struct:0.0%|TCP:0.0%|Probe:0.0%|Total:0/0
+02:53:09 │ INFO    │ 🧠 AI#4 386/7656(5%) top:— disc:0 | good:47 | sni=auto
+02:53:09 │ INFO    │ 🦠 Evolution scan starting...
+02:53:12 │ INFO    │ 🦠 Evolution: +426 new sources discovered!
+02:53:12 │ INFO    │ 🌐 Fetching 800/1395 [150w | 0 dead | +426 new]
+02:53:14 │ INFO    │ ✓    4  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+02:53:14 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+02:53:14 │ INFO    │ ✓  319  ←  https://raw.githubusercontent.com/ndsphonemy/proxy-sub/main/defau
+02:53:14 │ INFO    │ ✓   37  ←  https://raw.githubusercontent.com/resasanian/Mirza/main/sub
+02:53:14 │ INFO    │ ✓  145  ←  https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/main/s
+02:53:14 │ INFO    │ ✓    1  ←  https://raw.githubusercontent.com/awesome-vpn/awesome-vpn/master/
+02:53:14 │ INFO    │ ✓   28  ←  https://raw.githubusercontent.com/resasanian/Mirza/main/best
+02:53:14 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+02:53:14 │ INFO    │ ✓    1  ←  https://raw.githubusercontent.com/resasanian/Mirza/main/vless
+02:53:14 │ INFO    │ ✓    2  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+02:53:14 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+02:53:14 │ INFO    │ ✓   22  ←  https://raw.githubusercontent.com/ermaozi/get_subscribe/main/subs
+02:53:14 │ INFO    │ ✓    9  ←  https://raw.githubusercontent.com/ermaozi01/free_clash_vpn/main/s
+02:53:14 │ INFO    │ ✓  145  ←  https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/main/s
+02:53:14 │ INFO    │ ✓    5  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+02:53:15 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+02:53:15 │ INFO    │ ✓   41  ←  https://raw.githubusercontent.com/roosterkid/openproxylist/main/V
+02:53:15 │ INFO    │ ✓  144  ←  https://raw.githubusercontent.com/ndsphonemy/proxy-sub/main/speed
+02:53:15 │ INFO    │ ✓    8  ←  https://raw.githubusercontent.com/adiwzx/freenode/main/adispeed.t
+02:53:15 │ INFO    │ ✓  114  ←  https://raw.githubusercontent.com/MhdiTaheri/V2rayCollector_Py/ma
+02:53:15 │ INFO    │ ✓    1  ←  https://raw.githubusercontent.com/Everyday-VPN/Everyday-VPN/main/
+02:53:15 │ INFO    │ ✓  187  ←  https://raw.githubusercontent.com/4n0nymou3/multi-proxy-config-fe
+02:53:15 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+02:53:15 │ INFO    │ ✓    4  ←  https://raw.githubusercontent.com/shabane/kamaji/master/hub/vmess
+02:53:15 │ INFO    │ ✓   35  ←  https://raw.githubusercontent.com/youfoundamin/V2rayCollector/mai
+02:53:15 │ INFO    │ ✓  296  ←  https://raw.githubusercontent.com/shabane/kamaji/master/hub/vless
+02:53:15 │ INFO    │ ✓  653  ←  https://raw.githubusercontent.com/youfoundamin/V2rayCollector/mai
+02:53:17 │ INFO    │ ✓  298  ←  https://raw.githubusercontent.com/shabane/kamaji/master/hub/merge
+02:53:17 │ INFO    │ ✓  495  ←  https://raw.githubusercontent.com/Surfboardv2ray/TGParse/main/spl
+02:53:17 │ INFO    │ ✓    5  ←  https://t.me/s/V2ray_Alpha
+02:53:17 │ INFO    │ ✓    4  ←  https://t.me/s/FreeVpnVless
+02:53:17 │ INFO    │ ✓   17  ←  https://raw.githubusercontent.com/mheidari98/.proxy/main/vmess
+02:53:17 │ INFO    │ ✓    1  ←  https://t.me/s/V2rayFree
+02:53:17 │ INFO    │ ✓ 1120  ←  https://raw.githubusercontent.com/SoliSpirit/v2ray-configs/main/a
+02:53:17 │ INFO    │ ✓    2  ←  https://t.me/s/v2ray_free_conf
+02:53:18 │ INFO    │ ✓ 1455  ←  https://raw.githubusercontent.com/mheidari98/.proxy/main/vless
+02:53:18 │ INFO    │ ✓    4  ←  https://t.me/s/vpnfail_v2ray
+02:53:18 │ INFO    │ ✓    4  ←  https://t.me/s/frev2rayng
+02:53:18 │ INFO    │ ✓    8  ←  https://t.me/s/v2ray_collector
+02:53:18 │ INFO    │ ✓    1  ←  https://t.me/s/iP_CF
+02:53:18 │ INFO    │ ✓    2  ←  https://t.me/s/free_vpn_v2ray
+02:53:18 │ INFO    │ ✓ 1720  ←  https://raw.githubusercontent.com/Leon406/SubCrawler/master/sub/s
+02:53:18 │ INFO    │ ✓   51  ←  https://t.me/s/v2rayconfigs
+02:53:18 │ INFO    │ ✓    7  ←  https://t.me/s/v2ray_configs_pool
+02:53:18 │ INFO    │ ✓    1  ←  https://t.me/s/proxyiran
+02:53:18 │ INFO    │ ✓ 1471  ←  https://raw.githubusercontent.com/mheidari98/.proxy/main/all
+02:53:19 │ INFO    │ 📦 4248 unique | 46/800 active
+02:53:19 │ INFO    │ 🤖 Mode: AGGRESSIVE | ping<800ms | probe<3000ms
+02:53:19 │ INFO    │ ⚡ Checking 4248 [⏳1069s | stop@50 | 150w]
+02:53:20 │ INFO    │ ✅ v2ray.codefyinc.com|VLESS|12/12|84ms→invite.viber.com
+02:53:21 │ INFO    │ ✅ 152.42.164.192|VLESS|12/12|167ms→web.whatsapp.com
+02:53:27 │ INFO    │ ✅ 2 live | 0 errors | 🤖 v10|AGGRESSIVE|Run#4|Pass:0.3%|Struct:88.7%|TCP:1.6%|Probe:8.6%|Total:2/673
+02:53:27 │ INFO    │ 🔍 Geo (2) ...
+02:53:27 │ INFO    │ 
+📊 Top 2:
+02:53:27 │ INFO    │   #   Type  Ping   Probe  Compat  CC   Host
+02:53:27 │ INFO    │    1.   🚀🔒   84ms  238ms 12/12  US   v2ray.codefyinc.com
+02:53:27 │ INFO    │    2.   🚀🔒  167ms  666ms 12/12  SG   152.42.164.192
+02:53:28 │ INFO    │ 📨 1/5: v2ray.codefyinc.com→invite.viber.com
+02:53:31 │ INFO    │ 📨 2/5: 152.42.164.192→web.whatsapp.com
+02:53:33 │ INFO    │ 💾 Sub: 2 → sub_link.txt
+02:53:33 │ INFO    │ 💾 Cache: 2 saved
+02:53:33 │ INFO    │ 
+🏁 23s | 2 fresh | 0 cached | 2 posted | +426 discovered
+02:53:33 │ INFO    │ 🤖 v10|BALANCED|Run#5|Pass:0.3%|Struct:88.7%|TCP:1.6%|Probe:8.6%|Total:2/673
+02:53:33 │ INFO    │ AI#5 410/8376(5%) top:viber(1),whatsapp(1) disc:426
