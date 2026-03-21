@@ -51045,3 +51045,87 @@
 🏁 56s | 35 fresh | 20 cached | 5 posted | +0 discovered
 19:05:23 │ INFO    │ 🤖 v10|STRICT|Run#14|Pass:18.4%|Struct:61.6%|TCP:5.6%|Probe:8.3%|Total:394/2138
 19:05:23 │ INFO    │ AI#14 546/14862(4%) top:help(54),nnet(3) disc:475
+20:05:22 │ INFO    │ ╔══════════════════════════════════════════════════════╗
+20:05:22 │ INFO    │ ║  🤖 V2RAY ULTIMATE HUNTER v10 — VIRUS MODE          ║
+20:05:22 │ INFO    │ ║  173  sources | 18m deadline | STRICT     mode       ║
+20:05:22 │ INFO    │ ╚══════════════════════════════════════════════════════╝
+20:05:22 │ INFO    │ 🤖 v10|STRICT|Run#14|Pass:18.4%|Struct:61.6%|TCP:5.6%|Probe:8.3%|Total:394/2138
+20:05:22 │ INFO    │ 🧠 AI#14 546/14862(4%) top:help(54),nnet(3) disc:475 | good:253 | sni=auto
+20:05:22 │ INFO    │ ✅ BOT_TOKEN: ***SEEA
+20:05:22 │ INFO    │ 🦠 Evolution scan ...
+20:05:25 │ INFO    │ 🌐 Fetching 585/648 [150w | 569 dead | +475 new]
+20:05:25 │ INFO    │ ✓    2  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+20:05:25 │ INFO    │ ✓    4  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+20:05:26 │ INFO    │ ✓    9  ←  https://raw.githubusercontent.com/resasanian/Mirza/main/best.txt
+20:05:27 │ INFO    │ ✓    1  ←  https://raw.githubusercontent.com/Everyday-VPN/Everyday-VPN/main/
+20:05:27 │ INFO    │ ✓   31  ←  https://raw.githubusercontent.com/youfoundamin/V2rayCollector/mai
+20:05:27 │ INFO    │ ✓    1  ←  https://raw.githubusercontent.com/awesome-vpn/awesome-vpn/master/
+20:05:27 │ INFO    │ ✓   29  ←  https://raw.githubusercontent.com/peasoft/NoMoreWalls/master/list
+20:05:27 │ INFO    │ ✓   26  ←  https://raw.githubusercontent.com/roosterkid/openproxylist/main/V
+20:05:27 │ INFO    │ ✓    5  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+20:05:27 │ INFO    │ ✓   22  ←  https://raw.githubusercontent.com/ermaozi/get_subscribe/main/subs
+20:05:27 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+20:05:27 │ INFO    │ ✓    7  ←  https://t.me/s/hiddify_free
+20:05:27 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+20:05:27 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/MrMohebi/xray-proxy-grabber-tel
+20:05:27 │ INFO    │ ✓   12  ←  https://t.me/s/FreakConfig
+20:05:27 │ INFO    │ ✓   29  ←  https://t.me/s/Outline_Vpn
+20:05:27 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+20:05:27 │ INFO    │ ✓   21  ←  https://raw.githubusercontent.com/MrMohebi/xray-proxy-grabber-tel
+20:05:27 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+20:05:27 │ INFO    │ ✓   29  ←  https://raw.githubusercontent.com/peasoft/NoMoreWalls/master/list
+20:05:27 │ INFO    │ ✓   26  ←  https://raw.githubusercontent.com/roosterkid/openproxylist/main/V
+20:05:27 │ INFO    │ ✓    7  ←  https://t.me/s/free4allVPN
+20:05:27 │ INFO    │ ✓    7  ←  https://t.me/s/vless_vmess
+20:05:27 │ INFO    │ ✓    7  ←  https://t.me/s/v2ray_configs_pool
+20:05:27 │ INFO    │ ✓    2  ←  https://t.me/s/ArV2ray
+20:05:27 │ INFO    │ ✓    1  ←  https://t.me/s/FreeVlessVpn
+20:05:27 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+20:05:27 │ INFO    │ ✓    3  ←  https://t.me/s/Configforvpn01
+20:05:27 │ INFO    │ ✓   23  ←  https://t.me/s/v2ray_swhil
+20:05:28 │ INFO    │ ✓    2  ←  https://t.me/s/v2ray_configs
+20:05:28 │ INFO    │ ✓  196  ←  https://raw.githubusercontent.com/AzadNetCH/Clash/main/AzadNet.tx
+20:05:28 │ INFO    │ ✓    6  ←  https://t.me/s/vmess_vless_v2rayng
+20:05:28 │ INFO    │ ✓    2  ←  https://t.me/s/proxy_kafee
+20:05:28 │ INFO    │ ✓    3  ←  https://t.me/s/v2line
+20:05:28 │ INFO    │ ✓   50  ←  https://t.me/s/oneclickvpnkeys
+20:05:28 │ INFO    │ ✓    5  ←  https://t.me/s/v2ray_alpha
+20:05:28 │ INFO    │ ✓   12  ←  https://raw.githubusercontent.com/Surfboardv2ray/TGParse/main/spl
+20:05:28 │ INFO    │ ✓  145  ←  https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/main/s
+20:05:28 │ INFO    │ ✓  145  ←  https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/main/s
+20:05:28 │ INFO    │ ✓  647  ←  https://raw.githubusercontent.com/youfoundamin/V2rayCollector/mai
+20:05:28 │ INFO    │ ✓ 1738  ←  https://raw.githubusercontent.com/Leon406/SubCrawler/master/sub/s
+20:05:28 │ INFO    │ ✓ 2158  ←  https://raw.githubusercontent.com/SoliSpirit/v2ray-configs/main/a
+20:05:28 │ INFO    │ ✓   29  ←  https://raw.githubusercontent.com/mheidari98/.proxy/main/vmess
+20:05:28 │ INFO    │ ✓ 1547  ←  https://raw.githubusercontent.com/Surfboardv2ray/TGParse/main/spl
+20:05:28 │ INFO    │ ✓ 2689  ←  https://raw.githubusercontent.com/mheidari98/.proxy/main/vless
+20:05:28 │ INFO    │ ✓ 2717  ←  https://raw.githubusercontent.com/mheidari98/.proxy/main/all
+20:05:29 │ INFO    │ 📦 4751 unique | 46/585 active | ~2983 WS+443
+20:05:29 │ INFO    │ 🤖 Mode: STRICT | ping<600ms | probe<2500ms
+20:05:29 │ INFO    │ ⚡ Checking 4751 [⏳1072s | stop@50 | 150w]
+20:05:29 │ INFO    │   🔍 200 checked | 0 live | 2000/s | ⏳1072s | 🤖 v10|STRICT|Run#14|Pass:18.4%|Struct:61.6%|TCP:5.6%|Probe:8
+20:05:29 │ INFO    │   🔍 400 checked | 0 live | 2000/s | ⏳1072s | 🤖 v10|STRICT|Run#14|Pass:18.4%|Struct:61.5%|TCP:5.6%|Probe:8
+20:05:29 │ INFO    │   🔍 600 checked | 0 live | 2000/s | ⏳1072s | 🤖 v10|STRICT|Run#14|Pass:18.4%|Struct:61.4%|TCP:5.6%|Probe:8
+20:05:29 │ INFO    │   🔍 800 checked | 0 live | 2000/s | ⏳1072s | 🤖 v10|STRICT|Run#14|Pass:18.4%|Struct:61.4%|TCP:5.6%|Probe:8
+20:05:29 │ INFO    │   🔍 1000 checked | 0 live | 2000/s | ⏳1072s | 🤖 v10|STRICT|Run#14|Pass:18.4%|Struct:61.4%|TCP:5.6%|Probe:8
+20:05:29 │ INFO    │   🔍 1200 checked | 0 live | 2000/s | ⏳1072s | 🤖 v10|STRICT|Run#14|Pass:18.4%|Struct:61.4%|TCP:5.6%|Probe:8
+20:05:29 │ INFO    │   🔍 1400 checked | 0 live | 2000/s | ⏳1072s | 🤖 v10|STRICT|Run#14|Pass:18.4%|Struct:61.3%|TCP:5.6%|Probe:8
+20:05:29 │ INFO    │   🔍 1600 checked | 0 live | 2000/s | ⏳1072s | 🤖 v10|STRICT|Run#14|Pass:18.4%|Struct:61.3%|TCP:5.6%|Probe:8
+20:05:29 │ INFO    │   🔍 1800 checked | 0 live | 2000/s | ⏳1072s | 🤖 v10|STRICT|Run#14|Pass:18.4%|Struct:61.3%|TCP:5.6%|Probe:8
+20:05:29 │ INFO    │   🔍 2000 checked | 0 live | 2000/s | ⏳1072s | 🤖 v10|STRICT|Run#14|Pass:18.4%|Struct:61.3%|TCP:5.6%|Probe:8
+20:05:29 │ INFO    │   🔍 2200 checked | 0 live | 2000/s | ⏳1072s | 🤖 v10|STRICT|Run#14|Pass:18.4%|Struct:61.3%|TCP:5.6%|Probe:8
+20:05:29 │ INFO    │   🔍 2400 checked | 0 live | 2000/s | ⏳1072s | 🤖 v10|STRICT|Run#14|Pass:18.4%|Struct:61.3%|TCP:5.6%|Probe:8
+20:05:30 │ INFO    │   🔍 2600 checked | 0 live | 2000/s | ⏳1072s | 🤖 v10|STRICT|Run#14|Pass:18.4%|Struct:61.3%|TCP:5.6%|Probe:8
+20:05:30 │ INFO    │   🔍 2800 checked | 0 live | 2000/s | ⏳1071s | 🤖 v10|STRICT|Run#14|Pass:18.4%|Struct:61.3%|TCP:5.6%|Probe:8
+20:05:30 │ INFO    │   🔍 3000 checked | 0 live | 2000/s | ⏳1071s | 🤖 v10|STRICT|Run#14|Pass:18.4%|Struct:61.3%|TCP:5.6%|Probe:8
+20:05:30 │ INFO    │   🔍 3200 checked | 0 live | 2000/s | ⏳1071s | 🤖 v10|STRICT|Run#14|Pass:18.4%|Struct:61.3%|TCP:5.6%|Probe:8
+20:05:30 │ INFO    │   🔍 3400 checked | 0 live | 2000/s | ⏳1071s | 🤖 v10|STRICT|Run#14|Pass:18.4%|Struct:61.3%|TCP:5.6%|Probe:8
+20:05:30 │ INFO    │   🔍 3600 checked | 0 live | 2000/s | ⏳1071s | 🤖 v10|STRICT|Run#14|Pass:18.4%|Struct:61.3%|TCP:5.6%|Probe:8
+20:05:30 │ INFO    │   🔍 3800 checked | 0 live | 2000/s | ⏳1071s | 🤖 v10|STRICT|Run#14|Pass:18.4%|Struct:61.3%|TCP:5.6%|Probe:8
+20:05:30 │ INFO    │   🔍 4000 checked | 0 live | 2000/s | ⏳1071s | 🤖 v10|STRICT|Run#14|Pass:18.4%|Struct:61.3%|TCP:5.6%|Probe:8
+20:05:30 │ INFO    │   🔍 4200 checked | 0 live | 2000/s | ⏳1071s | 🤖 v10|STRICT|Run#14|Pass:18.4%|Struct:61.3%|TCP:5.6%|Probe:8
+20:05:30 │ INFO    │   🔍 4400 checked | 0 live | 2000/s | ⏳1071s | 🤖 v10|STRICT|Run#14|Pass:18.4%|Struct:61.3%|TCP:5.6%|Probe:8
+20:05:30 │ INFO    │   🔍 4600 checked | 0 live | 2000/s | ⏳1071s | 🤖 v10|STRICT|Run#14|Pass:18.3%|Struct:61.4%|TCP:5.6%|Probe:8
+20:05:32 │ INFO    │ ✅ 0 live | 4751 checked | 0 errors
+   🤖 v10|STRICT|Run#14|Pass:18.3%|Struct:61.4%|TCP:5.6%|Probe:8.6%|Total:394/2152
+20:05:32 │ ERROR   │ No live configs — exit
