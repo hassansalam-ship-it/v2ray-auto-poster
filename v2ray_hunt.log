@@ -50574,3 +50574,47 @@
 🏁 43s | 50 fresh | 0 cached | 5 posted | +0 discovered
 11:00:50 │ INFO    │ 🤖 v10|STRICT|Run#11|Pass:17.4%|Struct:61.8%|TCP:5.3%|Probe:9.5%|Total:324/1859
 11:00:50 │ INFO    │ AI#11 435/14079(3%) top:nnet(3),viber(1) disc:453
+15:42:27 │ INFO    │ ╔══════════════════════════════════════════════════════╗
+15:42:27 │ INFO    │ ║  🤖 V2RAY ULTIMATE HUNTER v10 — VIRUS MODE          ║
+15:42:27 │ INFO    │ ║  31   sources | 18m deadline | STRICT     mode       ║
+15:42:27 │ INFO    │ ╚══════════════════════════════════════════════════════╝
+15:42:27 │ INFO    │ 🤖 v10|STRICT|Run#11|Pass:17.4%|Struct:61.8%|TCP:5.3%|Probe:9.5%|Total:324/1859
+15:42:27 │ INFO    │ 🧠 AI#11 435/14079(3%) top:nnet(3),viber(1) disc:453 | good:224 | sni=auto
+15:42:27 │ INFO    │ ✅ BOT_TOKEN: ***SEEA
+15:42:27 │ INFO    │ 🦠 Evolution scan ...
+15:42:30 │ INFO    │ 🦠 Evolution: +23 new sources discovered!
+15:42:30 │ INFO    │ 🌐 Fetching 493/507 [150w | 560 dead | +476 new]
+15:42:32 │ INFO    │ ✓    1  ←  https://raw.githubusercontent.com/Everyday-VPN/Everyday-VPN/main/
+15:42:32 │ INFO    │ ✓   15  ←  https://raw.githubusercontent.com/MrMohebi/xray-proxy-grabber-tel
+15:42:33 │ INFO    │ ✓   29  ←  https://raw.githubusercontent.com/peasoft/NoMoreWalls/master/list
+15:42:33 │ INFO    │ ✓    7  ←  https://t.me/s/free4allVPN
+15:42:33 │ INFO    │ ✓    7  ←  https://t.me/s/v2ray_configs_pool
+15:42:33 │ INFO    │ ✓   19  ←  https://raw.githubusercontent.com/roosterkid/openproxylist/main/V
+15:42:33 │ INFO    │ ✓    1  ←  https://t.me/s/iP_CF
+15:42:33 │ INFO    │ ✓  145  ←  https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/main/s
+15:42:33 │ INFO    │ ✓ 1738  ←  https://raw.githubusercontent.com/Leon406/SubCrawler/master/sub/s
+15:42:33 │ INFO    │ ✓ 2052  ←  https://raw.githubusercontent.com/SoliSpirit/v2ray-configs/main/a
+15:42:33 │ INFO    │ ✓ 1440  ←  https://raw.githubusercontent.com/Surfboardv2ray/TGParse/main/spl
+15:42:33 │ INFO    │ ✓   12  ←  https://raw.githubusercontent.com/Surfboardv2ray/TGParse/main/spl
+15:42:34 │ INFO    │ 📦 3367 unique | 12/493 active | ~2240 WS+443
+15:42:34 │ INFO    │ 🤖 Mode: STRICT | ping<600ms | probe<2000ms
+15:42:34 │ INFO    │ ⚡ Checking 3367 [⏳1073s | stop@50 | 150w]
+15:42:34 │ INFO    │   🔍 200 checked | 0 live | 2000/s | ⏳1073s | 🤖 v10|STRICT|Run#11|Pass:17.4%|Struct:61.7%|TCP:5.3%|Probe:9
+15:42:34 │ INFO    │   🔍 400 checked | 0 live | 2000/s | ⏳1073s | 🤖 v10|STRICT|Run#11|Pass:17.4%|Struct:61.6%|TCP:5.3%|Probe:9
+15:42:34 │ INFO    │   🔍 600 checked | 0 live | 2000/s | ⏳1073s | 🤖 v10|STRICT|Run#11|Pass:17.4%|Struct:61.5%|TCP:5.3%|Probe:9
+15:42:34 │ INFO    │   🔍 800 checked | 0 live | 2000/s | ⏳1073s | 🤖 v10|STRICT|Run#11|Pass:17.3%|Struct:61.5%|TCP:5.3%|Probe:9
+15:42:34 │ INFO    │   🔍 1000 checked | 0 live | 2000/s | ⏳1073s | 🤖 v10|STRICT|Run#11|Pass:17.3%|Struct:61.5%|TCP:5.3%|Probe:9
+15:42:34 │ INFO    │   🔍 1200 checked | 0 live | 2000/s | ⏳1073s | 🤖 v10|STRICT|Run#11|Pass:17.3%|Struct:61.5%|TCP:5.3%|Probe:9
+15:42:34 │ INFO    │   🔍 1400 checked | 0 live | 2000/s | ⏳1073s | 🤖 v10|STRICT|Run#11|Pass:17.3%|Struct:61.5%|TCP:5.3%|Probe:9
+15:42:34 │ INFO    │   🔍 1600 checked | 0 live | 2000/s | ⏳1073s | 🤖 v10|STRICT|Run#11|Pass:17.3%|Struct:61.5%|TCP:5.3%|Probe:9
+15:42:34 │ INFO    │   🔍 1800 checked | 0 live | 2000/s | ⏳1073s | 🤖 v10|STRICT|Run#11|Pass:17.3%|Struct:61.5%|TCP:5.3%|Probe:9
+15:42:34 │ INFO    │   🔍 2000 checked | 0 live | 2000/s | ⏳1073s | 🤖 v10|STRICT|Run#11|Pass:17.3%|Struct:61.5%|TCP:5.3%|Probe:9
+15:42:34 │ INFO    │   🔍 2200 checked | 0 live | 2000/s | ⏳1073s | 🤖 v10|STRICT|Run#11|Pass:17.3%|Struct:61.4%|TCP:5.3%|Probe:9
+15:42:34 │ INFO    │   🔍 2400 checked | 0 live | 2000/s | ⏳1073s | 🤖 v10|STRICT|Run#11|Pass:17.3%|Struct:61.4%|TCP:5.3%|Probe:9
+15:42:34 │ INFO    │   🔍 2600 checked | 0 live | 2000/s | ⏳1073s | 🤖 v10|STRICT|Run#11|Pass:17.3%|Struct:61.5%|TCP:5.3%|Probe:9
+15:42:34 │ INFO    │   🔍 2800 checked | 0 live | 2000/s | ⏳1073s | 🤖 v10|STRICT|Run#11|Pass:17.3%|Struct:61.5%|TCP:5.3%|Probe:9
+15:42:34 │ INFO    │   🔍 3000 checked | 0 live | 2000/s | ⏳1073s | 🤖 v10|STRICT|Run#11|Pass:17.2%|Struct:61.5%|TCP:5.3%|Probe:9
+15:42:34 │ INFO    │   🔍 3200 checked | 0 live | 2000/s | ⏳1073s | 🤖 v10|STRICT|Run#11|Pass:17.2%|Struct:61.5%|TCP:5.3%|Probe:9
+15:42:35 │ INFO    │ ✅ 0 live | 3367 checked | 0 errors
+   🤖 v10|STRICT|Run#11|Pass:17.2%|Struct:61.5%|TCP:5.3%|Probe:9.5%|Total:324/1879
+15:42:35 │ ERROR   │ No live configs — exit
