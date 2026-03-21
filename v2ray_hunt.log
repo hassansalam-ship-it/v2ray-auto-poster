@@ -49938,3 +49938,263 @@
 🏁 31s | 1 fresh | 5 cached | 5 posted | +9 discovered
 07:47:39 │ INFO    │ 🤖 v10|STRICT|Run#8|Pass:8.3%|Struct:74.6%|TCP:3.4%|Probe:8.1%|Total:88/1060
 07:47:39 │ INFO    │ AI#8 421/9862(4%) top:viber(1),whatsapp(1) disc:453
+09:02:15 │ INFO    │ ╔══════════════════════════════════════════════════════╗
+09:02:15 │ INFO    │ ║  🤖 V2RAY ULTIMATE HUNTER v10 — VIRUS MODE          ║
+09:02:15 │ INFO    │ ║  983  sources | 18m deadline | STRICT     mode       ║
+09:02:15 │ INFO    │ ╚══════════════════════════════════════════════════════╝
+09:02:15 │ INFO    │ 🤖 v10|STRICT|Run#8|Pass:8.3%|Struct:74.6%|TCP:3.4%|Probe:8.1%|Total:88/1060
+09:02:15 │ INFO    │ 🧠 AI#8 421/9862(4%) top:viber(1),whatsapp(1) disc:453 | good:121 | sni=auto
+09:02:15 │ INFO    │ ✅ BOT_TOKEN: ***SEEA
+09:02:15 │ INFO    │ 🦠 Evolution scan ...
+09:02:19 │ INFO    │ ♻️  Cache: 6/6
+09:02:19 │ INFO    │ ♻️  Re-verifying 6 cached ...
+09:02:20 │ INFO    │ ♻️  4/6 verified
+09:02:20 │ INFO    │ 🌐 Fetching 800/1431 [150w | 0 dead | +453 new]
+09:02:22 │ INFO    │ ✓  145  ←  https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/main/s
+09:02:22 │ INFO    │ ✓    9  ←  https://raw.githubusercontent.com/ermaozi01/free_clash_vpn/main/s
+09:02:22 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+09:02:22 │ INFO    │ ✓  319  ←  https://raw.githubusercontent.com/ndsphonemy/proxy-sub/main/defau
+09:02:22 │ INFO    │ ✓    4  ←  https://t.me/s/FreeVpnVless
+09:02:22 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+09:02:22 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+09:02:22 │ INFO    │ ✓    1  ←  https://t.me/s/proxyiran
+09:02:23 │ INFO    │ ✓    1  ←  https://raw.githubusercontent.com/Everyday-VPN/Everyday-VPN/main/
+09:02:23 │ INFO    │ ✓  271  ←  https://raw.githubusercontent.com/shabane/kamaji/master/hub/vless
+09:02:23 │ INFO    │ ✓    8  ←  https://raw.githubusercontent.com/adiwzx/freenode/main/adispeed.t
+09:02:23 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+09:02:23 │ INFO    │ ✓    5  ←  https://t.me/s/v2ray_free_conf
+09:02:23 │ INFO    │ ✓    3  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+09:02:23 │ INFO    │ ✓    1  ←  https://t.me/s/V2rayFree
+09:02:23 │ INFO    │ ✓    4  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+09:02:23 │ INFO    │ ✓   40  ←  https://raw.githubusercontent.com/roosterkid/openproxylist/main/V
+09:02:23 │ INFO    │ ✓    1  ←  https://raw.githubusercontent.com/resasanian/Mirza/main/vless
+09:02:23 │ INFO    │ ✓   28  ←  https://raw.githubusercontent.com/resasanian/Mirza/main/best
+09:02:23 │ INFO    │ ✓  144  ←  https://raw.githubusercontent.com/ndsphonemy/proxy-sub/main/speed
+09:02:23 │ INFO    │ ✓    1  ←  https://raw.githubusercontent.com/awesome-vpn/awesome-vpn/master/
+09:02:23 │ INFO    │ ✓    5  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+09:02:23 │ INFO    │ ✓    2  ←  https://raw.githubusercontent.com/w1770946466/Auto_proxy/main/Lon
+09:02:23 │ INFO    │ ✓   22  ←  https://raw.githubusercontent.com/ermaozi/get_subscribe/main/subs
+09:02:23 │ INFO    │ ✓    2  ←  https://t.me/s/gcp_v2ray
+09:02:23 │ INFO    │ ✓    4  ←  https://raw.githubusercontent.com/shabane/kamaji/master/hub/vmess
+09:02:23 │ INFO    │ ✓  200  ←  https://raw.githubusercontent.com/4n0nymou3/multi-proxy-config-fe
+09:02:23 │ INFO    │ ✓    1  ←  https://t.me/s/iP_CF
+09:02:23 │ INFO    │ ✓    4  ←  https://t.me/s/frev2rayng
+09:02:23 │ INFO    │ ✓   51  ←  https://t.me/s/v2rayconfigs
+09:02:23 │ INFO    │ ✓    8  ←  https://t.me/s/v2ray_collector
+09:02:23 │ INFO    │ ✓    7  ←  https://t.me/s/v2ray_configs_pool
+09:02:23 │ INFO    │ ✓   37  ←  https://raw.githubusercontent.com/resasanian/Mirza/main/sub
+09:02:23 │ INFO    │ ✓    5  ←  https://t.me/s/V2ray_Alpha
+09:02:23 │ INFO    │ ✓    2  ←  https://t.me/s/free_vpn_v2ray
+09:02:23 │ INFO    │ ✓   41  ←  https://raw.githubusercontent.com/youfoundamin/V2rayCollector/mai
+09:02:23 │ INFO    │ ✓    3  ←  https://t.me/s/CfV2ray
+09:02:23 │ INFO    │ ✓    5  ←  https://t.me/s/vpnfail_v2ray
+09:02:23 │ INFO    │ ✓  145  ←  https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/main/s
+09:02:24 │ INFO    │ ✓  273  ←  https://raw.githubusercontent.com/shabane/kamaji/master/hub/merge
+09:02:25 │ INFO    │ ✓  115  ←  https://raw.githubusercontent.com/MhdiTaheri/V2rayCollector_Py/ma
+09:02:25 │ INFO    │ ✓  646  ←  https://raw.githubusercontent.com/youfoundamin/V2rayCollector/mai
+09:02:25 │ INFO    │ ✓   12  ←  https://raw.githubusercontent.com/Surfboardv2ray/TGParse/main/spl
+09:02:25 │ INFO    │ ✓ 1741  ←  https://raw.githubusercontent.com/Leon406/SubCrawler/master/sub/s
+09:02:26 │ INFO    │ ✓ 1939  ←  https://raw.githubusercontent.com/SoliSpirit/v2ray-configs/main/a
+09:02:26 │ INFO    │ ✓ 2101  ←  https://raw.githubusercontent.com/mheidari98/.proxy/main/vless
+09:02:26 │ INFO    │ ✓ 1395  ←  https://raw.githubusercontent.com/Surfboardv2ray/TGParse/main/spl
+09:02:26 │ INFO    │ ✓   30  ←  https://raw.githubusercontent.com/mheidari98/.proxy/main/vmess
+09:02:27 │ INFO    │ ✓ 2130  ←  https://raw.githubusercontent.com/mheidari98/.proxy/main/all
+09:02:27 │ INFO    │ 📦 5025 unique | 49/800 active | ~3206 WS+443
+09:02:27 │ INFO    │ 🤖 Mode: STRICT | ping<600ms | probe<2000ms
+09:02:27 │ INFO    │ ⚡ Checking 5025 [⏳1068s | stop@50 | 150w]
+09:02:27 │ INFO    │   🔍 200 checked | 0 live | 2000/s | ⏳1068s | 🤖 v10|STRICT|Run#8|Pass:8.1%|Struct:72.7%|TCP:3.3%|Probe:7.9
+09:02:27 │ INFO    │   🔍 400 checked | 0 live | 2000/s | ⏳1068s | 🤖 v10|STRICT|Run#8|Pass:7.9%|Struct:71.6%|TCP:3.2%|Probe:7.8
+09:02:27 │ INFO    │   🔍 600 checked | 0 live | 2000/s | ⏳1068s | 🤖 v10|STRICT|Run#8|Pass:7.9%|Struct:71.6%|TCP:3.2%|Probe:7.8
+09:02:27 │ INFO    │   🔍 800 checked | 0 live | 1931/s | ⏳1068s | 🤖 v10|STRICT|Run#8|Pass:7.9%|Struct:71.6%|TCP:3.2%|Probe:7.8
+09:02:27 │ INFO    │   🔍 1000 checked | 0 live | 1086/s | ⏳1067s | 🤖 v10|STRICT|Run#8|Pass:7.6%|Struct:69.0%|TCP:3.1%|Probe:7.5
+09:02:28 │ INFO    │   🔍 1200 checked | 0 live | 571/s | ⏳1067s | 🤖 v10|STRICT|Run#8|Pass:7.6%|Struct:69.1%|TCP:3.1%|Probe:7.5
+09:02:28 │ INFO    │   🔍 1400 checked | 0 live | 658/s | ⏳1067s | 🤖 v10|STRICT|Run#8|Pass:7.6%|Struct:69.0%|TCP:3.1%|Probe:7.4
+09:02:28 │ INFO    │   🔍 1600 checked | 0 live | 688/s | ⏳1066s | 🤖 v10|STRICT|Run#8|Pass:7.6%|Struct:69.1%|TCP:3.2%|Probe:7.4
+09:02:29 │ INFO    │ ✅ 172.67.73.14|VLESS|1/12|14ms→(cf-detected)
+09:02:29 │ INFO    │   🔍 1800 checked | 0 live | 547/s | ⏳1066s | 🤖 v10|STRICT|Run#8|Pass:7.7%|Struct:69.1%|TCP:3.2%|Probe:7.4
+09:02:29 │ INFO    │ ✅ 172.67.73.14|VLESS|1/12|16ms→(cf-detected)
+09:02:29 │ INFO    │ ✅ 172.67.73.14|VLESS|1/12|11ms→(cf-detected)
+09:02:29 │ INFO    │ ✅ 172.64.152.23|VLESS|1/12|17ms→(cf-detected)
+09:02:29 │ INFO    │ ✅ 172.64.155.209|VLESS|1/12|14ms→(cf-detected)
+09:02:29 │ INFO    │ ✅ 172.67.73.14|VLESS|1/12|19ms→(cf-detected)
+09:02:29 │ INFO    │   🔍 2000 checked | 1 live | 615/s | ⏳1066s | 🤖 v10|STRICT|Run#8|Pass:8.1%|Struct:69.1%|TCP:3.2%|Probe:7.4
+09:02:29 │ INFO    │ ✅ 104.26.15.21|VLESS|1/12|14ms→(cf-detected)
+09:02:29 │ INFO    │ ✅ 104.17.98.251|VLESS|1/12|16ms→(cf-detected)
+09:02:29 │ INFO    │ ✅ 172.67.73.14|VLESS|1/12|17ms→(cf-detected)
+09:02:29 │ INFO    │ ✅ 104.21.18.41|VLESS|1/12|14ms→(cf-detected)
+09:02:29 │ INFO    │ ✅ 172.64.152.23|VLESS|1/12|12ms→(cf-detected)
+09:02:29 │ INFO    │ ✅ 104.26.15.21|VLESS|1/12|16ms→(cf-detected)
+09:02:29 │ INFO    │ ✅ 172.67.73.14|VLESS|1/12|24ms→(cf-detected)
+09:02:29 │ INFO    │ ✅ 104.16.2.90|VLESS|1/12|16ms→(cf-detected)
+09:02:29 │ INFO    │ ✅ 104.26.15.21|VLESS|1/12|13ms→(cf-detected)
+09:02:29 │ INFO    │ ✅ 188.114.98.0|VLESS|1/12|15ms→(cf-detected)
+09:02:29 │ INFO    │ ✅ 172.66.44.172|VLESS|1/12|17ms→(cf-detected)
+09:02:29 │ INFO    │   🔍 2200 checked | 3 live | 551/s | ⏳1065s | 🤖 v10|STRICT|Run#8|Pass:9.1%|Struct:69.1%|TCP:3.3%|Probe:7.5
+09:02:29 │ INFO    │ ✅ 172.67.180.92|VLESS|1/12|16ms→(cf-detected)
+09:02:29 │ INFO    │ ✅ 172.66.47.200|VLESS|1/12|14ms→(cf-detected)
+09:02:29 │ INFO    │   📊 5 live | ⏳1065s | AI#8 425/10806(4%) top:viber(1),whatsapp(1) disc:453
+09:02:29 │ INFO    │ ✅ 188.114.98.0|VLESS|1/12|12ms→(cf-detected)
+09:02:29 │ INFO    │ ✅ 172.64.152.23|VLESS|1/12|15ms→(cf-detected)
+09:02:29 │ INFO    │ ✅ 172.64.152.23|VLESS|1/12|18ms→(cf-detected)
+09:02:30 │ INFO    │   🔍 2400 checked | 6 live | 923/s | ⏳1065s | 🤖 v10|STRICT|Run#8|Pass:9.5%|Struct:69.1%|TCP:3.3%|Probe:7.5
+09:02:30 │ INFO    │ ✅ 104.16.2.90|VLESS|1/12|15ms→(cf-detected)
+09:02:30 │ INFO    │   🔍 2600 checked | 8 live | 2000/s | ⏳1065s | 🤖 v10|STRICT|Run#8|Pass:9.6%|Struct:69.1%|TCP:3.3%|Probe:7.5
+09:02:30 │ INFO    │   📊 10 live | ⏳1065s | AI#8 425/10890(4%) top:viber(1),whatsapp(1) disc:453
+09:02:30 │ INFO    │   🔍 2800 checked | 12 live | 2000/s | ⏳1065s | 🤖 v10|STRICT|Run#8|Pass:9.3%|Struct:68.0%|TCP:3.5%|Probe:7.3
+09:02:30 │ INFO    │   📊 15 live | ⏳1065s | AI#8 425/10909(4%) top:viber(1),whatsapp(1) disc:453
+09:02:30 │ INFO    │ ✅ 104.16.183.101|VLESS|1/12|23ms→(cf-detected)
+09:02:30 │ INFO    │   🔍 3000 checked | 18 live | 2000/s | ⏳1065s | 🤖 v10|STRICT|Run#8|Pass:8.8%|Struct:64.9%|TCP:4.1%|Probe:6.9
+09:02:30 │ INFO    │   📊 20 live | ⏳1065s | AI#8 425/10910(4%) top:viber(1),whatsapp(1) disc:453
+09:02:30 │ INFO    │ ✅ 104.16.2.90|VLESS|1/12|15ms→(cf-detected)
+09:02:30 │ INFO    │   📊 25 live | ⏳1065s | AI#8 425/10911(4%) top:viber(1),whatsapp(1) disc:453
+09:02:30 │ INFO    │ ✅ 172.66.45.7|VLESS|1/12|18ms→(cf-detected)
+09:02:30 │ INFO    │ ✅ 172.67.180.92|VLESS|1/12|19ms→(cf-detected)
+09:02:30 │ INFO    │ ✅ 104.17.212.240|VLESS|1/12|16ms→(cf-detected)
+09:02:30 │ INFO    │ ✅ 172.67.73.14|VLESS|1/12|15ms→(cf-detected)
+09:02:30 │ INFO    │ ✅ 172.64.145.38|VLESS|1/12|20ms→(cf-detected)
+09:02:30 │ INFO    │   📊 30 live | ⏳1065s | AI#8 425/10919(4%) top:viber(1),whatsapp(1) disc:453
+09:02:30 │ INFO    │ ✅ 172.67.180.92|VLESS|1/12|16ms→(cf-detected)
+09:02:30 │ INFO    │ ✅ 172.67.68.101|VLESS|1/12|15ms→(cf-detected)
+09:02:30 │ INFO    │ ✅ 104.18.0.144|VLESS|1/12|18ms→(cf-detected)
+09:02:30 │ INFO    │ ✅ 104.16.2.90|VLESS|1/12|16ms→(cf-detected)
+09:02:30 │ INFO    │ ✅ 172.66.44.111|VLESS|1/12|9ms→(cf-detected)
+09:02:30 │ INFO    │   📊 35 live | ⏳1065s | AI#8 425/10942(4%) top:viber(1),whatsapp(1) disc:453
+09:02:30 │ INFO    │ ✅ 104.21.120.137|VLESS|1/12|13ms→(cf-detected)
+09:02:30 │ INFO    │ ✅ 172.66.175.3|VLESS|1/12|11ms→(cf-detected)
+09:02:30 │ INFO    │ ✅ 172.67.73.14|VLESS|1/12|15ms→(cf-detected)
+09:02:30 │ INFO    │ ✅ 172.66.47.103|VLESS|1/12|14ms→(cf-detected)
+09:02:30 │ INFO    │ ✅ 104.16.2.90|VLESS|1/12|13ms→(cf-detected)
+09:02:30 │ INFO    │ ✅ 104.17.74.206|VLESS|1/12|15ms→(cf-detected)
+09:02:30 │ INFO    │   📊 40 live | ⏳1065s | AI#8 425/11005(4%) top:viber(1),whatsapp(1) disc:453
+09:02:30 │ INFO    │ ✅ 172.67.180.92|VLESS|1/12|15ms→(cf-detected)
+09:02:30 │ INFO    │   🔍 3200 checked | 42 live | 361/s | ⏳1064s | 🤖 v10|STRICT|Run#8|Pass:9.7%|Struct:62.4%|TCP:5.1%|Probe:6.5
+09:02:30 │ INFO    │ ✅ 172.66.47.155|VLESS|1/12|17ms→(cf-detected)
+09:02:30 │ INFO    │ ✅ 104.26.15.21|VLESS|1/12|15ms→(cf-detected)
+09:02:30 │ INFO    │ ✅ 104.16.2.90|VLESS|1/12|16ms→(cf-detected)
+09:02:30 │ INFO    │   📊 45 live | ⏳1064s | AI#8 425/11033(4%) top:viber(1),whatsapp(1) disc:453
+09:02:30 │ INFO    │ ✅ norman.ns.cloudflare.com|VLESS|1/12|30ms→(cf-detected)
+09:02:30 │ INFO    │ ✅ 172.67.180.92|VLESS|1/12|16ms→(cf-detected)
+09:02:30 │ INFO    │ ✅ 104.21.18.41|VLESS|1/12|15ms→(cf-detected)
+09:02:30 │ INFO    │ ✅ 188.114.98.0|VLESS|1/12|15ms→(cf-detected)
+09:02:30 │ INFO    │ ✅ 172.67.180.92|VLESS|1/12|14ms→(cf-detected)
+09:02:30 │ INFO    │   📊 50 live | ⏳1064s | AI#8 425/11059(4%) top:viber(1),whatsapp(1) disc:453
+09:02:30 │ INFO    │ 🛑 Stop@50
+09:02:30 │ INFO    │ ✅ 172.67.149.104|VLESS|1/12|14ms→(cf-detected)
+09:02:30 │ INFO    │ ✅ 104.17.98.251|VLESS|1/12|11ms→(cf-detected)
+09:02:30 │ INFO    │ ✅ 188.114.98.0|VLESS|1/12|20ms→(cf-detected)
+09:02:31 │ INFO    │ ✅ 172.67.180.92|VLESS|1/12|13ms→(cf-detected)
+09:02:31 │ INFO    │ ✅ 188.114.96.3|VLESS|1/12|10ms→(cf-detected)
+09:02:31 │ INFO    │ ✅ 172.67.73.14|VLESS|1/12|17ms→(cf-detected)
+09:02:31 │ INFO    │ ✅ 188.114.98.0|VLESS|1/12|12ms→(cf-detected)
+09:02:31 │ INFO    │ ✅ 188.114.98.0|VLESS|1/12|14ms→(cf-detected)
+09:02:31 │ INFO    │ ✅ 172.67.149.60|VLESS|1/12|16ms→(cf-detected)
+09:02:31 │ INFO    │ ✅ delilah.ns.cloudflare.com|VLESS|1/12|29ms→(cf-detected)
+09:02:31 │ INFO    │ ✅ 104.20.1.252|VLESS|1/12|13ms→(cf-detected)
+09:02:31 │ INFO    │ ✅ 188.114.96.3|VLESS|1/12|16ms→(cf-detected)
+09:02:31 │ INFO    │ ✅ 188.114.98.0|VLESS|1/12|16ms→(cf-detected)
+09:02:31 │ INFO    │ ✅ 104.17.80.176|VLESS|1/12|17ms→(cf-detected)
+09:02:31 │ INFO    │ ✅ 172.64.145.38|VLESS|1/12|12ms→(cf-detected)
+09:02:31 │ INFO    │ ✅ 104.16.2.90|VLESS|1/12|16ms→(cf-detected)
+09:02:31 │ INFO    │ ✅ 172.67.73.14|VLESS|1/12|11ms→(cf-detected)
+09:02:31 │ INFO    │ ✅ VPN.nnet.online|VLESS|1/12|52ms→(cf-detected)
+09:02:31 │ INFO    │ ✅ 188.114.98.0|VLESS|1/12|15ms→(cf-detected)
+09:02:31 │ INFO    │ ✅ 104.16.2.90|VLESS|1/12|17ms→(cf-detected)
+09:02:31 │ INFO    │ ✅ 104.16.2.90|VLESS|1/12|17ms→(cf-detected)
+09:02:31 │ INFO    │ ✅ 188.114.98.0|VLESS|1/12|16ms→(cf-detected)
+09:02:31 │ INFO    │ ✅ 162.159.12.151|VLESS|1/12|16ms→(cf-detected)
+09:02:31 │ INFO    │ ✅ 172.66.47.200|VLESS|1/12|28ms→(cf-detected)
+09:02:31 │ INFO    │ ✅ 104.16.2.90|VLESS|1/12|14ms→(cf-detected)
+09:02:31 │ INFO    │ ✅ 104.21.18.41|VLESS|1/12|16ms→(cf-detected)
+09:02:31 │ INFO    │ ✅ 104.18.5.250|VLESS|1/12|17ms→(cf-detected)
+09:02:31 │ INFO    │ ✅ 172.67.180.92|VLESS|1/12|18ms→(cf-detected)
+09:02:31 │ INFO    │ ✅ 104.16.246.91|VLESS|1/12|10ms→(cf-detected)
+09:02:31 │ INFO    │ ✅ vpn.nnet.online|VLESS|1/12|14ms→(cf-detected)
+09:02:31 │ INFO    │ ✅ 188.114.96.3|VLESS|1/12|12ms→(cf-detected)
+09:02:31 │ INFO    │ ✅ 172.66.44.56|VLESS|1/12|26ms→(cf-detected)
+09:02:31 │ INFO    │ ✅ 104.16.79.146|VLESS|1/12|15ms→(cf-detected)
+09:02:31 │ INFO    │ ✅ 172.66.47.100|VLESS|1/12|13ms→(cf-detected)
+09:02:31 │ INFO    │ ✅ 104.16.2.90|VLESS|1/12|17ms→(cf-detected)
+09:02:31 │ INFO    │ ✅ 104.16.2.90|VLESS|1/12|16ms→(cf-detected)
+09:02:31 │ INFO    │   🔍 3400 checked | 50 live | 213/s | ⏳1064s | 🤖 v10|STRICT|Run#8|Pass:12.8%|Struct:62.1%|TCP:5.6%|Probe:6.
+09:02:31 │ INFO    │ ✅ 104.26.14.21|VLESS|1/12|10ms→(cf-detected)
+09:02:31 │ INFO    │ ✅ 104.26.14.21|VLESS|1/12|13ms→(cf-detected)
+09:02:31 │ INFO    │ ✅ 104.26.14.21|VLESS|1/12|12ms→(cf-detected)
+09:02:32 │ INFO    │ ✅ 104.26.14.21|VLESS|1/12|24ms→(cf-detected)
+09:02:32 │ INFO    │ ✅ 104.26.14.21|VLESS|1/12|16ms→(cf-detected)
+09:02:32 │ INFO    │ ✅ 198.41.215.237|VLESS|1/12|16ms→(cf-detected)
+09:02:32 │ INFO    │ ✅ 173.245.49.206|VLESS|1/12|14ms→(cf-detected)
+09:02:32 │ INFO    │ ✅ 104.24.158.194|VLESS|1/12|13ms→(cf-detected)
+09:02:32 │ INFO    │ ✅ 104.26.14.21|VLESS|1/12|14ms→(cf-detected)
+09:02:32 │ INFO    │ ✅ 104.26.14.21|VLESS|1/12|15ms→(cf-detected)
+09:02:32 │ INFO    │ ✅ 104.26.14.21|VLESS|1/12|12ms→(cf-detected)
+09:02:32 │ INFO    │ ✅ 173.245.58.80|VLESS|1/12|21ms→(cf-detected)
+09:02:32 │ INFO    │ ✅ 173.245.49.59|VLESS|1/12|15ms→(cf-detected)
+09:02:32 │ INFO    │ ✅ afrcloud22.mmv.kr|VLESS|1/12|43ms→(cf-detected)
+09:02:33 │ INFO    │ ✅ 104.26.14.21|VLESS|1/12|13ms→(cf-detected)
+09:02:33 │ INFO    │ ✅ afrcloud22.mmv.kr|VLESS|1/12|31ms→(cf-detected)
+09:02:33 │ INFO    │ ✅ afrcloud22.mmv.kr|VLESS|1/12|45ms→(cf-detected)
+09:02:33 │ INFO    │ ✅ chatgpt.com|VLESS|1/12|18ms→(cf-detected)
+09:02:33 │ INFO    │ ✅ 104.26.14.21|VLESS|1/12|14ms→(cf-detected)
+09:02:34 │ INFO    │ ✅ www.speedtest.net|VLESS|1/12|150ms→(cf-detected)
+09:02:34 │ INFO    │ ✅ www.speedtest.net|VLESS|1/12|181ms→(cf-detected)
+09:02:34 │ INFO    │ ✅ alldata.tech|VLESS|1/12|58ms→(cf-detected)
+09:02:34 │ INFO    │ ✅ afrcloud22.mmv.kr|VLESS|1/12|188ms→(cf-detected)
+09:02:34 │ INFO    │ ✅ nodejs.org|VLESS|1/12|22ms→(cf-detected)
+09:02:34 │ INFO    │ ✅ meti-u9d.pages.dev|VLESS|1/12|60ms→(cf-detected)
+09:02:34 │ INFO    │ ✅ braze.com|VLESS|1/12|44ms→(cf-detected)
+09:02:34 │ INFO    │ ✅ www.speedtest.net|VLESS|1/12|45ms→(cf-detected)
+09:02:34 │ INFO    │ ✅ mfa.gov.ua|VLESS|1/12|144ms→(cf-detected)
+09:02:34 │ INFO    │ ✅ nodejs.org|VLESS|1/12|14ms→(cf-detected)
+09:02:34 │ INFO    │ ✅ 104.25.99.169|VLESS|1/12|26ms→(cf-detected)
+09:02:34 │ INFO    │ ✅ www.speedtest.net|VLESS|1/12|109ms→(cf-detected)
+09:02:34 │ INFO    │ ✅ www.speedtest.net|VLESS|1/12|154ms→(cf-detected)
+09:02:34 │ INFO    │ ✅ alalucarne.com|VLESS|1/12|42ms→(cf-detected)
+09:02:34 │ INFO    │ ✅ www.speedtest.net|VLESS|1/12|170ms→(cf-detected)
+09:02:34 │ INFO    │ ✅ www.speedtest.net|VLESS|1/12|114ms→(cf-detected)
+09:02:34 │ INFO    │ ✅ 108.162.198.154|VLESS|1/12|27ms→(cf-detected)
+09:02:34 │ INFO    │ ✅ nodejs.org|VLESS|1/12|15ms→(cf-detected)
+09:02:34 │ INFO    │ ✅ cf.mahdi383ir.website|VLESS|1/12|127ms→(cf-detected)
+09:02:34 │ INFO    │ ✅ ir.esk6a.ir|VLESS|1/12|226ms→(cf-detected)
+09:02:34 │ INFO    │ ✅ www.speedtest.net|VLESS|1/12|133ms→(cf-detected)
+09:02:35 │ INFO    │ ✅ creativecommons.org|VLESS|1/12|35ms→(cf-detected)
+09:02:35 │ INFO    │ ✅ nodejs.org|VLESS|1/12|16ms→(cf-detected)
+09:02:35 │ INFO    │ ✅ cf.008500.xyz|VLESS|1/12|55ms→(cf-detected)
+09:02:35 │ INFO    │ ✅ x-cite.dk|VLESS|1/12|62ms→(cf-detected)
+09:02:35 │ INFO    │ ✅ nodejs.org|VLESS|1/12|15ms→(cf-detected)
+09:02:35 │ INFO    │ ✅ nodejs.org|VLESS|1/12|15ms→(cf-detected)
+09:02:35 │ INFO    │ ✅ www.visa.com|VLESS|1/12|81ms→(cf-detected)
+09:02:35 │ INFO    │ ✅ cf.008500.xyz|VLESS|1/12|35ms→(cf-detected)
+09:02:36 │ INFO    │ ✅ black-mouse-6c80.tedoxa4182.workers.dev|VLESS|1/12|48ms→(cf-detected)
+09:02:40 │ INFO    │ ✅ 103.21.244.48|VLESS|1/12|217ms→(cf-detected)
+09:02:40 │ INFO    │ ✅ 50 live | 3506 checked | 0 errors
+   🤖 v10|STRICT|Run#8|Pass:16.4%|Struct:62.1%|TCP:5.8%|Probe:10.4%|Total:224/1363
+09:02:40 │ INFO    │ 🔍 Geo (50) ...
+09:02:40 │ INFO    │ 
+📊 Top 10:
+09:02:40 │ INFO    │   #   Type  Ping   Probe  Compat  CC   Host
+09:02:40 │ INFO    │    1. ⚡🚀🔒   15ms   15ms  1/12  CA   188.114.98.0
+09:02:40 │ INFO    │    2. ⚡🚀🔒   12ms   12ms  1/12  CA   188.114.98.0
+09:02:40 │ INFO    │    3. ⚡🚀🔒   15ms   15ms  1/12  CA   104.17.74.206
+09:02:40 │ INFO    │    4. ⚡🚀🔒   30ms   30ms  1/12  CA   norman.ns.cloudflare.com
+09:02:40 │ INFO    │    5. ⚡🚀🔒   15ms   15ms  1/12  CA   188.114.98.0
+09:02:40 │ INFO    │    6. ⚡🚀🔒   20ms  104ms  1/12  CA   CdnJS.com
+09:02:40 │ INFO    │    7. ⚡🚀🔒   13ms  108ms  1/12  CA   nodejs.org
+09:02:40 │ INFO    │    8. ⚡🚀🔒   11ms  107ms  1/12  CA   172.66.132.196
+09:02:40 │ INFO    │    9. ⚡🚀🔒   11ms  104ms  1/12  CA   creativecommons.org
+09:02:40 │ INFO    │   10. ⚡🚀     14ms   14ms  1/12  CA   172.67.73.14
+09:02:41 │ INFO    │ ✅ TG sent OK: 188.114.98.0
+09:02:41 │ INFO    │ 📨 1/5: 188.114.98.0→(cf-detected)
+09:02:43 │ INFO    │ ✅ TG sent OK: 188.114.98.0
+09:02:43 │ INFO    │ 📨 2/5: 188.114.98.0→(cf-detected)
+09:02:46 │ INFO    │ ✅ TG sent OK: 104.17.74.206
+09:02:46 │ INFO    │ 📨 3/5: 104.17.74.206→(cf-detected)
+09:02:48 │ INFO    │ ✅ TG sent OK: norman.ns.cloudflare.com
+09:02:48 │ INFO    │ 📨 4/5: norman.ns.cloudflare.com→(cf-detected)
+09:02:51 │ INFO    │ ✅ TG sent OK: 188.114.98.0
+09:02:51 │ INFO    │ 📨 5/5: 188.114.98.0→(cf-detected)
+09:02:53 │ INFO    │ 💾 Sub: 54 → sub_link.txt
+09:02:53 │ INFO    │ 💾 Cache: 54 saved
+09:02:53 │ INFO    │ 
+🏁 37s | 50 fresh | 4 cached | 5 posted | +0 discovered
+09:02:53 │ INFO    │ 🤖 v10|STRICT|Run#9|Pass:16.4%|Struct:62.1%|TCP:5.8%|Probe:10.4%|Total:224/1363
+09:02:53 │ INFO    │ AI#9 427/12340(3%) top:viber(1),whatsapp(1) disc:453
